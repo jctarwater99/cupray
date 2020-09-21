@@ -1,0 +1,31 @@
+Installing React native for Developing
+	> node -v 		// (if version is less than 12.14.1 or dne, update it, good luck)
+	> npm install -g expo-cli
+			// Also install expo client app on mobile phone
+
+	Creating a new project is done by running
+	> expo init <nameOfProject>
+	But you can probably just pull from the repo?
+
+Installing Sqlite for the database
+	> expo install expo-sqlite
+
+
+Installing Firebase for notifications
+	https://www.youtube.com/watch?v=z6DEJXYQpP4
+	Just watch this. Might go through later and update the relevant files that need to be 
+	changed along with the installation to make it work. If not, just putting the link 
+	here is easier than saying run these 3 commands and update these 6 files by pasting 
+	these 20 lines and blah blah blah
+
+
+Installing React native navigation for multiple screens?
+	> npm install @react-navigation/native
+	> expo install react-native-gesture-handler react-native-reanimated react-native-screens react-native-safe-area-context @react-native-community/masked-view
+	
+	// Alternative equivalent to "expo install..." line
+	// npm install react-native-reanimated react-native-gesture-handler react-native-screens react-native-safe-area-context @react-native-community/masked-view
+	// For mac and IOS
+	> npx pod-install ios
+
+

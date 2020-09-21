@@ -47,7 +47,7 @@ const testOne = ({ navigation }) => {
       >
         <Button
           title="Press Me"
-          onPress={() => makeDatabase()} //navigation.navigate("SecondScreen")}
+          onPress={() => makeTable()} //navigation.navigate("SecondScreen")}
         />
       </View>
       <View
@@ -55,23 +55,43 @@ const testOne = ({ navigation }) => {
           backgroundColor: "#00f",
           flex: 1,
         }}
-      />
+      >
+        <Button title="Press Me" onPress={() => insertAndQuery()} />
+      </View>
     </View>
   );
 };
 
-function makeDatabase() {
+function makeTable() {
   const db = SQLite.openDatabase("db.cupray");
   db.transaction((tx) => {
     tx.executeSql(
-      "CREATE TABLE IF NOT EXISTS reqests (id INTEGER PRIMARY KEY AUTOINCREMENT, description TEXT)"
+      "CREATE TABLE IF NOT EXISTS requests (id INTEGER PRIMARY KEY AUTOINCREMENT, description TEXT)",
+      [],
+      function (tx, res) {
+        console.log("Executed First query");
+      }
     );
-    tx.executeSql("INSERT INTO requests (description) values (?)", [
-      "gibberish",
-    ]);
-    tx.executeSql("SELECT * FROM requests", null, (tx, results) => {
-      let dataLen = results.rows.length;
+  });
+}
+function insertAndQuery() {
+  const db = SQLite.openDatabase("db.cupray");
+  console.log("Reached insert and query function");
+  db.transaction((tx) => {
+    tx.executeSql(
+      "INSERT INTO requests (description) values ('and then there were three')",
+      null,
+      function (tx, res) {
+        console.log("Executed Second query", res);
+      },
+      function (tx, res) {
+        console.log("Second query failed", res);
+      }
+    );
+    tx.executeSql("SELECT * FROM requests", null, function (tx, res) {
+      let dataLen = res.rows.length;
       alert(dataLen);
+      console.log("Executed third query", res);
     });
   });
 }
