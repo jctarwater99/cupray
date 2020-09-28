@@ -7,21 +7,11 @@ export function createDatabase() {
   db.transaction((tx) => {
     // TODO: These 5 commands will need to be removed eventually
     // TODO: These are only for keeping a clean DB while testing/developing
-    tx.executeSql("DROP TABLE IF EXISTS requests", [], function (tx, res) {
-      console.log("Executed drop requests");
-    });
-    tx.executeSql("DROP TABLE IF EXISTS tags", [], function (tx, res) {
-      console.log("Executed drop tags");
-    });
-    tx.executeSql("DROP TABLE IF EXISTS reminders", [], function (tx, res) {
-      console.log("Executed drop reminders");
-    });
-    tx.executeSql("DROP TABLE IF EXISTS request_tags", [], function (tx, res) {
-      console.log("Executed drop request_tags");
-    });
-    tx.executeSql("DROP TABLE IF EXISTS categories", [], function (tx, res) {
-      console.log("Executed drop categores");
-    });
+    tx.executeSql("DROP TABLE IF EXISTS requests", []);
+    tx.executeSql("DROP TABLE IF EXISTS tags", []);
+    tx.executeSql("DROP TABLE IF EXISTS reminders", []);
+    tx.executeSql("DROP TABLE IF EXISTS request_tags", []);
+    tx.executeSql("DROP TABLE IF EXISTS categories", []);
 
     // Requests
     tx.executeSql(
@@ -44,8 +34,7 @@ export function createDatabase() {
     tx.executeSql(
       "CREATE TABLE IF NOT EXISTS tags ( " +
         "id INT AUTO_INCREMENT PRIMARY KEY," +
-        "name		TEXT," +
-        "FOREIGN KEY (requestID) REFERENCES requests(id));",
+        "name		TEXT);",
       null,
       () => void 0,
       (tx, result) => {
@@ -59,7 +48,8 @@ export function createDatabase() {
         "id INT AUTO_INCREMENT PRIMARY KEY," +
         "requestID	INT, " +
         "tagID	INT, " +
-        "FOREIGN KEY (requestID) REFERENCES requests(id));",
+        "FOREIGN KEY (requestID) REFERENCES requests(id),",
+      "FOREIGN KEY (tagID) REFERENCES tags(id));",
       null,
       () => void 0,
       (tx, result) => {
@@ -96,4 +86,5 @@ export function createDatabase() {
       }
     );
   });
+  console.log("Finished createDatabase()");
 }

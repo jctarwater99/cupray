@@ -4,8 +4,11 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { StatusBar } from "expo-status-bar";
 import React from "react";
 import { StyleSheet, Button, Text, View } from "react-native";
-import * as dbf from "./database/create";
+import { createDatabase } from "./database/create";
+import { populateDB } from "./database/populate";
+import * as queries from "./database/query";
 import { Request, Request_Tag, Tag, Reminder } from "./database/objects";
+import { disableExpoCliLogging } from "expo/build/logs/Logs";
 
 //import { insertAndQuery, makeTable } from "./database/create";
 
@@ -43,8 +46,11 @@ const testOne = ({ navigation }) => {
         }}
       >
         <Button
-          title="Create DB"
-          onPress={() => dbf.createDatabase()} //navigation.navigate("SecondScreen")}
+          title="Create/Populate DB"
+          onPress={() => {
+            createDatabase();
+            populateDB();
+          }} //navigation.navigate("SecondScreen")}
         />
       </View>
       <View
@@ -53,7 +59,7 @@ const testOne = ({ navigation }) => {
           flex: 1,
         }}
       >
-        <Button title="Insert into db" onPress={() => dbf.insertAndQuery()} />
+        <Button title="Query DB" onPress={() => queries.getTags()} />
       </View>
     </View>
   );

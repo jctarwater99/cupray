@@ -1,6 +1,6 @@
 import * as SQLite from "expo-sqlite";
-import * as db_insert from "./database/insert";
-import { Request, Request_Tag, Tag, Reminder } from "./database/objects";
+import * as db_insert from "./insert";
+import { Request, Request_Tag, Tag, Reminder, Frequency } from "./objects";
 
 export function populateDB() {
   populateDBwithRequests();
@@ -97,12 +97,44 @@ export function populateDBwithRequests() {
   request.remind_freq = 6;
   request.remind_time = "22:22:22";
   requests.push(request);
+
+  for (request in requests) {
+    db_insert.insertRequest(requests[request]);
+  }
+
+  console.log("Finished Inserting Requests");
 }
 
-export function populateDBwithTags() {}
+export function populateDBwithTags() {
+  function createTag(name) {
+    var tag = new Tag();
+    tag.name = name;
+    return tag;
+  }
 
-export function populateDBwithCategories() {}
+  var tags = new Array();
+  tags.push(createTag("Bob"));
+  tags.push(createTag("Authority"));
+  tags.push(createTag("Sister"));
+  tags.push(createTag("Friends"));
+  tags.push(createTag("Archived"));
+  tags.push(createTag("Expired"));
 
-export function populateDBwithRequestTags() {}
+  for (var i = 0; i < tags.length; i++) {
+    db_insert.insertTag(tags[i]);
+  }
 
-export function populateDBwithReminders() {}
+  console.log("Finished Inserting Tags");
+}
+
+export function populateDBwithCategories() {
+  console.log("Finished Inserting Caategories");
+}
+
+export function populateDBwithRequestTags() {
+  console.log("Finished Inserting RequestTags");
+}
+
+export function populateDBwithReminders() {
+  console.log("Finished Inserting Reminders");
+}

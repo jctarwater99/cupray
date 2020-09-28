@@ -1,12 +1,6 @@
 import * as SQLite from "expo-sqlite";
 // Do I need this import?
-import {
-  Request,
-  Request_Tag,
-  Tag,
-  Reminder,
-  Frequency,
-} from "./database/objects";
+import { Request, Request_Tag, Tag, Reminder, Frequency } from "./objects";
 
 // These functions are starting to feel repetitive.
 // We could probably create a "do sql" function that takes an sql string, [] of args, and an error/success message
@@ -37,8 +31,11 @@ export function insertTag(tag) {
   const db = SQLite.openDatabase("db.cupray");
   db.transaction((tx) => {
     tx.executeSql(
-      "INSERT INTO tags(name, isCategory) VALUES(?, ?);",
-      [tag.name, tag.isCategory],
+      "INSERT INTO tags(name) VALUES(?);",
+      [tag.name],
+      // (tx, res) => {
+      //   console.log("Inserted: ", tag.name);
+      // },
       () => void 0,
       (tx, result) => {
         console.log("Inserting tag failed", result);

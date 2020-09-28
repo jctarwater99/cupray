@@ -1,30 +1,34 @@
-class Request {
-  subject = "";
-  description = "";
-  create_time = "";
-  expire_time = "";
-  remind_freq = 0;
-  remind_time = "";
+export class Request {
+  constructor() {
+    this.subject = "";
+    this.description = "";
+    this.create_time = "";
+    this.expire_time = "";
+    this.remind_freq = 0;
+    this.remind_time = "";
+  }
 }
-class Tag {
-  name = "";
+export class Tag {
+  constructor() {
+    this.name = "";
+  }
 }
-class RequestTag {
+export class RequestTag {
   requestID = 0;
   tagID = 0;
 }
-class Reminder {
+export class Reminder {
   requestID = 0;
   reminderID = 0;
 }
-class Category {
+export class Category {
   name = "";
   TagID = 0;
   reminder_freq = 0;
   reminder_time = "";
 }
 
-const Frequency = {
+export const Frequency = {
   EXPIRED: 0, // *
   NONE: 1, // For reminders that are organized by category not request
   FUTURE_DATE: 2,
