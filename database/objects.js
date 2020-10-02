@@ -29,7 +29,7 @@ export class Category {
 }
 
 export const Frequency = {
-  EXPIRED: 0, // *
+  ARCHIVED: 0, // *
   NONE: 1, // For reminders that are organized by category not request
   FUTURE_DATE: 2,
   ANNUALLY: 3,

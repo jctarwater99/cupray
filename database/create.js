@@ -16,7 +16,7 @@ export function createDatabase() {
     // Requests
     tx.executeSql(
       "CREATE TABLE IF NOT EXISTS requests (" +
-        "id INT AUTO_INCREMENT PRIMARY KEY," +
+        "id INTEGER PRIMARY KEY," +
         "subject	TEXT, " +
         "description	TEXT," +
         "create_time	TEXT," +
@@ -33,7 +33,7 @@ export function createDatabase() {
     // Tags
     tx.executeSql(
       "CREATE TABLE IF NOT EXISTS tags ( " +
-        "id INT AUTO_INCREMENT PRIMARY KEY," +
+        "id INTEGER PRIMARY KEY," +
         "name		TEXT);",
       null,
       () => void 0,
@@ -45,7 +45,7 @@ export function createDatabase() {
     // Request Tags
     tx.executeSql(
       "CREATE TABLE IF NOT EXISTS request_tags ( " +
-        "id INT AUTO_INCREMENT PRIMARY KEY," +
+        "id INTEGER PRIMARY KEY," +
         "requestID	INT, " +
         "tagID	INT, " +
         "FOREIGN KEY (requestID) REFERENCES requests(id),",
@@ -60,7 +60,7 @@ export function createDatabase() {
     // Categories
     tx.executeSql(
       "CREATE TABLE IF NOT EXISTS categories ( " +
-        "ID INT AUTO_INCREMENT PRIMARY KEY," +
+        "ID INTEGER PRIMARY KEY," +
         "name TEXT," +
         "tagID INT, " +
         "reminder_freq INT, " +
@@ -76,7 +76,7 @@ export function createDatabase() {
     // Reminders
     tx.executeSql(
       "CREATE TABLE IF NOT EXISTS reminders ( " +
-        "reminderID		INT PRIMARY KEY," +
+        "reminderID		INTEGER PRIMARY KEY," +
         "requestID		INT," +
         "FOREIGN KEY (requestID) REFERENCES requests(id));",
       null,

@@ -21,7 +21,8 @@ export function getTags() {
       "SELECT name, id from tags ORDER BY name;",
       [],
       (tx, result) => {
-        console.log("getTags query succeeded", result);
+        console.log("getTags query succeeded");
+        //this.state.tags = result.rows._array;
       },
       //() => void 0,
       (tx, result) => {

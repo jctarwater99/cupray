@@ -1,6 +1,13 @@
 import * as SQLite from "expo-sqlite";
 import * as db_insert from "./insert";
-import { Request, Request_Tag, Tag, Reminder, Frequency } from "./objects";
+import {
+  Request,
+  Request_Tag,
+  Tag,
+  Reminder,
+  Frequency,
+  Category,
+} from "./objects";
 
 export function populateDB() {
   populateDBwithRequests();
@@ -98,9 +105,9 @@ export function populateDBwithRequests() {
   request.remind_time = "22:22:22";
   requests.push(request);
 
-  for (request in requests) {
-    db_insert.insertRequest(requests[request]);
-  }
+  requests.forEach((element) => {
+    db_insert.insertRequest(element);
+  });
 
   console.log("Finished Inserting Requests");
 }
@@ -118,17 +125,36 @@ export function populateDBwithTags() {
   tags.push(createTag("Sister"));
   tags.push(createTag("Friends"));
   tags.push(createTag("Archived"));
-  tags.push(createTag("Expired"));
+  tags.push(createTag("Church"));
+  tags.push(createTag("Missions"));
+  tags.push(createTag("Family"));
 
-  for (var i = 0; i < tags.length; i++) {
-    db_insert.insertTag(tags[i]);
-  }
+  tags.forEach((element) => {
+    db_insert.insertTag(element);
+  });
 
   console.log("Finished Inserting Tags");
 }
 
 export function populateDBwithCategories() {
-  console.log("Finished Inserting Caategories");
+  function createCat(name, tagID) {
+    var cat = new Category();
+    cat.name = name;
+    cat.tagID = tagID;
+    cat.reminder_freq = 8;
+    cat.reminder_time = "14:15:14+0000";
+    return cat;
+  }
+
+  var cats = new Array();
+  cats.push(createTag("Church", 6));
+  cats.push(createTag("Missions", 7));
+  cats.push(createTag("Family", 8));
+
+  cats.forEach((element) => {
+    db_insert.insertCategory(element);
+  });
+  console.log("Finished Inserting Categories");
 }
 
 export function populateDBwithRequestTags() {
