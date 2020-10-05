@@ -22,7 +22,8 @@ export function createDatabase() {
         "create_time	TEXT," +
         "expire_time	TEXT," +
         "remind_freq	INT," +
-        "remind_time	TEXT);",
+        "remind_time	TEXT," +
+        "weight       INT);",
       null,
       () => void 0,
       (tx, result) => {

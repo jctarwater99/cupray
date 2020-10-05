@@ -28,6 +28,7 @@ export function populateDBwithRequests() {
   request.expire_time = "2020-10-10T17:15:14+0000";
   request.remind_freq = 2;
   request.remind_time = "17:15:00";
+  request.weight = 1;
   requests.push(request);
 
   request = new Request();
@@ -39,6 +40,7 @@ export function populateDBwithRequests() {
   request.expire_time = "2020-10-09T17:15:14+0000";
   request.remind_freq = 2;
   request.remind_time = "19:15:00";
+  request.weight = 10;
   requests.push(request);
 
   request = new Request();
@@ -50,6 +52,7 @@ export function populateDBwithRequests() {
   request.expire_time = "2020-12-30T14:15:14+0000";
   request.remind_freq = 11;
   request.remind_time = "19:20:00";
+  request.weight = 2;
   requests.push(request);
 
   request = new Request();
@@ -61,6 +64,7 @@ export function populateDBwithRequests() {
   request.expire_time = "2020-10-07T14:15:14+0000";
   request.remind_freq = 8;
   request.remind_time = "08:05:00";
+  request.weight = 4;
   requests.push(request);
 
   request = new Request();
@@ -72,6 +76,7 @@ export function populateDBwithRequests() {
   request.expire_time = "2020-11-07T14:15:14+0000";
   request.remind_freq = 7;
   request.remind_time = "09:00:00";
+  request.weight = 2;
   requests.push(request);
 
   request = new Request();
@@ -84,6 +89,7 @@ export function populateDBwithRequests() {
   request.expire_time = "2020-11-04T14:15:14+0000";
   request.remind_freq = 2;
   request.remind_time = "12:00:00";
+  request.weight = 3;
   requests.push(request);
 
   request = new Request();
@@ -93,6 +99,7 @@ export function populateDBwithRequests() {
   request.expire_time = "2020-10-07T14:15:14+0000";
   request.remind_freq = 11;
   request.remind_time = "19:15:00";
+  request.weight = 1;
   requests.push(request);
 
   request = new Request();
@@ -103,6 +110,7 @@ export function populateDBwithRequests() {
   request.expire_time = "2222-12-22T22:22:22+0000";
   request.remind_freq = 6;
   request.remind_time = "22:22:22";
+  request.weight = 1;
   requests.push(request);
 
   requests.forEach((element) => {

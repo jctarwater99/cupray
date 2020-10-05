@@ -6,6 +6,7 @@ export class Request {
     this.expire_time = "";
     this.remind_freq = 0;
     this.remind_time = "";
+    this.weight = 0;
   }
 }
 export class Tag {
