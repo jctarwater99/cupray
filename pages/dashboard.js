@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Image, TouchableOpacity, Dimensions, FlatList } from "react-native";
 import { StyleSheet, Button, Text, View } from "react-native";
 import { populateDB } from "../database/populate";
@@ -49,7 +49,10 @@ export function Dashboard({ navigation }) {
           />
           <Text style={styles.dashText}>Scripture</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.dashButton}></TouchableOpacity>
+        <TouchableOpacity
+          style={styles.dashButton}
+          onPress={() => navigation.navigate("Test")}
+        ></TouchableOpacity>
       </View>
       <Image
         style={styles.CUlogo}
