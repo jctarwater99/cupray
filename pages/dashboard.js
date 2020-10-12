@@ -5,7 +5,7 @@ import { populateDB } from "../database/populate";
 import { createDatabase } from "../database/create";
 import * as queries from "../database/query";
 
-export function Dashboard({ navigation }) {
+const Dashboard = ( { navigation }) => {
   return (
     <View style={styles.dashboardContainer}>
       <View style={styles.verseofDay}>
@@ -169,3 +169,5 @@ const styles = StyleSheet.create({
     marginBottom: 180,
   },
 });
+
+export default Dashboard;

@@ -3,16 +3,15 @@ import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { Request, Request_Tag, Tag, Reminder } from "./database/objects";
-import { WelcomeScreen } from "./pages/welcome";
-import { Dashboard } from "./pages/dashboard";
-import { TestPage } from "./pages/testPage";
+import WelcomeScreen from "./pages/welcome";
+import Dashboard from "./pages/dashboard";
+import TestPage from "./pages/testPage";
 import { disableExpoCliLogging } from "expo/build/logs/Logs";
-
 import { SafeAreaView } from "react-native-safe-area-context";
 
-export default function App() {
-  const Stack = createStackNavigator();
+const Stack = createStackNavigator();
 
+const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
@@ -26,3 +25,6 @@ export default function App() {
     </NavigationContainer>
   );
 }
+
+export default App;
+

@@ -15,6 +15,7 @@ export function populateDB() {
   populateDBwithRequestTags();
   populateDBwithReminders();
   populateDBwithReminders();
+  populateDBwithCategories();
 }
 
 export function populateDBwithRequests() {
@@ -155,9 +156,9 @@ export function populateDBwithCategories() {
   }
 
   var cats = new Array();
-  cats.push(createTag("Church", 6));
-  cats.push(createTag("Missions", 7));
-  cats.push(createTag("Family", 8));
+  cats.push(createCat("Church", 6));
+  cats.push(createCat("Missions", 7));
+  cats.push(createCat("Family", 8));
 
   cats.forEach((element) => {
     db_insert.insertCategory(element);

@@ -18,10 +18,10 @@ export function getCategories() {
         console.log("getCategories query failed", result);
       }
     );
+    return categories;
   });
-
-  return categories;
 }
+
 export function getTags() {
   const db = SQLite.openDatabase("db.cupray");
   db.transaction((tx) => {

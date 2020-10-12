@@ -3,7 +3,7 @@ import { StatusBar } from "expo-status-bar";
 import { Image, TouchableOpacity, Dimensions, FlatList } from "react-native";
 import { StyleSheet, Button, Text, View } from "react-native";
 
-export function WelcomeScreen({ navigation }) {
+ const WelcomeScreen = ( {navigation} ) => {
   return (
     <View style={styles.welcomeContainer}>
       <Image style={styles.pray} source={require("../assets/pray.png")} />
@@ -82,3 +82,5 @@ const styles = StyleSheet.create({
     marginTop: 18,
   },
 });
+
+export default WelcomeScreen;

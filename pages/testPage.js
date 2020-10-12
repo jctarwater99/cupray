@@ -1,12 +1,27 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import * as SQLite from "expo-sqlite";
 import { StatusBar } from "expo-status-bar";
 import { Image, TouchableOpacity, Dimensions, FlatList } from "react-native";
 import { StyleSheet, Button, Text, View } from "react-native";
 import * as queries from "../database/query";
 
-export function TestPage({ navigation }) {
+const db = SQLite.openDatabase("db.cupray");
+
+const TestPage = () => {
   const [count, setCount] = useState(0);
-  const [categories, setCategories] = useState([]);
+  let [categories, setCategories] = useState([]);
+
+  useEffect(()=>{
+    db.transaction((tx) => {
+      tx.executeSql('SELECT name, tagID from categories ORDER BY name',[],(tx, result) => {
+          var temp = [];
+          for(let i = 0; i < result.rows.length; ++i)
+            temp.push(result.rows.item(i));
+          setCategories(temp);
+          console.log(temp)
+        });
+    });
+  }, []);
 
   return (
     <View>
@@ -21,12 +36,13 @@ export function TestPage({ navigation }) {
       <Button
         title="Query Button"
         onPress={function () {
-          temp = queries.getCategories();
+          //queries.getCategories();
           //setCategories();
-          console.log(temp);
         }}
       />
-      <Text>Oi {categories} Yeet</Text>
+      <Text>Oi yeet </Text>
     </View>
   );
 }
+
+export default TestPage;
