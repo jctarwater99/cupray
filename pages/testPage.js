@@ -11,16 +11,8 @@ const TestPage = () => {
   const [count, setCount] = useState(0);
   let [categories, setCategories] = useState([]);
 
-  useEffect(()=>{
-    db.transaction((tx) => {
-      tx.executeSql('SELECT name, tagID from categories ORDER BY name',[],(tx, result) => {
-          var temp = [];
-          for(let i = 0; i < result.rows.length; ++i)
-            temp.push(result.rows.item(i));
-          setCategories(temp);
-          console.log(temp)
-        });
-    });
+  useEffect(() => {
+    queries.getCategories((results) => setCategories(results));
   }, []);
 
   return (
@@ -36,13 +28,12 @@ const TestPage = () => {
       <Button
         title="Query Button"
         onPress={function () {
-          //queries.getCategories();
-          //setCategories();
+          console.log(categories);
         }}
       />
       <Text>Oi yeet </Text>
     </View>
   );
-}
+};
 
 export default TestPage;
