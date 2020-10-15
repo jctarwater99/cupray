@@ -5,23 +5,24 @@ import { populateDB } from "../database/populate";
 import { createDatabase } from "../database/create";
 import * as queries from "../database/query";
 
-const Dashboard = ( { navigation }) => {
+var { height, width } = Dimensions.get("window");
+
+const Dashboard = ({ navigation }) => {
   return (
     <View style={styles.dashboardContainer}>
       <View style={styles.verseofDay}>
         <Text style={styles.verseOf}>Verse of the Day:</Text>
+        <View style={styles.lineStyle} />
         <Text style={styles.nowMay}>
           “Now may the Lord of Peace himself give you peace at all times and in
           every way. {"\n"}The Lord be with all of you.” {"\n"} (2 Thess. 3:16)
         </Text>
       </View>
+
       <View style={styles.container}>
         <TouchableOpacity
           style={styles.dashButton}
-          onPress={() => {
-            createDatabase();
-            populateDB();
-          }}
+          onPress={() => navigation.navigate("Cat")}
         >
           <Image
             style={styles.dashImage}
@@ -60,19 +61,29 @@ const Dashboard = ( { navigation }) => {
       />
     </View>
   );
-}
+};
+
 const styles = StyleSheet.create({
-  container: {
+  // Overall container for screen
+  dashboardContainer: {
     flex: 1,
+    backgroundColor: "#EFEFEF",
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: height * 0.03,
+  },
+
+  container: {
+    flex: 2,
     flexDirection: "row",
-    marginTop: -150,
-    marginLeft: -40,
+    marginTop: height * -0.2,
+    marginLeft: width * -0.1,
   },
 
   container2: {
-    flex: 1,
+    flex: 3,
     flexDirection: "row",
-    marginTop: 10,
+    marginTop: height * 0.08,
     marginLeft: -40,
     alignContent: "center",
   },
@@ -80,56 +91,42 @@ const styles = StyleSheet.create({
   dashButton: {
     width: 135,
     height: 138,
-    shadowColor: "rgba(0, 0, 0, 0.16)",
-    shadowOffset: { width: 3, height: 0 },
-    shadowRadius: 5,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.27,
+    shadowRadius: 3.65,
+
+    elevation: 3,
     borderRadius: 20,
     backgroundColor: "#e8e7e4",
-    marginLeft: 40,
+    marginLeft: width * 0.1,
     alignContent: "center",
   },
 
   dashImage: {
     width: 65,
     height: 95,
-    marginLeft: 35,
-    marginTop: 20,
+    marginLeft: width * 0.09,
+    marginTop: height * 0.03,
   },
 
   dashText: {
-    width: 108,
-    height: 22,
     color: "#003a63",
     fontSize: 15,
     fontWeight: "700",
     alignSelf: "center",
-    marginTop: 42,
-    marginLeft: 20,
+    marginTop: height * 0.035,
+    marginLeft: width * -0.01,
   },
 
   CUlogo: {
-    width: 263,
-    height: 76,
+    width: 163,
+    height: 46,
     opacity: 0.85,
-    marginBottom: 30,
-  },
-
-  dashboardContainer: {
-    flex: 1,
-    backgroundColor: "#EFEFEF",
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 10,
-  },
-
-  thePrayer: {
-    width: 219,
-    height: 53,
-    color: "#d6c396",
-    fontSize: 19,
-    fontWeight: "700",
-    textAlign: "center",
-    marginTop: -10,
+    marginBottom: height * 0.03,
   },
 
   verseOf: {
@@ -138,7 +135,7 @@ const styles = StyleSheet.create({
     color: "#d6c396",
     fontSize: 20,
     fontWeight: "700",
-    marginTop: 30,
+    marginTop: height * 0.05,
     textAlign: "center",
   },
 
@@ -147,26 +144,34 @@ const styles = StyleSheet.create({
     height: 116,
     color: "#efefef",
     fontSize: 17,
-    fontWeight: "300",
+    fontWeight: "100",
     textAlign: "center",
-  },
-
-  pray: {
-    width: 74,
-    height: 103,
-    marginTop: 250,
+    marginTop: height * 0.02,
   },
 
   verseofDay: {
     width: 337,
     height: 230,
     alignItems: "center",
-    shadowColor: "rgba(0, 0, 0, 0.16)",
-    shadowOffset: { width: 3, height: 0 },
-    shadowRadius: 6,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.57,
+    shadowRadius: 4.65,
+
+    elevation: 6,
     borderRadius: 20,
     backgroundColor: "#003A63",
     marginBottom: 180,
+  },
+
+  lineStyle: {
+    borderWidth: 0.75,
+    borderColor: "#D3D3D3",
+    marginTop: height * 0.01,
+    width: 270,
   },
 });
 

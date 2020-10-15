@@ -3,7 +3,7 @@ import { StatusBar } from "expo-status-bar";
 import { Image, TouchableOpacity, Dimensions, FlatList } from "react-native";
 import { StyleSheet, Button, Text, View } from "react-native";
 
- const WelcomeScreen = ( {navigation} ) => {
+const WelcomeScreen = ({ navigation }) => {
   return (
     <View style={styles.welcomeContainer}>
       <Image style={styles.pray} source={require("../assets/pray.png")} />
@@ -25,7 +25,7 @@ import { StyleSheet, Button, Text, View } from "react-native";
       <StatusBar style="auto" />
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   welcomeContainer: {
@@ -35,18 +35,25 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 
-  cupray: {
-    width: 233,
-    height: 82,
-    color: "#d6c396",
-    fontSize: 59,
-    fontWeight: "700",
-    textAlign: "center",
+  pray: {
+    width: 74,
+    height: 103,
+    marginTop: 200,
   },
+
   cu: {
     color: "#efefef",
     width: 233,
     height: 82,
+    fontSize: 59,
+    fontWeight: "700",
+    textAlign: "center",
+  },
+
+  cupray: {
+    width: 233,
+    height: 82,
+    color: "#d6c396",
     fontSize: 59,
     fontWeight: "700",
     textAlign: "center",
@@ -66,9 +73,15 @@ const styles = StyleSheet.create({
     width: 244,
     height: 61,
     alignItems: "center",
-    shadowColor: "rgba(0, 0, 0, 0.16)",
-    shadowOffset: { width: 3, height: 0 },
-    shadowRadius: 6,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.27,
+    shadowRadius: 4.65,
+
+    elevation: 6,
     borderRadius: 20,
     backgroundColor: "#e8e7e4",
     marginBottom: 100,
