@@ -6,7 +6,9 @@ export class Request {
     this.expire_time = "";
     this.remind_freq = 0;
     this.remind_time = "";
-    this.weight = 0;
+    this.daily_weight = 0;
+    this.notification_weight = 0;
+    this.priority = 0;
   }
 }
 export class Tag {
@@ -42,4 +44,10 @@ export const Frequency = {
   BIWEEKLY: 9, // *
   TRIWEEKLY: 10,
   DAILY: 11, // *
+};
+
+export const Priority = {
+  LOW: 0,
+  MED: 1,
+  HIGH: 2,
 };

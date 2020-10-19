@@ -13,12 +13,14 @@ import {
 // We could probably create a "do sql" function that takes an sql string, [] of args, and an error/success message
 // This file would look nicer. Other files would not. Probably better to do this huh.
 
+const db = SQLite.openDatabase("db.cupray");
+
 export function insertRequest(request) {
-  const db = SQLite.openDatabase("db.cupray");
   db.transaction((tx) => {
     tx.executeSql(
       "INSERT INTO requests(subject, description, create_time," +
-        "expire_time, remind_freq, remind_time) VALUES(?, ?, ?, ?, ?, ?);",
+        "expire_time, remind_freq, remind_time, daily_weight, " +
+        "notification_weight, priority) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?);",
       [
         request.subject,
         request.description,
@@ -26,6 +28,9 @@ export function insertRequest(request) {
         request.expire_time,
         request.remind_freq,
         request.remind_time,
+        request.daily_weight,
+        request.notification_weight,
+        request.priority,
       ],
       () => void 0,
       (tx, result) => {
@@ -35,7 +40,6 @@ export function insertRequest(request) {
   });
 }
 export function insertTag(tag) {
-  const db = SQLite.openDatabase("db.cupray");
   db.transaction((tx) => {
     tx.executeSql(
       "INSERT INTO tags(name) VALUES(?);",
@@ -48,7 +52,6 @@ export function insertTag(tag) {
   });
 }
 export function insertRequestTag(requestTag) {
-  const db = SQLite.openDatabase("db.cupray");
   db.transaction((tx) => {
     tx.executeSql(
       "INSERT INTO request_tags(requestID, tagID) VALUES(?, ?);",
@@ -61,7 +64,6 @@ export function insertRequestTag(requestTag) {
   });
 }
 export function insertReminder(reminder) {
-  const db = SQLite.openDatabase("db.cupray");
   db.transaction((tx) => {
     tx.executeSql(
       "INSERT INTO reminders(reminderID, requestID) VALUES(?, ?);",
@@ -74,7 +76,6 @@ export function insertReminder(reminder) {
   });
 }
 export function insertCategory(category) {
-  const db = SQLite.openDatabase("db.cupray");
   db.transaction((tx) => {
     tx.executeSql(
       "INSERT INTO categories(name, tagID, reminder_freq, reminder_time) VALUES(?, ?, ?, ?);",

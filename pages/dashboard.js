@@ -5,7 +5,7 @@ import { populateDB } from "../database/populate";
 import { createDatabase } from "../database/create";
 import * as queries from "../database/query";
 
-const Dashboard = ( { navigation }) => {
+const Dashboard = ({ navigation }) => {
   return (
     <View style={styles.dashboardContainer}>
       <View style={styles.verseofDay}>
@@ -30,10 +30,7 @@ const Dashboard = ( { navigation }) => {
           <Text style={styles.dashText}>Prayer Journal</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity
-          style={styles.dashButton}
-          onPress={() => queries.getTags()}
-        >
+        <TouchableOpacity style={styles.dashButton} onPress={() => void 0}>
           <Image
             style={styles.dashImage}
             source={require("../assets/pray.png")}
@@ -60,7 +57,7 @@ const Dashboard = ( { navigation }) => {
       />
     </View>
   );
-}
+};
 const styles = StyleSheet.create({
   container: {
     flex: 1,
