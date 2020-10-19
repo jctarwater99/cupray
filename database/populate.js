@@ -2,7 +2,7 @@ import * as SQLite from "expo-sqlite";
 import * as db_insert from "./insert";
 import {
   Request,
-  Request_Tag,
+  RequestTag,
   Tag,
   Reminder,
   Frequency,
@@ -20,6 +20,8 @@ export function populateDB() {
 
 export function populateDBwithRequests() {
   requests = [];
+
+  // 1
   request = new Request();
   request.subject = "Senior Design";
   request.description =
@@ -29,9 +31,12 @@ export function populateDBwithRequests() {
   request.expire_time = "2020-10-10T17:15:14+0000";
   request.remind_freq = 2;
   request.remind_time = "17:15:00";
-  request.weight = 1;
+  request.daily_weight = 1;
+  request.notification_weight = 0;
+  request.priority = 1;
   requests.push(request);
 
+  // 2
   request = new Request();
   request.subject = "Depressed Friend";
   request.description =
@@ -41,9 +46,12 @@ export function populateDBwithRequests() {
   request.expire_time = "2020-10-09T17:15:14+0000";
   request.remind_freq = 2;
   request.remind_time = "19:15:00";
-  request.weight = 10;
+  request.daily_weight = 3;
+  request.notification_weight = 0;
+  request.priority = 1;
   requests.push(request);
 
+  // 3
   request = new Request();
   request.subject = "Sister's Unhealthy Relationship";
   request.description =
@@ -53,9 +61,12 @@ export function populateDBwithRequests() {
   request.expire_time = "2020-12-30T14:15:14+0000";
   request.remind_freq = 11;
   request.remind_time = "19:20:00";
-  request.weight = 2;
+  request.daily_weight = 5;
+  request.notification_weight = 7;
+  request.priority = 0;
   requests.push(request);
 
+  // 4
   request = new Request();
   request.subject = "Division in my church";
   request.description =
@@ -65,9 +76,12 @@ export function populateDBwithRequests() {
   request.expire_time = "2020-10-07T14:15:14+0000";
   request.remind_freq = 8;
   request.remind_time = "08:05:00";
-  request.weight = 4;
+  request.daily_weight = 1;
+  request.notification_weight = 0;
+  request.priority = 0;
   requests.push(request);
 
+  // 5
   request = new Request();
   request.subject = "I need a servant's heart!";
   request.description =
@@ -77,9 +91,12 @@ export function populateDBwithRequests() {
   request.expire_time = "2020-11-07T14:15:14+0000";
   request.remind_freq = 7;
   request.remind_time = "09:00:00";
-  request.weight = 2;
+  request.daily_weight = 5;
+  request.notification_weight = 2;
+  request.priority = 1;
   requests.push(request);
 
+  // 6
   request = new Request();
   request.subject = "National Leadership";
   request.description =
@@ -90,9 +107,12 @@ export function populateDBwithRequests() {
   request.expire_time = "2020-11-04T14:15:14+0000";
   request.remind_freq = 2;
   request.remind_time = "12:00:00";
-  request.weight = 3;
+  request.daily_weight = 0;
+  request.notification_weight = 0;
+  request.priority = 2;
   requests.push(request);
 
+  // 7
   request = new Request();
   request.subject = "Bob";
   request.description = "Please make Bob the best physicist ever to live";
@@ -100,9 +120,12 @@ export function populateDBwithRequests() {
   request.expire_time = "2020-10-07T14:15:14+0000";
   request.remind_freq = 11;
   request.remind_time = "19:15:00";
-  request.weight = 1;
+  request.daily_weight = 4;
+  request.notification_weight = 4;
+  request.priority = 1;
   requests.push(request);
 
+  // 8
   request = new Request();
   request.subject = "01&((#3993(*003)))";
   request.description =
@@ -111,7 +134,9 @@ export function populateDBwithRequests() {
   request.expire_time = "2222-12-22T22:22:22+0000";
   request.remind_freq = 6;
   request.remind_time = "22:22:22";
-  request.weight = 1;
+  request.daily_weight = 2;
+  request.notification_weight = 3;
+  request.priority = 2;
   requests.push(request);
 
   requests.forEach((element) => {
@@ -129,14 +154,16 @@ export function populateDBwithTags() {
   }
 
   var tags = new Array();
-  tags.push(createTag("Bob"));
-  tags.push(createTag("Authority"));
-  tags.push(createTag("Sister"));
-  tags.push(createTag("Friends"));
-  tags.push(createTag("Archived"));
-  tags.push(createTag("Church"));
-  tags.push(createTag("Missions"));
-  tags.push(createTag("Family"));
+
+  tags.push(createTag("Bob")); // 1
+  tags.push(createTag("Authority")); // 2
+  tags.push(createTag("Sister")); // 3
+  tags.push(createTag("Friends")); // 4
+  tags.push(createTag("Archived")); // 5
+  tags.push(createTag("Church")); // 6
+  tags.push(createTag("Missions")); // 7
+  tags.push(createTag("Family")); // 8
+  tags.push(createTag("Expired"));
 
   tags.forEach((element) => {
     db_insert.insertTag(element);
@@ -167,6 +194,16 @@ export function populateDBwithCategories() {
 }
 
 export function populateDBwithRequestTags() {
+  function createRT(reqID, tagID) {
+    var RT = new RequestTag();
+    RT.requestID = reqID;
+    RT.tagID = tagID;
+    return RT;
+  }
+
+  var RTs = new Array();
+  RTs.push(createRT());
+
   console.log("Finished Inserting RequestTags");
 }
 

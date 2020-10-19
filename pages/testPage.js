@@ -1,18 +1,15 @@
 import React, { useEffect, useState } from "react";
-import * as SQLite from "expo-sqlite";
 import { StatusBar } from "expo-status-bar";
 import { Image, TouchableOpacity, Dimensions, FlatList } from "react-native";
 import { StyleSheet, Button, Text, View } from "react-native";
 import * as queries from "../database/query";
-
-const db = SQLite.openDatabase("db.cupray");
 
 const TestPage = () => {
   const [count, setCount] = useState(0);
   let [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    queries.getCategories((results) => setCategories(results));
+    queries.getTags((results) => setCategories(results));
   }, []);
 
   return (

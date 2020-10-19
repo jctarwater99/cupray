@@ -31,10 +31,7 @@ const Dashboard = ({ navigation }) => {
           <Text style={styles.dashText}>Prayer Journal</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity
-          style={styles.dashButton}
-          onPress={() => queries.getTags()}
-        >
+        <TouchableOpacity style={styles.dashButton} onPress={() => void 0}>
           <Image
             style={styles.dashImage}
             source={require("../assets/pray.png")}
@@ -62,7 +59,6 @@ const Dashboard = ({ navigation }) => {
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   // Overall container for screen
   dashboardContainer: {
