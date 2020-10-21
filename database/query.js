@@ -18,6 +18,7 @@ export function getCategories(callback) {
   });
 }
 
+// Broken? or not populated?
 export function getTags(callback) {
   db.transaction((tx) => {
     tx.executeSql(

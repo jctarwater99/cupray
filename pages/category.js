@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Image, TouchableOpacity, Dimensions, FlatList } from "react-native";
 import { StyleSheet, Button, Text, View } from "react-native";
 import { populateDB } from "../database/populate";
@@ -9,14 +9,39 @@ import { Category } from "../database/objects";
 var { height, width } = Dimensions.get("window");
 
 const CategoryScreen = ({ navigation }) => {
+  let [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    queries.getCategories((results) => {
+      setCategories(results);
+    });
+  }, []);
+
+  let listItemView = (category) => {
+    return (
+      <View key={item.user_id} style={styles.folderTitles}>
+        <Text>Id: {category.id}</Text>
+        <Text>Name: {category.name}</Text>
+      </View>
+    );
+  };
+
   return (
     <View style={styles.container}>
+      {/* This view below will probably be replaced with a
+      flatlist. We need to change the way the navigation works
+      though. We need to pass the tag of the category who's requests
+      we want to load when we get to the requests page. 
+      First I just want the categories to be loaded dynamically though*/}
       <View style={styles.folderContainer}>
         <Text style={styles.folderTitles}>Scripture Prayers</Text>
         <View style={styles.lineStyle} />
-        <Text style={styles.folderTitles}
-        onPress={() => navigation.navigate("Request")}
-        >Family</Text>
+        <Text
+          style={styles.folderTitles}
+          onPress={() => navigation.navigate("Request")}
+        >
+          Family
+        </Text>
         <View style={styles.lineStyle} />
         <Text style={styles.folderTitles}>Intimacy With God</Text>
         <View style={styles.lineStyle} />
@@ -26,7 +51,10 @@ const CategoryScreen = ({ navigation }) => {
         <Text style={styles.folderTitles}></Text>
       </View>
       <View style={styles.addCat}>
-        <TouchableOpacity style={styles.createCategoryButton}>
+        <TouchableOpacity
+          onPress={() => void 0} // goto create category page or popup or something
+          style={styles.createCategoryButton}
+        >
           <Text style={styles.plusSign}>+</Text>
         </TouchableOpacity>
       </View>
