@@ -14,7 +14,9 @@ const CategoryScreen = ({ navigation }) => {
       <View style={styles.folderContainer}>
         <Text style={styles.folderTitles}>Scripture Prayers</Text>
         <View style={styles.lineStyle} />
-        <Text style={styles.folderTitles}>Family</Text>
+        <Text style={styles.folderTitles}
+        onPress={() => navigation.navigate("Request")}
+        >Family</Text>
         <View style={styles.lineStyle} />
         <Text style={styles.folderTitles}>Intimacy With God</Text>
         <View style={styles.lineStyle} />

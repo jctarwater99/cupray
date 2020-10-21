@@ -15,6 +15,7 @@ import TestPage from "./pages/testPage";
 import { disableExpoCliLogging } from "expo/build/logs/Logs";
 import { SafeAreaView } from "react-native-safe-area-context";
 import CategoryScreen from "./pages/category";
+import RequestScreen from "./pages/request";
 
 const Stack = createStackNavigator();
 
@@ -28,6 +29,7 @@ const App = () => {
         {<Stack.Screen name="Welcome" component={WelcomeScreen} />}
         {<Stack.Screen name="Dash" component={Dashboard} />}
         {<Stack.Screen name="Cat" component={CategoryScreen} />}
+        {<Stack.Screen name="Request" component={RequestScreen} />}
         {<Stack.Screen name="Test" component={TestPage} />}
       </Stack.Navigator>
     </NavigationContainer>
