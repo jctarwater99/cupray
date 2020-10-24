@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { Image, TouchableOpacity, Dimensions, FlatList } from "react-native";
 import { StyleSheet, Button, Text, View } from "react-native";
-import { populateDB } from "../database/populate";
-import { createDatabase } from "../database/create";
 import * as queries from "../database/query";
 
 var { height, width } = Dimensions.get("window");

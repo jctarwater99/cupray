@@ -183,6 +183,7 @@ export function populateDBwithCategories() {
   }
 
   var cats = new Array();
+  cats.push(createCat("Friends", 4));
   cats.push(createCat("Church", 6));
   cats.push(createCat("Missions", 7));
   cats.push(createCat("Family", 8));
@@ -202,8 +203,15 @@ export function populateDBwithRequestTags() {
   }
 
   var RTs = new Array();
-  RTs.push(createRT());
-
+  RTs.push(createRT(7, 1));
+  RTs.push(createRT(2, 4));
+  RTs.push(createRT(7, 4));
+  RTs.push(createRT(4, 6));
+  RTs.push(createRT(3, 3));
+  RTs.push(createRT(3, 8));
+  RTs.forEach((element) => {
+    db_insert.insertRequestTag(element);
+  });
   console.log("Finished Inserting RequestTags");
 }
 

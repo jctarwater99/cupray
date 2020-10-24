@@ -14,19 +14,18 @@ import { Category } from "../database/objects";
 
 var { height, width } = Dimensions.get("window");
 
-const RequestScreen = ({ navigation }) => {
+const RequestScreen = ({ route }) => {
   let [requests, setRequests] = useState([]);
 
   useEffect(() => {
-    // This is the wrong query. We'll probably need to pass
-    // In some tags or something that we get from the
-    // User clicking on a certain category
-    queries.getTags((results) => setRequests(results));
+    queries.getRequestsInCategory(route.params.id, (results) =>
+      setRequests(results)
+    );
   }, []);
 
   let listItemView = (item) => {
     return (
-      <View key={item.user_id} style={styles.requestContainer}>
+      <View key={item.id} style={styles.requestContainer}>
         <View style={styles.circle} />
         <Text style={styles.requestTitles}>{item.name}</Text>
       </View>

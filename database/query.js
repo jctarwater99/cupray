@@ -34,6 +34,31 @@ export function getTags(callback) {
   });
 }
 
+export function getRequestsInCategory(categoryId, callback) {
+  db.transaction((tx) => {
+    tx.executeSql(
+      // "SELECT requests.name, requests.id FROM requests " +
+      //   "INNER JOIN request_tags as RT ON RT.requestID = request.id " +
+      //   "INNER JOIN tags ON RT.tagID = tags.id " +
+      //   "WHERE tags.id = ? " +
+      //   "EXCEPT " +
+      //   "SELECT requests.name, requests.id FROM requests " +
+      //   "INNER JOIN request_tags as RT ON RT.requestID = request.id " +
+      //   "INNER JOIN tags ON RT.tagID = tags.id; " +
+      //   "tags.name = 'expired';",
+      "SELECT * FROM request_tags;", // tf?
+      [categoryId],
+      (tx, result) => {
+        console.log(result);
+        callback(result.rows._array);
+      },
+      (tx, result) => {
+        console.log("getRequestsInCategory query failed", result);
+      }
+    );
+  });
+}
+
 // Currently probably results in duplicates
 // Need to do select * from requests except
 // select start from requests, tags, RTs were

@@ -1,10 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { Image, TouchableOpacity, Dimensions, FlatList } from "react-native";
-import { StyleSheet, Button, Text, View } from "react-native";
-import { populateDB } from "../database/populate";
-import { createDatabase } from "../database/create";
+import {
+  Image,
+  TouchableOpacity,
+  Dimensions,
+  StyleSheet,
+  FlatList,
+  Button,
+  Text,
+  View,
+} from "react-native";
 import * as queries from "../database/query";
 import { Category } from "../database/objects";
+import { preventAutoHide } from "expo/build/launch/SplashScreen";
 
 var { height, width } = Dimensions.get("window");
 
@@ -19,36 +26,28 @@ const CategoryScreen = ({ navigation }) => {
 
   let listItemView = (category) => {
     return (
-      <View key={item.user_id} style={styles.folderTitles}>
-        <Text>Id: {category.id}</Text>
-        <Text>Name: {category.name}</Text>
-      </View>
+      <Text
+        key={category.tagID}
+        style={styles.folderTitles}
+        onPress={() => navigation.navigate("Request", { id: category.tagID })}
+      >
+        {category.name}
+      </Text>
     );
+  };
+  let listViewItemSeparator = () => {
+    return <View style={styles.lineStyle} />;
   };
 
   return (
     <View style={styles.container}>
-      {/* This view below will probably be replaced with a
-      flatlist. We need to change the way the navigation works
-      though. We need to pass the tag of the category who's requests
-      we want to load when we get to the requests page. 
-      First I just want the categories to be loaded dynamically though*/}
       <View style={styles.folderContainer}>
-        <Text style={styles.folderTitles}>Scripture Prayers</Text>
-        <View style={styles.lineStyle} />
-        <Text
-          style={styles.folderTitles}
-          onPress={() => navigation.navigate("Request")}
-        >
-          Family
-        </Text>
-        <View style={styles.lineStyle} />
-        <Text style={styles.folderTitles}>Intimacy With God</Text>
-        <View style={styles.lineStyle} />
-        <Text style={styles.folderTitles}>Missions</Text>
-        <View style={styles.lineStyle} />
-        <Text style={styles.folderTitles}></Text>
-        <Text style={styles.folderTitles}></Text>
+        <FlatList
+          data={categories}
+          keyExtractor={(item, index) => index.toString()}
+          ItemSeparatorComponent={listViewItemSeparator}
+          renderItem={({ item }) => listItemView(item)}
+        />
       </View>
       <View style={styles.addCat}>
         <TouchableOpacity
@@ -73,12 +72,12 @@ const styles = StyleSheet.create({
 
   folderContainer: {
     width: 337,
-    height: "auto",
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 3,
     },
+    padding: height * 0.02,
     shadowOpacity: 0.27,
     shadowRadius: 4.65,
 
@@ -88,12 +87,13 @@ const styles = StyleSheet.create({
   },
 
   folderTitles: {
+    flex: 0,
+    fontSize: 16,
     color: "#003a63",
-    fontSize: 15,
     fontWeight: "700",
     flexDirection: "column",
-    marginTop: height * 0.04,
-    marginBottom: height * -0.02,
+    marginTop: height * 0.02,
+    marginBottom: height * 0.02,
     marginLeft: width * 0.1,
   },
 
@@ -101,8 +101,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#D3D3D3",
     margin: 40,
-    marginBottom: height * -0.02,
-    marginTop: height * 0.04,
+    marginBottom: 0,
+    marginTop: 0,
   },
 
   addCat: {

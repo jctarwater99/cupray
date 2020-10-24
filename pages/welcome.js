@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import { Image, TouchableOpacity, Dimensions, FlatList } from "react-native";
 import { StyleSheet, Button, Text, View } from "react-native";
+import { populateDB } from "../database/populate";
+import { createDatabase } from "../database/create";
 
 const WelcomeScreen = ({ navigation }) => {
   return (
@@ -17,7 +19,11 @@ const WelcomeScreen = ({ navigation }) => {
       <View style={{ flex: 1, justifyContent: "flex-end" }}>
         <TouchableOpacity
           style={styles.bbutton}
-          onPress={() => navigation.navigate("Dash")}
+          onPress={() => {
+            createDatabase();
+            populateDB();
+            navigation.navigate("Dash");
+          }}
         >
           <Text style={styles.prayButton}>Let's Start Praying</Text>
         </TouchableOpacity>

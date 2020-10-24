@@ -56,14 +56,14 @@ export function createDatabase() {
       null,
       () => void 0,
       (tx, result) => {
-        console.log("Creating 'tags' table failed", result);
+        console.log("Creating 'request_tags' table failed", result);
       }
     );
 
     // Categories
     tx.executeSql(
       "CREATE TABLE IF NOT EXISTS categories ( " +
-        "ID INTEGER PRIMARY KEY," +
+        "id INTEGER PRIMARY KEY," +
         "name TEXT," +
         "tagID INT, " +
         "reminder_freq INT, " +
