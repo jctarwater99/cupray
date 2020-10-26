@@ -27,7 +27,7 @@ const RequestScreen = ({ route }) => {
     return (
       <View key={item.id} style={styles.requestContainer}>
         <View style={styles.circle} />
-        <Text style={styles.requestTitles}>{item.name}</Text>
+        <Text style={styles.requestTitles}>{item.subject}</Text>
       </View>
     );
   };

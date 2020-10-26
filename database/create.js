@@ -1,18 +1,25 @@
 import * as SQLite from "expo-sqlite";
 
-// This function should probably get called every time the app loads?
-// If we can only call it once, (like the welcome screen?) that would be ideal.
-export function createDatabase() {
+export function dropForTesting() {
   const db = SQLite.openDatabase("db.cupray");
   db.transaction((tx) => {
     // TODO: These 5 commands will need to be removed eventually
     // TODO: These are only for keeping a clean DB while testing/developing
     tx.executeSql("DROP TABLE IF EXISTS requests", []);
     tx.executeSql("DROP TABLE IF EXISTS tags", []);
-    tx.executeSql("DROP TABLE IF EXISTS reminders", []);
     tx.executeSql("DROP TABLE IF EXISTS request_tags", []);
     tx.executeSql("DROP TABLE IF EXISTS categories", []);
+    tx.executeSql("DROP TABLE IF EXISTS reminders", [], () => {
+      console.log("Last drop");
+    });
+  });
+}
 
+// This function should probably get called every time the app loads?
+// If we can only call it once, (like the welcome screen?) that would be ideal.
+export function createDatabase() {
+  const db = SQLite.openDatabase("db.cupray");
+  db.transaction((tx) => {
     // Requests
     tx.executeSql(
       "CREATE TABLE IF NOT EXISTS requests (" +
@@ -48,11 +55,11 @@ export function createDatabase() {
     // Request Tags
     tx.executeSql(
       "CREATE TABLE IF NOT EXISTS request_tags ( " +
-        "id INTEGER PRIMARY KEY," +
-        "requestID	INT, " +
-        "tagID	INT, " +
-        "FOREIGN KEY (requestID) REFERENCES requests(id),",
-      "FOREIGN KEY (tagID) REFERENCES tags(id));",
+        "id INTEGER PRIMARY KEY, " +
+        "requestID INT, " +
+        "tagID INT, " +
+        "FOREIGN KEY (requestID) REFERENCES requests(id)," +
+        "FOREIGN KEY (tagID) REFERENCES tags(id));",
       null,
       () => void 0,
       (tx, result) => {
@@ -63,8 +70,8 @@ export function createDatabase() {
     // Categories
     tx.executeSql(
       "CREATE TABLE IF NOT EXISTS categories ( " +
-        "id INTEGER PRIMARY KEY," +
-        "name TEXT," +
+        "id INTEGER PRIMARY KEY, " +
+        "name TEXT, " +
         "tagID INT, " +
         "reminder_freq INT, " +
         "reminder_time TEXT, " +

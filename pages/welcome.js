@@ -3,7 +3,8 @@ import { StatusBar } from "expo-status-bar";
 import { Image, TouchableOpacity, Dimensions, FlatList } from "react-native";
 import { StyleSheet, Button, Text, View } from "react-native";
 import { populateDB } from "../database/populate";
-import { createDatabase } from "../database/create";
+import { createDatabase, dropForTesting } from "../database/create";
+import * as queries from "../database/query";
 
 const WelcomeScreen = ({ navigation }) => {
   return (
@@ -13,13 +14,20 @@ const WelcomeScreen = ({ navigation }) => {
       <Text style={styles.cu}>
         CU<Text style={styles.cupray}>Pray.</Text>
       </Text>
-      <Text style={styles.thePrayer}>
+      <Text
+        style={styles.thePrayer}
+        onPress={() => {
+          //dropForTesting();
+          queries.testQuery();
+        }}
+      >
         The prayer journal app for your 1000 days
       </Text>
       <View style={{ flex: 1, justifyContent: "flex-end" }}>
         <TouchableOpacity
           style={styles.bbutton}
           onPress={() => {
+            dropForTesting();
             createDatabase();
             populateDB();
             navigation.navigate("Dash");

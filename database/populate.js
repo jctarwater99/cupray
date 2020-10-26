@@ -114,7 +114,7 @@ export function populateDBwithRequests() {
 
   // 7
   request = new Request();
-  request.subject = "Bob";
+  request.subject = "Bob's Career";
   request.description = "Please make Bob the best physicist ever to live";
   request.create_time = "2020-09-22T14:15:14+0000";
   request.expire_time = "2020-10-07T14:15:14+0000";
@@ -127,16 +127,44 @@ export function populateDBwithRequests() {
 
   // 8
   request = new Request();
-  request.subject = "01&((#3993(*003)))";
+  request.subject = "Proposal";
+  request.description = "That Bob would propose to Yayira soon";
+  request.create_time = "2020-09-22T14:15:14+0000";
+  request.expire_time = "2020-10-07T14:15:14+0000";
+  request.remind_freq = 11;
+  request.remind_time = "19:15:00";
+  request.daily_weight = 4;
+  request.notification_weight = 4;
+  request.priority = 1;
+  requests.push(request);
+
+  // 9
+  request = new Request();
+  request.subject = "Contentment";
   request.description =
-    ")*)(!)(#*)$)$*)*#(#@~~~``Testing for bad input*$#))$#'''";
-  request.create_time = "0000-09-22T14:15:14+0000";
-  request.expire_time = "2222-12-22T22:22:22+0000";
-  request.remind_freq = 6;
-  request.remind_time = "22:22:22";
-  request.daily_weight = 2;
-  request.notification_weight = 3;
-  request.priority = 2;
+    "That I wouldn't complain as much since God is good despite the inconveniences";
+  request.create_time = "2020-09-22T14:15:14+0000";
+  request.expire_time = "2020-10-07T14:15:14+0000";
+  request.remind_freq = 11;
+  request.remind_time = "19:15:00";
+  request.daily_weight = 4;
+  request.notification_weight = 4;
+  request.priority = 1;
+  requests.push(request);
+
+  // 10
+  request = new Request();
+  request.subject = "Consistency in the word";
+  request.description =
+    "We make time for the things we value, that God would put a desire in me to know Him " +
+    "and a sense of urgency so that I will be motivated to spend daily time in the word meditating.";
+  request.create_time = "2020-09-22T14:15:14+0000";
+  request.expire_time = "2020-10-07T14:15:14+0000";
+  request.remind_freq = 11;
+  request.remind_time = "19:15:00";
+  request.daily_weight = 4;
+  request.notification_weight = 4;
+  request.priority = 1;
   requests.push(request);
 
   requests.forEach((element) => {
@@ -163,7 +191,8 @@ export function populateDBwithTags() {
   tags.push(createTag("Church")); // 6
   tags.push(createTag("Missions")); // 7
   tags.push(createTag("Family")); // 8
-  tags.push(createTag("Expired"));
+  tags.push(createTag("Expired")); // 9
+  tags.push(createTag("Myself"));
 
   tags.forEach((element) => {
     db_insert.insertTag(element);
@@ -187,6 +216,7 @@ export function populateDBwithCategories() {
   cats.push(createCat("Church", 6));
   cats.push(createCat("Missions", 7));
   cats.push(createCat("Family", 8));
+  cats.push(createCat("Myself", 10));
 
   cats.forEach((element) => {
     db_insert.insertCategory(element);
@@ -203,12 +233,19 @@ export function populateDBwithRequestTags() {
   }
 
   var RTs = new Array();
-  RTs.push(createRT(7, 1));
-  RTs.push(createRT(2, 4));
-  RTs.push(createRT(7, 4));
-  RTs.push(createRT(4, 6));
-  RTs.push(createRT(3, 3));
-  RTs.push(createRT(3, 8));
+  RTs.push(createRT(7, 1)); // Bob's career,        Bob
+  RTs.push(createRT(2, 4)); // Depressed friend,    friends
+  RTs.push(createRT(7, 4)); // Bob's career,        friends
+  RTs.push(createRT(4, 6)); // Division in church   church
+  RTs.push(createRT(3, 3)); // Sisters rela-ship    sister
+  RTs.push(createRT(3, 8)); // Sisters rela-ship    Family
+  RTs.push(createRT(8, 9)); // Proposal,            expired
+  RTs.push(createRT(8, 1)); // Proposal,            Bob
+  RTs.push(createRT(8, 1)); // Proposal,            friends
+  RTs.push(createRT(1, 10)); // SD                   myself
+  RTs.push(createRT(9, 10)); // Contentment          myself
+  RTs.push(createRT(10, 10)); // Consistency in word  myself
+
   RTs.forEach((element) => {
     db_insert.insertRequestTag(element);
   });

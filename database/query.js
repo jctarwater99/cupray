@@ -3,6 +3,36 @@ import { Request, Request_Tag, Tag, Reminder, Frequency } from "./objects";
 
 const db = SQLite.openDatabase("db.cupray");
 
+export function testQuery() {
+  db.transaction((tx) => {
+    tx.executeSql(
+      // requests.subject, requests.id //////instead of *
+      "SELECT * FROM requests " +
+        "INNER JOIN request_tags as RT ON RT.requestID = requests.id " +
+        "INNER JOIN tags ON RT.tagID = tags.id;",
+      [],
+      (tx, result) => {
+        console.log(result);
+      }
+    );
+  });
+}
+
+export function getAllTables() {
+  db.transaction((tx) => {
+    tx.executeSql(
+      "SELECT name FROM sqlite_master " +
+        "WHERE type IN ('table','view') " +
+        "AND name NOT LIKE 'sqlite_%' " +
+        "ORDER BY 1;",
+      [],
+      (tx, result) => {
+        console.log(result);
+      }
+    );
+  });
+}
+
 export function getCategories(callback) {
   db.transaction((tx) => {
     tx.executeSql(
@@ -37,19 +67,17 @@ export function getTags(callback) {
 export function getRequestsInCategory(categoryId, callback) {
   db.transaction((tx) => {
     tx.executeSql(
-      // "SELECT requests.name, requests.id FROM requests " +
-      //   "INNER JOIN request_tags as RT ON RT.requestID = request.id " +
-      //   "INNER JOIN tags ON RT.tagID = tags.id " +
-      //   "WHERE tags.id = ? " +
-      //   "EXCEPT " +
-      //   "SELECT requests.name, requests.id FROM requests " +
-      //   "INNER JOIN request_tags as RT ON RT.requestID = request.id " +
-      //   "INNER JOIN tags ON RT.tagID = tags.id; " +
-      //   "tags.name = 'expired';",
-      "SELECT * FROM request_tags;", // tf?
+      "SELECT DISTINCT requests.subject, requests.id FROM requests " +
+        "INNER JOIN request_tags as RT ON RT.requestID = requests.id " +
+        "INNER JOIN tags ON RT.tagID = tags.id " +
+        "WHERE tags.id = ?; " +
+        "EXCEPT " +
+        "SELECT requests.subject, requests.id FROM requests " +
+        "INNER JOIN request_tags as RT ON RT.requestID = requests.id " +
+        "INNER JOIN tags ON RT.tagID = tags.id " +
+        "tags.name = 'expired';",
       [categoryId],
       (tx, result) => {
-        console.log(result);
         callback(result.rows._array);
       },
       (tx, result) => {

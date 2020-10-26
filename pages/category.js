@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import * as queries from "../database/query";
 import { Category } from "../database/objects";
-import { preventAutoHide } from "expo/build/launch/SplashScreen";
+//import { preventAutoHide } from "expo/build/launch/SplashScreen";
 
 var { height, width } = Dimensions.get("window");
 

@@ -1,6 +1,7 @@
 Installing React native for Developing
 	> node -v 		// (if version is less than 12.14.1 or dne, update it, good luck)
 	> npm install -g expo-cli
+	> // yarn add expo??
 			// Also install expo client app on mobile phone
 
 	Creating a new project is done by running
