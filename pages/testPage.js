@@ -4,30 +4,19 @@ import { Image, TouchableOpacity, Dimensions, FlatList } from "react-native";
 import { StyleSheet, Button, Text, View } from "react-native";
 import * as queries from "../database/query";
 
-const TestPage = () => {
-  const [count, setCount] = useState(0);
+const TestPage = ({ route, navigation }) => {
   let [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    queries.getTags((results) => setCategories(results));
+    //queries.getTags((results) => setCategories(results));
+    console.log(route.params.id);
+    queries.getRequest(route.params.id, (results) => console.log(results));
   }, []);
 
   return (
     <View>
       <Text>Example Text</Text>
-      <Button
-        title="Count Button"
-        onPress={function () {
-          setCount(count + 1);
-        }}
-      />
-      <Text>Did I press the button {count} times?</Text>
-      <Button
-        title="Query Button"
-        onPress={function () {
-          console.log(categories);
-        }}
-      />
+      <Button title="Query Button" />
       <Text>Oi yeet </Text>
     </View>
   );

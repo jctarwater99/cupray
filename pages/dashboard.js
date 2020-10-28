@@ -47,7 +47,7 @@ const Dashboard = ({ navigation }) => {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.dashButton}
-          onPress={() => navigation.navigate("Test")}
+          //onPress={() => navigation.navigate("Test")}
         ></TouchableOpacity>
       </View>
       <Image

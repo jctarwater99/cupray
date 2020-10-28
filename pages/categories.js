@@ -11,11 +11,10 @@ import {
 } from "react-native";
 import * as queries from "../database/query";
 import { Category } from "../database/objects";
-//import { preventAutoHide } from "expo/build/launch/SplashScreen";
 
 var { height, width } = Dimensions.get("window");
 
-const CategoryScreen = ({ navigation }) => {
+const CategoriesScreen = ({ navigation }) => {
   let [categories, setCategories] = useState([]);
 
   useEffect(() => {
@@ -29,7 +28,7 @@ const CategoryScreen = ({ navigation }) => {
       <Text
         key={category.tagID}
         style={styles.folderTitles}
-        onPress={() => navigation.navigate("Request", { id: category.tagID })}
+        onPress={() => navigation.navigate("Requests", { id: category.tagID })}
       >
         {category.name}
       </Text>
@@ -129,4 +128,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CategoryScreen;
+export default CategoriesScreen;

@@ -14,7 +14,7 @@ import { Category } from "../database/objects";
 
 var { height, width } = Dimensions.get("window");
 
-const RequestScreen = ({ route }) => {
+const RequestsScreen = ({ route, navigation }) => {
   let [requests, setRequests] = useState([]);
 
   useEffect(() => {
@@ -23,12 +23,19 @@ const RequestScreen = ({ route }) => {
     );
   }, []);
 
-  let listItemView = (item) => {
+  let listItemView = (request) => {
     return (
-      <View key={item.id} style={styles.requestContainer}>
+      <TouchableOpacity
+        key={request.id}
+        style={styles.requestContainer}
+        // Navigate @ Request, need isNew??
+        onPress={() => {
+          navigation.navigate("Test", { id: request.id, isNew: false });
+        }}
+      >
         <View style={styles.circle} />
-        <Text style={styles.requestTitles}>{item.subject}</Text>
-      </View>
+        <Text style={styles.requestTitles}>{request.subject}</Text>
+      </TouchableOpacity>
     );
   };
 
@@ -112,4 +119,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default RequestScreen;
+export default RequestsScreen;
