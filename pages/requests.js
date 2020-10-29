@@ -30,7 +30,7 @@ const RequestsScreen = ({ route, navigation }) => {
         style={styles.requestContainer}
         // Navigate @ Request, need isNew??
         onPress={() => {
-          navigation.navigate("Test", { id: request.id, isNew: false });
+          navigation.navigate("RefactorRequest", { id: request.id, isNew: false });
         }}
       >
         <View style={styles.circle} />
@@ -74,16 +74,16 @@ const styles = StyleSheet.create({
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 3,
+      height: 2,
     },
     shadowOpacity: 0.27,
-    shadowRadius: 4.65,
+    shadowRadius: 3.65,
 
     elevation: 6,
     borderRadius: 10,
     backgroundColor: "#E8E7E4",
-    marginBottom: height * 0.01,
-    overflow: "hidden",
+    margin: height * 0.01,
+    
   },
 
   requestTitles: {
@@ -95,12 +95,12 @@ const styles = StyleSheet.create({
   },
 
   circle: {
-    width: 22,
-    height: 22,
+    width: 26,
+    height: 26,
     borderRadius: 100 / 2,
     borderWidth: 2,
     borderColor: "#D6C396",
-    marginTop: height * 0.025,
+    marginTop: height * 0.019,
     marginLeft: width * 0.09,
   },
 

@@ -40,6 +40,10 @@ const CategoriesScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
+      <Text style={styles.title}>
+          Categories<Text style={styles.titleAccent}>.</Text>
+        </Text>
+
       <View style={styles.folderContainer}>
         <FlatList
           data={categories}
@@ -66,15 +70,15 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#EFEFEF",
     alignItems: "center",
-    marginTop: height * 0.06,
+    marginTop: height * 0.02,
   },
 
   folderContainer: {
-    width: 337,
+    width: 327,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 3,
+      height: 2,
     },
     padding: height * 0.02,
     shadowOpacity: 0.27,
@@ -125,6 +129,19 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     marginTop: height * -0.003,
     textAlign: "center",
+  },
+  title: {
+    color: "#D6C396",
+    fontSize: 46,
+    fontWeight: "700",
+    marginBottom: height * 0.02,
+    marginRight: width * 0.2,
+  },
+
+  titleAccent: {
+    color: "#003A63",
+    fontSize: 46,
+    fontWeight: "700",
   },
 });
 
