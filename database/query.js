@@ -115,7 +115,7 @@ export function getRequest(id, callback) {
       "SELECT * FROM requests WHERE requests.id = ?;",
       [id],
       (tx, result) => {
-        callback(result.rows._array);
+        callback(result.rows._array[0]);
       },
       (tx, result) => {
         console.log("getRequest query failed", result);

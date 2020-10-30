@@ -25,13 +25,18 @@ const App = () => {
     <NavigationContainer>
       <Stack.Navigator
         initialRouteName="Welcome"
-        screenOptions={{ headerShown: true }}
+        screenOptions={{ headerShown: false }}
       >
         {<Stack.Screen name="Welcome" component={WelcomeScreen} />}
         {<Stack.Screen name="Dash" component={Dashboard} />}
         {<Stack.Screen name="Cat" component={CategoriesScreen} />}
         {<Stack.Screen name="Requests" component={RequestsScreen} />}
-        {<Stack.Screen name="RefactorRequest" component={RefactorRequestScreen} />}
+        {
+          <Stack.Screen
+            name="RefactorRequest"
+            component={RefactorRequestScreen}
+          />
+        }
         {<Stack.Screen name="Test" component={TestPage} />}
       </Stack.Navigator>
     </NavigationContainer>

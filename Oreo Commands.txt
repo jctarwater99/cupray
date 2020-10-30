@@ -30,4 +30,7 @@ Installing React native navigation for multiple screens?
 	// For mac and IOS
 	> npx pod-install ios
 
+Installing radio buttons to simplify user error
+
+	> npm install radio-buttons-react-native --save
 

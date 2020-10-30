@@ -7,57 +7,56 @@ import {
   SafeAreaView,
 } from "react-native";
 import { StyleSheet, Button, Text, View } from "react-native";
-import { populateDB } from "../database/populate";
-import { createDatabase } from "../database/create";
 import * as queries from "../database/query";
 import { Category } from "../database/objects";
+import RadioButtonRN from "radio-buttons-react-native";
 
 var { height, width } = Dimensions.get("window");
 
 const RefactorRequestScreen = ({ route, navigation }) => {
+  let [request, setRequest] = useState([]);
 
-    let [requests, setRequest] = useState([]);
+  useEffect(() => {
+    queries.getRequest(route.params.id, (results) => setRequest(results));
+  }, []);
 
-    useEffect(() => {
-      queries.getRequest(route.params.id, (results) =>
-        setRequest(results)
-      );
-    }, []);
+  const data = [
+    {
+      label: "low",
+    },
+    {
+      label: "medium",
+    },
+    {
+      label: "high",
+    },
+  ];
 
-    let listItemView = (request) => {
-        return (
-          <View
-            key={request.id}
-            style={styles.requestContainer}
-          >
-            <Text style={styles.requestTitles}>{request.subject}</Text>
-          </View>
-        );
-      };
+  return (
+    <SafeAreaView style={{ flex: 1 }}>
+      <View style={styles.container}>
+        <Text style={styles.title}>{request.subject}</Text>
+        <View>
+          <Button
+            title="PMTT"
+            onPress={() => {
+              console.log(request.subject);
+            }}
+          />
+          <RadioButtonRN
+            data={data}
+            initial={2}
+            selectedBtn={(e) => console.log(e)}
+          />
+        </View>
+      </View>
+    </SafeAreaView>
+  );
+};
 
-    return (
-        <SafeAreaView style={{ flex: 1 }}>
-          <View style={styles.container}>
-            {/* this line is returning the wrong request subject and idk why */}
-            <Text style={styles.title}>
-            {request.subject}
-            </Text>
-            <View>
-              <FlatList
-              // Enter Request Details here
-                data={requests}
-                keyExtractor={(item, index) => index.toString()}
-                renderItem={({ item }) => listItemView(item)}
-              />
-            </View>
-          </View>
-        </SafeAreaView>
-      );
-}
-    
 const styles = StyleSheet.create({
-// Overall container for screen
-container: {
+  // Overall container for screen
+  container: {
     flex: 1,
     backgroundColor: "#EFEFEF",
     alignItems: "center",
@@ -79,7 +78,6 @@ container: {
     borderRadius: 10,
     backgroundColor: "#E8E7E4",
     margin: height * 0.01,
-    
   },
 
   requestTitles: {
@@ -97,8 +95,6 @@ container: {
     marginBottom: height * 0.05,
     marginTop: height * 0.05,
   },
-
 });
-
 
 export default RefactorRequestScreen;
