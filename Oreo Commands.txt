@@ -11,6 +11,8 @@ Installing React native for Developing
 Installing Sqlite for the database
 	> expo install expo-sqlite
 
+Installing radio buttons to simplify user error
+	> npm install radio-buttons-react-native --save
 
 Installing Firebase for notifications
 	https://www.youtube.com/watch?v=z6DEJXYQpP4
@@ -30,7 +32,4 @@ Installing React native navigation for multiple screens?
 	// For mac and IOS
 	> npx pod-install ios
 
-Installing radio buttons to simplify user error
-
-	> npm install radio-buttons-react-native --save
 

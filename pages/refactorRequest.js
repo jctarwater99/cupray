@@ -5,8 +5,14 @@ import {
   Dimensions,
   FlatList,
   SafeAreaView,
+  TextInput,
+  TextArea,
+  StyleSheet,
+  Button,
+  Text,
+  View,
 } from "react-native";
-import { StyleSheet, Button, Text, View } from "react-native";
+import { CheckBox } from "react-native-elements";
 import * as queries from "../database/query";
 import { Category } from "../database/objects";
 import RadioButtonRN from "radio-buttons-react-native";
@@ -37,17 +43,52 @@ const RefactorRequestScreen = ({ route, navigation }) => {
       <View style={styles.container}>
         <Text style={styles.title}>{request.subject}</Text>
         <View>
-          <Button
-            title="PMTT"
-            onPress={() => {
-              console.log(request.subject);
-            }}
-          />
-          <RadioButtonRN
+          <View>
+            <Button
+              title="PMTT"
+              onPress={() => {
+                console.log(request.subject);
+              }}
+            />
+          </View>
+          {/*<RadioButtonRN
             data={data}
             initial={2}
             selectedBtn={(e) => console.log(e)}
-          />
+          />*/}
+          <View
+            style={{
+              flexDirection: "row",
+              margin: 0,
+              padding: 0,
+              alignItems: "flex-end",
+              //justifyContent: "flex-end",
+            }}
+          >
+            <CheckBox
+              style={styles.checkBox}
+              checkedIcon="dot-circle-o"
+              uncheckedIcon="circle-o"
+            ></CheckBox>
+            <CheckBox
+              style={styles.checkBox}
+              checkedIcon="dot-circle-o"
+              uncheckedIcon="circle-o"
+            ></CheckBox>
+            <CheckBox
+              style={styles.checkBox}
+              checkedIcon="dot-circle-o"
+              uncheckedIcon="circle-o"
+            ></CheckBox>
+          </View>
+          <View>
+            <TextInput
+              placeholder="Temporary Filler"
+              numberOfLines={4}
+              maxLength={100} // max number of chars
+              style={{ backgroundColor: "white", marginTop: 30, padding: 5 }}
+            />
+          </View>
         </View>
       </View>
     </SafeAreaView>
@@ -55,6 +96,8 @@ const RefactorRequestScreen = ({ route, navigation }) => {
 };
 
 const styles = StyleSheet.create({
+  checkbox: { minWidth: 0, minHeight: 0 },
+
   // Overall container for screen
   container: {
     flex: 1,
