@@ -21,6 +21,8 @@ var { height, width } = Dimensions.get("window");
 
 const RefactorRequestScreen = ({ route, navigation }) => {
   let [request, setRequest] = useState([]);
+  let [dld, setDLD] = useState(route.params.isNew);
+  let [checked, setBoxes] = useState([true, true, false]);
 
   useEffect(() => {
     queries.getRequest(route.params.id, (results) => setRequest(results));
@@ -38,6 +40,103 @@ const RefactorRequestScreen = ({ route, navigation }) => {
     },
   ];
 
+  const temp = () => {
+    return (
+      <View>
+        <Text>Hello</Text>
+      </View>
+    );
+  };
+
+  const temp2 = () => {
+    return (
+      <View>
+        <Text>Hi</Text>
+      </View>
+    );
+  };
+  {
+    /*
+    I think we want something along the lines of the following
+
+    if editMode
+      return
+        button: save -> onPress -> db call, edit mode = false
+        textbox: title
+        dropdown: category
+        textbox: etc
+        buttons, with on press function
+
+    else
+      return
+        button: edit -> onPress -> edit mode = true
+        text: title
+        text: category
+        text: etc
+        buttons, but with no on press function
+  */
+  }
+  {
+    /*
+  if (dld) {
+    return (
+      <SafeAreaView style={{ flex: 1, marginTop: height * 0.4 }}>
+        <Button
+          title="testy"
+          onPress={() => {
+            console.log("changed");
+            setDLD(false);
+          }}
+        >
+          <Text>test</Text>
+        </Button>
+        {temp()}
+      </SafeAreaView>
+    );
+  } else {
+    return (
+      <SafeAreaView style={{ flex: 1, marginTop: height * 0.4 }}>
+        <Button
+          title="testy2"
+          onPress={() => {
+            console.log("changed");
+            setDLD(true);
+          }}
+        >
+          <Text>test</Text>
+        </Button>
+        {temp2()}
+      </SafeAreaView>
+    );
+  } */
+  }
+
+  let handleCheckBoxPress = (box) => {
+    let newState = [];
+    if (box == "Box1") {
+      newState = [true, false, false];
+    } else if (box == "Box2") {
+      newState = [true, true, false];
+    } else {
+      newState = [true, true, true];
+    }
+
+    setBoxes(newState);
+  };
+
+  let makeCheckBox = (cBoxTitle, stateVar) => {
+    return (
+      <CheckBox
+        id={cBoxTitle}
+        style={styles.checkBox}
+        checkedIcon="dot-circle-o"
+        uncheckedIcon="circle-o"
+        onPress={() => handleCheckBoxPress(cBoxTitle)}
+        checked={stateVar}
+      ></CheckBox>
+    );
+  };
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.container}>
@@ -51,11 +150,6 @@ const RefactorRequestScreen = ({ route, navigation }) => {
               }}
             />
           </View>
-          {/*<RadioButtonRN
-            data={data}
-            initial={2}
-            selectedBtn={(e) => console.log(e)}
-          />*/}
           <View
             style={{
               flexDirection: "row",
@@ -65,21 +159,9 @@ const RefactorRequestScreen = ({ route, navigation }) => {
               //justifyContent: "flex-end",
             }}
           >
-            <CheckBox
-              style={styles.checkBox}
-              checkedIcon="dot-circle-o"
-              uncheckedIcon="circle-o"
-            ></CheckBox>
-            <CheckBox
-              style={styles.checkBox}
-              checkedIcon="dot-circle-o"
-              uncheckedIcon="circle-o"
-            ></CheckBox>
-            <CheckBox
-              style={styles.checkBox}
-              checkedIcon="dot-circle-o"
-              uncheckedIcon="circle-o"
-            ></CheckBox>
+            {makeCheckBox("Box1", checked[0])}
+            {makeCheckBox("Box2", checked[1])}
+            {makeCheckBox("Box3", checked[2])}
           </View>
           <View>
             <TextInput
@@ -89,6 +171,7 @@ const RefactorRequestScreen = ({ route, navigation }) => {
               style={{ backgroundColor: "white", marginTop: 30, padding: 5 }}
             />
           </View>
+          <View style={{ margin: 10 }} />
         </View>
       </View>
     </SafeAreaView>
