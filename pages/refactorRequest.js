@@ -21,11 +21,21 @@ var { height, width } = Dimensions.get("window");
 
 const RefactorRequestScreen = ({ route, navigation }) => {
   let [request, setRequest] = useState([]);
+  let [tags, setTags] = useState([]);
+  let [categories, setCategories] = useState([]);
+  let [requestCategory, setRC] = useState("None");
+  let [requestTags, setRTags] = useState([]);
   let [dld, setDLD] = useState(route.params.isNew);
   let [checked, setBoxes] = useState([true, true, false]);
 
   useEffect(() => {
-    queries.getRequest(route.params.id, (results) => setRequest(results));
+    queries.getRequest(route.params.req_id, (results) => setRequest(results));
+    queries.getTags((results) => setTags(results));
+    queries.getCategories((results) => setCategories(results));
+    queries.getTagsForRequest(route.params.req_id, (results) => {
+      setRTags(results);
+      console.log("Tags", results);
+    });
   }, []);
 
   const data = [
@@ -146,7 +156,7 @@ const RefactorRequestScreen = ({ route, navigation }) => {
             <Button
               title="PMTT"
               onPress={() => {
-                console.log(request.subject);
+                console.log(request.id);
               }}
             />
           </View>
