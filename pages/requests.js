@@ -30,7 +30,7 @@ const RequestsScreen = ({ route, navigation }) => {
         style={styles.requestContainer}
         // Navigate @ Request, need isNew??
         onPress={() => {
-          navigation.navigate("RefactorRequest", { id: request.id, isNew: false });
+          navigation.navigate("ThisRequest", { id: request.id, isNew: false });
         }}
       >
         <View style={styles.circle} />

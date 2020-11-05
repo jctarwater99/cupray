@@ -5,6 +5,7 @@ import {
   Dimensions,
   FlatList,
   SafeAreaView,
+  ScrollView,
   TextInput,
   TextArea,
   StyleSheet,
@@ -18,7 +19,7 @@ import { Category } from "../database/objects";
 
 var { height, width } = Dimensions.get("window");
 
-const RefactorRequestScreen = ({ route, navigation }) => {
+const ThisRequestScreen = ({ route, navigation }) => {
   let [request, setRequest] = useState([]);
   let [dld, setDLD] = useState(route.params.isNew);
   let [checked, setBoxes] = useState([true, true, false]);
@@ -128,10 +129,15 @@ const RefactorRequestScreen = ({ route, navigation }) => {
       <CheckBox
         id={cBoxTitle}
         style={styles.checkBox}
-        checkedIcon="dot-circle-o"
+        checkedIcon="circle"
         uncheckedIcon="circle-o"
+        margin={'50%'}
+        size={40}
         onPress={() => handleCheckBoxPress(cBoxTitle)}
         checked={stateVar}
+        checkedColor={"#D6C396"}
+        uncheckedColor={"#D6C396"}
+        
       ></CheckBox>
     );
   };
@@ -139,20 +145,32 @@ const RefactorRequestScreen = ({ route, navigation }) => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.container}>
-        <Text style={styles.title}>{request.subject}</Text>
+      <Text style={styles.title}>{request.subject}</Text>
+      <Text style={styles.subtitle}>{/*request.category*/} Family </Text>
+          <ScrollView style={styles.requestContainer}>
         <View>
           <View>
-            <Button
-              title="PMTT"
-              onPress={() => {
-                console.log(request.subject);
-              }}
+          <Text style={styles.boxheaders}>Description</Text>
+            <TextInput
+              placeholder="But I must explain to you how all this 
+              mistaken idea of denouncing pleasure 
+              and praising pain was born and I will 
+              give you a complete account of the system, 
+              and expound the actual teachings of the 
+              great explorer of the truth, 
+              the master-builder of human happiness. "
+              numberOfLines={4}
+              maxLength={100} // max number of chars
+              multiline = {true}
+              style={{ backgroundColor: "white",  padding: 5, marginBottom: 20, textAlignVertical: 'top'}}
             />
           </View>
+
+          <Text style={styles.boxheaders}>Priority</Text>
           <View
             style={{
               flexDirection: "row",
-              margin: 0,
+              marginTop: 0,
               padding: 0,
               alignItems: "flex-end",
               //justifyContent: "flex-end",
@@ -162,23 +180,25 @@ const RefactorRequestScreen = ({ route, navigation }) => {
             {makeCheckBox("Box2", checked[1])}
             {makeCheckBox("Box3", checked[2])}
           </View>
-          <View>
-            <TextInput
-              placeholder="Temporary Filler"
-              numberOfLines={4}
-              maxLength={100} // max number of chars
-              style={{ backgroundColor: "white", marginTop: 30, padding: 5}}
-            />
-          </View>
-          <View style={{ margin: 10 }} />
+          <Text style={styles.boxheaders}>Tags</Text>
+          <Text style={styles.subtitle}>Family</Text>
+
+          <Text style={styles.boxheaders}>Frequency</Text>
+          <Text style={styles.subtitle}>Daily</Text>
+
+          <Text style={styles.boxheaders}>Reminder Expiration</Text>
+          <Text style={styles.subtitle}>11/24/2020</Text>
         </View>
+        </ScrollView>
       </View>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  checkbox: { minWidth: 0, minHeight: 0 },
+  checkBox: { 
+      backgroundColor: "#D6C396",
+    },
 
   // Overall container for screen
   container: {
@@ -190,7 +210,6 @@ const styles = StyleSheet.create({
 
   requestContainer: {
     width: 327,
-    height: 540,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -203,6 +222,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: "#E8E7E4",
     margin: height * 0.01,
+    padding: 25,
   },
 
   requestTitles: {
@@ -217,9 +237,21 @@ const styles = StyleSheet.create({
     color: "#003A63",
     fontSize: 30,
     fontWeight: "700",
-    marginBottom: height * 0.05,
+    marginBottom: height * 0.01,
     marginTop: height * 0.05,
+  },
+  subtitle: {
+    color: "#7E8C96",
+    fontSize: 20,
+    fontWeight: "700",
+    marginBottom: height * 0.02,
+  },
+  boxheaders: {
+    color: "#003A63",
+    fontSize: 20,
+    fontWeight: "700",
+    marginBottom: height * 0.01,
   },
 });
 
-export default RefactorRequestScreen;
+export default ThisRequestScreen;
