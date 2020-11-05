@@ -18,7 +18,7 @@ const RequestsScreen = ({ route, navigation }) => {
   let [requests, setRequests] = useState([]);
 
   useEffect(() => {
-    queries.getRequestsInCategory(route.params.id, (results) =>
+    queries.getRequestsInCategory(route.params.cat_id, (results) =>
       setRequests(results)
     );
   }, []);
@@ -30,7 +30,12 @@ const RequestsScreen = ({ route, navigation }) => {
         style={styles.requestContainer}
         // Navigate @ Request, need isNew??
         onPress={() => {
-          navigation.navigate("ThisRequest", { id: request.id, isNew: false });
+          navigation.navigate("ThisRequest", {
+            cat_id: route.params.cat_id,
+            cat_name: route.params.cat_name,
+            req_id: request.id,
+            isNew: false,
+          });
         }}
       >
         <View style={styles.circle} />
@@ -83,7 +88,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: "#E8E7E4",
     margin: height * 0.01,
-    
   },
 
   requestTitles: {

@@ -28,7 +28,12 @@ const CategoriesScreen = ({ navigation }) => {
       <Text
         key={category.tagID}
         style={styles.folderTitles}
-        onPress={() => navigation.navigate("Requests", { id: category.tagID })}
+        onPress={() =>
+          navigation.navigate("Requests", {
+            cat_id: category.tagID,
+            cat_name: category.name,
+          })
+        }
       >
         {category.name}
       </Text>
@@ -41,8 +46,8 @@ const CategoriesScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>
-          Categories<Text style={styles.titleAccent}>.</Text>
-        </Text>
+        Categories<Text style={styles.titleAccent}>.</Text>
+      </Text>
 
       <View style={styles.folderContainer}>
         <FlatList

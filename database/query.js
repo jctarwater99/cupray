@@ -150,3 +150,20 @@ export function updateRequest(reqID, request, callback) {
     );
   });
 }
+
+export function getTagsForRequest(id, callback) {
+  db.transaction((tx) => {
+    tx.executeSql(
+      "SELECT DISTINCT tags.name, tags.id FROM tags, request_tags " +
+        "ON request_tags.tagID = tags.id " +
+        "WHERE request_tags.requestID = ?;",
+      [id],
+      (tx, result) => {
+        callback(result.rows._array);
+      },
+      (tx, result) => {
+        console.log("getRequest query failed", result);
+      }
+    );
+  });
+}
