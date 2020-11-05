@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#EFEFEF",
     alignItems: "center",
     justifyContent: "center",
-    marginTop: height * 0.03,
+    marginTop: height * 0.1,
   },
 
   container: {
@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
   container2: {
     flex: 3,
     flexDirection: "row",
-    marginTop: height * 0.08,
+    marginTop: height * 0.04,
     marginLeft: -40,
     alignContent: "center",
   },

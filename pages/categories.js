@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#EFEFEF",
     alignItems: "center",
-    marginTop: height * 0.02,
+    marginTop: height * 0.1,
   },
 
   folderContainer: {
@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 1,
     },
     padding: height * 0.02,
     shadowOpacity: 0.27,

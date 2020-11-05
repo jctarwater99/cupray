@@ -25,7 +25,7 @@ const ThisRequestScreen = ({ route, navigation }) => {
   let [checked, setBoxes] = useState([true, true, false]);
 
   useEffect(() => {
-    queries.getRequest(route.params.id, (results) => setRequest(results));
+    queries.getRequest(route.params.req_id, (results) => setRequest(results));
   }, []);
 
   const data = [
@@ -146,7 +146,15 @@ const ThisRequestScreen = ({ route, navigation }) => {
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.container}>
       <Text style={styles.title}>{request.subject}</Text>
-      <Text style={styles.subtitle}>{/*request.category*/} Family </Text>
+
+      <View style={{flexDirection: 'row', alignSelf: 'stretch', justifyContent: 'space-between'}}> 
+      <Text style={{width: 95}}></Text>
+      <Text style={styles.subtitle}>{route.params.cat_name} </Text>
+      <TouchableOpacity style={styles.editButton}>
+          <Text style={styles.editButtonText}>EDIT</Text>
+      </TouchableOpacity>
+
+      </View>
           <ScrollView style={styles.requestContainer}>
         <View>
           <View>
@@ -209,7 +217,7 @@ const styles = StyleSheet.create({
   },
 
   requestContainer: {
-    width: 327,
+    
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -251,6 +259,31 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "700",
     marginBottom: height * 0.01,
+  },
+
+  editButton: {
+    width: 70,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.27,
+    shadowRadius: 2.65,
+
+    elevation: 6,
+    borderRadius: 10,
+    backgroundColor: "#7E8C96",
+    marginRight: width * 0.06,
+    
+  },
+
+  editButtonText: {
+    color: "#EFEFEF",
+    fontSize: 18,
+    fontWeight: "700",
+    textAlign: "center",
+    marginTop: height * 0.01,
   },
 });
 
