@@ -5,6 +5,7 @@ import { StyleSheet, Button, Text, View } from "react-native";
 import { populateDB } from "../database/populate";
 import { createDatabase, dropForTesting } from "../database/create";
 import * as queries from "../database/query";
+import * as Notifications from 'expo-notifications';
 
 const WelcomeScreen = ({ navigation }) => {
   return (
@@ -30,6 +31,23 @@ const WelcomeScreen = ({ navigation }) => {
             dropForTesting();
             createDatabase();
             populateDB();
+            Notifications.setNotificationHandler(({
+              handleNotification: async () => ({
+                shouldShowAlert: true,
+                shouldPlaySound: false,
+                shouldSetBadge: false,
+              })
+            }));
+
+            Notifications.scheduleNotificationAsync({
+              content: {
+                title: "Yay!",
+                body: "You did it!",
+              },
+              trigger: {
+                seconds: 1,
+              },
+            });
             navigation.navigate("Dash");
           }}
         >
