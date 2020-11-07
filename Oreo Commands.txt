@@ -12,7 +12,11 @@ Installing Sqlite for the database
 	> expo install expo-sqlite
 
 Installing radio buttons to simplify user error
-	> npm install radio-buttons-react-native --save
+	// Actually, I think I found a default library and used that, not these
+	> npm install radio-buttons-react-native --save 
+
+Installing dropdown menu for picking categories when editing request
+	> npm install react-native-dropdown-picker --save
 
 Installing expo notification handling
 	> expo install expo-notifications

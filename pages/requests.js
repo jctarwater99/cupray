@@ -34,7 +34,7 @@ const RequestsScreen = ({ route, navigation }) => {
             cat_id: route.params.cat_id,
             cat_name: route.params.cat_name,
             req_id: request.id,
-            isNew: false,
+            isNewReq: false,
           });
         }}
       >

@@ -23,6 +23,19 @@ export function populateDBwithRequests() {
 
   // 1
   request = new Request();
+  request.subject = "  ";
+  request.description = "  ";
+  request.create_time = "";
+  request.expire_time = "";
+  request.remind_freq = 0;
+  request.remind_time = "";
+  request.daily_weight = 1;
+  request.notification_weight = 0;
+  request.priority = 1;
+  requests.push(request);
+
+  // 2
+  request = new Request();
   request.subject = "Senior Design";
   request.description =
     "That I would not worry about deadlines and finishing in time but rather that I would be " +
@@ -36,7 +49,7 @@ export function populateDBwithRequests() {
   request.priority = 1;
   requests.push(request);
 
-  // 2
+  // 3
   request = new Request();
   request.subject = "Depressed Friend";
   request.description =
@@ -51,9 +64,9 @@ export function populateDBwithRequests() {
   request.priority = 1;
   requests.push(request);
 
-  // 3
+  // 4
   request = new Request();
-  request.subject = "Sister's Unhealthy Relationship";
+  request.subject = "Sister's Relationship";
   request.description =
     "Lord, could you give my sister Agatha the wisdom and insight to see how bad this guy is?" +
     "Please show her that she can and should go to you for her worth and validation";
@@ -66,7 +79,7 @@ export function populateDBwithRequests() {
   request.priority = 0;
   requests.push(request);
 
-  // 4
+  // 5
   request = new Request();
   request.subject = "Division in my church";
   request.description =
@@ -81,7 +94,7 @@ export function populateDBwithRequests() {
   request.priority = 0;
   requests.push(request);
 
-  // 5
+  // 6
   request = new Request();
   request.subject = "I need a servant's heart!";
   request.description =
@@ -96,7 +109,7 @@ export function populateDBwithRequests() {
   request.priority = 1;
   requests.push(request);
 
-  // 6
+  // 7
   request = new Request();
   request.subject = "National Leadership";
   request.description =
@@ -112,7 +125,7 @@ export function populateDBwithRequests() {
   request.priority = 2;
   requests.push(request);
 
-  // 7
+  // 8
   request = new Request();
   request.subject = "Bob's Career";
   request.description = "Please make Bob the best physicist ever to live";
@@ -125,7 +138,7 @@ export function populateDBwithRequests() {
   request.priority = 1;
   requests.push(request);
 
-  // 8
+  // 9
   request = new Request();
   request.subject = "Proposal";
   request.description = "That Bob would propose to Yayira soon";
@@ -138,7 +151,7 @@ export function populateDBwithRequests() {
   request.priority = 1;
   requests.push(request);
 
-  // 9
+  // 10
   request = new Request();
   request.subject = "Contentment";
   request.description =
@@ -152,7 +165,7 @@ export function populateDBwithRequests() {
   request.priority = 1;
   requests.push(request);
 
-  // 10
+  // 11
   request = new Request();
   request.subject = "Consistency in the word";
   request.description =
@@ -233,18 +246,18 @@ export function populateDBwithRequestTags() {
   }
 
   var RTs = new Array();
-  RTs.push(createRT(7, 1)); // Bob's career,        Bob
-  RTs.push(createRT(2, 4)); // Depressed friend,    friends
-  RTs.push(createRT(7, 4)); // Bob's career,        friends
-  RTs.push(createRT(4, 6)); // Division in church   church
-  RTs.push(createRT(3, 3)); // Sisters rela-ship    sister
-  RTs.push(createRT(3, 8)); // Sisters rela-ship    Family
-  RTs.push(createRT(8, 9)); // Proposal,            expired
-  RTs.push(createRT(8, 1)); // Proposal,            Bob
-  RTs.push(createRT(8, 1)); // Proposal,            friends
-  RTs.push(createRT(1, 10)); // SD                   myself
-  RTs.push(createRT(9, 10)); // Contentment          myself
-  RTs.push(createRT(10, 10)); // Consistency in word  myself
+  RTs.push(createRT(8, 1)); // Bob's career,        Bob
+  RTs.push(createRT(3, 4)); // Depressed friend,    friends
+  RTs.push(createRT(8, 4)); // Bob's career,        friends
+  RTs.push(createRT(5, 6)); // Division in church   church
+  RTs.push(createRT(4, 3)); // Sisters rela-ship    sister
+  RTs.push(createRT(4, 8)); // Sisters rela-ship    Family
+  RTs.push(createRT(9, 9)); // Proposal,            expired
+  RTs.push(createRT(9, 1)); // Proposal,            Bob
+  RTs.push(createRT(9, 1)); // Proposal,            friends
+  RTs.push(createRT(2, 10)); // SD                   myself
+  RTs.push(createRT(10, 10)); // Contentment          myself
+  RTs.push(createRT(11, 10)); // Consistency in word  myself
 
   RTs.forEach((element) => {
     db_insert.insertRequestTag(element);

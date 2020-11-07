@@ -1,7 +1,7 @@
 export class Request {
   constructor() {
-    this.subject = "";
-    this.description = "";
+    this.subject = ""; // Max 25?
+    this.description = ""; // Max 300?
     this.create_time = "";
     this.expire_time = "";
     this.remind_freq = 0;
@@ -13,7 +13,7 @@ export class Request {
 }
 export class Tag {
   constructor() {
-    this.name = "";
+    this.name = ""; // max 10?
   }
 }
 export class RequestTag {
@@ -25,7 +25,7 @@ export class Reminder {
   reminderID = 0;
 }
 export class Category {
-  name = "";
+  name = ""; // Max 10?
   TagID = 0;
   reminder_freq = 0;
   reminder_time = "";
