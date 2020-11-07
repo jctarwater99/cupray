@@ -47,8 +47,17 @@ const Dashboard = ({ navigation }) => {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.dashButton}
-          //onPress={() => navigation.navigate("Test")}
-        ></TouchableOpacity>
+          onPress={() => {
+            navigation.navigate("ThisRequest", {
+              cat_id: 1,
+              cat_name: "Select Category",
+              req_id: 1,
+              isNewReq: true,
+            });
+          }}
+        >
+          <Text style={{ marginTop: 50, marginLeft: 20 }}>New Request</Text>
+        </TouchableOpacity>
       </View>
       <Image
         style={styles.CUlogo}

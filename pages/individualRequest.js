@@ -3,11 +3,9 @@ import {
   Image,
   TouchableOpacity,
   Dimensions,
-  FlatList,
   SafeAreaView,
   ScrollView,
   TextInput,
-  TextArea,
   StyleSheet,
   Button,
   Text,
@@ -17,44 +15,34 @@ import { CheckBox } from "react-native-elements";
 import * as queries from "../database/query";
 import { Category } from "../database/objects";
 
+import DropDownPicker from "react-native-dropdown-picker";
+
 var { height, width } = Dimensions.get("window");
 
 const ThisRequestScreen = ({ route, navigation }) => {
   let [request, setRequest] = useState([]);
-  let [dld, setDLD] = useState(route.params.isNew);
+  let [tags, setTags] = useState([]);
+  let [categories, setCategories] = useState([]);
+  let [requestCategory, setRC] = useState("None");
+  let [requestTags, setRTags] = useState([]);
+  let [inEditMode, setMode] = useState(route.params.isNewReq);
   let [checked, setBoxes] = useState([true, true, false]);
+  let [description, setDescription] = useState("");
+
+  let [country, setCountry] = useState("uk");
 
   useEffect(() => {
-    queries.getRequest(route.params.req_id, (results) => setRequest(results));
+    queries.getRequest(route.params.req_id, (results) => {
+      setRequest(results);
+      setDescription(results.description);
+    });
+    queries.getCategories((results) => setCategories(results));
+    queries.getTagsForRequest(route.params.req_id, (results) =>
+      setRTags(results)
+    );
+    queries.getTags((results) => setTags(results));
   }, []);
 
-  const data = [
-    {
-      label: "low",
-    },
-    {
-      label: "medium",
-    },
-    {
-      label: "high",
-    },
-  ];
-
-  const temp = () => {
-    return (
-      <View>
-        <Text>Hello</Text>
-      </View>
-    );
-  };
-
-  const temp2 = () => {
-    return (
-      <View>
-        <Text>Hi</Text>
-      </View>
-    );
-  };
   {
     /*
     I think we want something along the lines of the following
@@ -75,40 +63,6 @@ const ThisRequestScreen = ({ route, navigation }) => {
         text: etc
         buttons, but with no on press function
   */
-  }
-  {
-    /*
-  if (dld) {
-    return (
-      <SafeAreaView style={{ flex: 1, marginTop: height * 0.4 }}>
-        <Button
-          title="testy"
-          onPress={() => {
-            console.log("changed");
-            setDLD(false);
-          }}
-        >
-          <Text>test</Text>
-        </Button>
-        {temp()}
-      </SafeAreaView>
-    );
-  } else {
-    return (
-      <SafeAreaView style={{ flex: 1, marginTop: height * 0.4 }}>
-        <Button
-          title="testy2"
-          onPress={() => {
-            console.log("changed");
-            setDLD(true);
-          }}
-        >
-          <Text>test</Text>
-        </Button>
-        {temp2()}
-      </SafeAreaView>
-    );
-  } */
   }
 
   let handleCheckBoxPress = (box) => {
@@ -131,82 +85,203 @@ const ThisRequestScreen = ({ route, navigation }) => {
         style={styles.checkBox}
         checkedIcon="circle"
         uncheckedIcon="circle-o"
-        margin={'50%'}
+        margin={"50%"}
         size={40}
-        onPress={() => handleCheckBoxPress(cBoxTitle)}
+        onPress={() => {
+          if (inEditMode) {
+            handleCheckBoxPress(cBoxTitle);
+          }
+        }}
         checked={stateVar}
         checkedColor={"#D6C396"}
         uncheckedColor={"#D6C396"}
-        
       ></CheckBox>
     );
   };
 
-  return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <View style={styles.container}>
-      <Text style={styles.title}>{request.subject}</Text>
+  if (inEditMode) {
+    return (
+      <SafeAreaView style={{ flex: 1 }}>
+        <View style={styles.container}>
+          <TextInput
+            maxLength={25} // max number of chars
+            multiline={false}
+            value={request.subject}
+            //onChange={(text) => setDescription(text)}
+            style={{
+              backgroundColor: "white",
+              padding: 5,
+              marginBottom: 20,
+              textAlignVertical: "top",
+            }}
+          />
 
-      <View style={{flexDirection: 'row', alignSelf: 'stretch', justifyContent: 'space-between'}}> 
-      <Text style={{width: 95}}></Text>
-      <Text style={styles.subtitle}>{route.params.cat_name} </Text>
-      <TouchableOpacity style={styles.editButton}>
-          <Text style={styles.editButtonText}>EDIT</Text>
-      </TouchableOpacity>
-
-      </View>
-          <ScrollView style={styles.requestContainer}>
-        <View>
-          <View>
-          <Text style={styles.boxheaders}>Description</Text>
-            <TextInput
-              placeholder="But I must explain to you how all this 
-              mistaken idea of denouncing pleasure 
-              and praising pain was born and I will 
-              give you a complete account of the system, 
-              and expound the actual teachings of the 
-              great explorer of the truth, 
-              the master-builder of human happiness. "
-              numberOfLines={4}
-              maxLength={100} // max number of chars
-              multiline = {true}
-              style={{ backgroundColor: "white",  padding: 5, marginBottom: 20, textAlignVertical: 'top'}}
-            />
-          </View>
-
-          <Text style={styles.boxheaders}>Priority</Text>
           <View
             style={{
               flexDirection: "row",
-              marginTop: 0,
-              padding: 0,
-              alignItems: "flex-end",
-              //justifyContent: "flex-end",
+              alignSelf: "stretch",
+              justifyContent: "space-between",
             }}
           >
-            {makeCheckBox("Box1", checked[0])}
-            {makeCheckBox("Box2", checked[1])}
-            {makeCheckBox("Box3", checked[2])}
+            <Text style={{ width: 95 }}></Text>
+            {/*<Text style={styles.subtitle}>{route.params.cat_name}</Text>*/}
+            <DropDownPicker
+              items={[
+                {
+                  label: "USA",
+                  value: "usa",
+                },
+                {
+                  label: "UK",
+                  value: "uk",
+                },
+                {
+                  label: "France",
+                  value: "france",
+                },
+              ]}
+              defaultValue={country}
+              containerStyle={{ height: 40 }}
+              style={{ backgroundColor: "#fafafa" }}
+              itemStyle={{
+                justifyContent: "flex-start",
+              }}
+              dropDownStyle={{ backgroundColor: "#fafafa" }}
+              onChangeItem={(item) => setCountry(item.value)}
+            />
+            <TouchableOpacity
+              onPress={() => {
+                setMode(false);
+              }}
+              style={styles.editButton}
+            >
+              <Text style={styles.editButtonText}>SAVE</Text>
+            </TouchableOpacity>
           </View>
-          <Text style={styles.boxheaders}>Tags</Text>
-          <Text style={styles.subtitle}>Family</Text>
+          <ScrollView style={styles.requestContainer}>
+            <View>
+              <View>
+                <Text style={styles.boxheaders}>Description</Text>
+                <TextInput
+                  numberOfLines={4}
+                  maxLength={300} // max number of chars
+                  multiline={true}
+                  value={description}
+                  onChange={(text) => setDescription(text)}
+                  style={{
+                    backgroundColor: "white",
+                    padding: 5,
+                    marginBottom: 20,
+                    textAlignVertical: "top",
+                  }}
+                />
+              </View>
 
-          <Text style={styles.boxheaders}>Frequency</Text>
-          <Text style={styles.subtitle}>Daily</Text>
+              <Text style={styles.boxheaders}>Priority</Text>
+              <View
+                style={{
+                  flexDirection: "row",
+                  marginTop: 0,
+                  padding: 0,
+                  alignItems: "flex-end",
+                  //justifyContent: "flex-end",
+                }}
+              >
+                {makeCheckBox("Box1", checked[0])}
+                {makeCheckBox("Box2", checked[1])}
+                {makeCheckBox("Box3", checked[2])}
+              </View>
+              <Text style={styles.boxheaders}>Tags</Text>
+              <Text style={styles.subtitle}>Family</Text>
 
-          <Text style={styles.boxheaders}>Reminder Expiration</Text>
-          <Text style={styles.subtitle}>11/24/2020</Text>
+              <Text style={styles.boxheaders}>Frequency</Text>
+              <Text style={styles.subtitle}>Daily</Text>
+
+              <Text style={styles.boxheaders}>Reminder Expiration</Text>
+              <Text style={styles.subtitle}>11/24/2020</Text>
+            </View>
+          </ScrollView>
         </View>
-        </ScrollView>
-      </View>
-    </SafeAreaView>
-  );
+      </SafeAreaView>
+    );
+  } else {
+    return (
+      <SafeAreaView style={{ flex: 1 }}>
+        <View style={styles.container}>
+          <Text style={styles.title}>{request.subject}</Text>
+
+          <View
+            style={{
+              flexDirection: "row",
+              alignSelf: "stretch",
+              justifyContent: "space-between",
+            }}
+          >
+            <Text style={{ width: 95 }}></Text>
+            <Text style={styles.subtitle}>{route.params.cat_name} </Text>
+            <TouchableOpacity
+              onPress={() => {
+                setMode(true);
+              }}
+              style={styles.editButton}
+            >
+              <Text style={styles.editButtonText}>EDIT</Text>
+            </TouchableOpacity>
+          </View>
+          <ScrollView style={styles.requestContainer}>
+            <View>
+              <View>
+                <Text style={styles.boxheaders}>Description</Text>
+                <Text
+                  //numberOfLines={4}
+                  //maxLength={300} // max number of chars
+                  //multiline={true}
+                  //value={request.description}
+                  style={{
+                    //  backgroundColor: "white",
+                    padding: 5,
+                    marginBottom: 20,
+                    textAlignVertical: "top",
+                  }}
+                >
+                  {description}
+                </Text>
+              </View>
+
+              <Text style={styles.boxheaders}>Priority</Text>
+              <View
+                style={{
+                  flexDirection: "row",
+                  marginTop: 0,
+                  padding: 0,
+                  alignItems: "flex-end",
+                  //justifyContent: "flex-end",
+                }}
+              >
+                {makeCheckBox("Box1", checked[0])}
+                {makeCheckBox("Box2", checked[1])}
+                {makeCheckBox("Box3", checked[2])}
+              </View>
+              <Text style={styles.boxheaders}>Tags</Text>
+              <Text style={styles.subtitle}>Family</Text>
+
+              <Text style={styles.boxheaders}>Frequency</Text>
+              <Text style={styles.subtitle}>Daily</Text>
+
+              <Text style={styles.boxheaders}>Reminder Expiration</Text>
+              <Text style={styles.subtitle}>11/24/2020</Text>
+            </View>
+          </ScrollView>
+        </View>
+      </SafeAreaView>
+    );
+  }
 };
 
 const styles = StyleSheet.create({
-  checkBox: { 
-      backgroundColor: "#D6C396",
-    },
+  checkBox: {
+    backgroundColor: "#D6C396",
+  },
 
   // Overall container for screen
   container: {
@@ -217,7 +292,6 @@ const styles = StyleSheet.create({
   },
 
   requestContainer: {
-    
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -275,7 +349,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: "#7E8C96",
     marginRight: width * 0.06,
-    
   },
 
   editButtonText: {
