@@ -13,6 +13,7 @@ import {
 } from "react-native";
 import { CheckBox } from "react-native-elements";
 import * as queries from "../database/query";
+import * as updates from "../database/update";
 import { Category } from "../database/objects";
 
 import DropDownPicker from "react-native-dropdown-picker";
@@ -28,6 +29,7 @@ const ThisRequestScreen = ({ route, navigation }) => {
   let [inEditMode, setMode] = useState(route.params.isNewReq);
   let [checked, setBoxes] = useState([true, true, false]);
   let [description, setDescription] = useState("");
+  let [subject, setSubject] = useState("");
 
   let [country, setCountry] = useState("uk");
 
@@ -35,6 +37,7 @@ const ThisRequestScreen = ({ route, navigation }) => {
     queries.getRequest(route.params.req_id, (results) => {
       setRequest(results);
       setDescription(results.description);
+      setSubject(results.subject);
     });
     queries.getCategories((results) => setCategories(results));
     queries.getTagsForRequest(route.params.req_id, (results) =>
@@ -64,6 +67,20 @@ const ThisRequestScreen = ({ route, navigation }) => {
         buttons, but with no on press function
   */
   }
+  let saveChanges = () => {
+    req = new Request();
+    req.subject = subject;
+    req.description = description;
+
+    req.expire_time = request.expire_time;
+    req.remind_freq = request.remind_freq;
+    req.remind_time = request.remind_time;
+    req.priority = request.priority;
+
+    updates.updateRequest(route.params.req_id, req);
+
+    // Also handle tag and category changes
+  };
 
   let handleCheckBoxPress = (box) => {
     let newState = [];
@@ -104,10 +121,11 @@ const ThisRequestScreen = ({ route, navigation }) => {
       <SafeAreaView style={{ flex: 1 }}>
         <View style={styles.container}>
           <TextInput
+            style={{ marginTop: height * 0.02 }}
             maxLength={25} // max number of chars
             multiline={false}
-            value={request.subject}
-            //onChange={(text) => setDescription(text)}
+            value={subject}
+            onChange={(text) => setSubject(text.nativeEvent.text)}
             style={{
               backgroundColor: "white",
               padding: 5,
@@ -152,6 +170,7 @@ const ThisRequestScreen = ({ route, navigation }) => {
             <TouchableOpacity
               onPress={() => {
                 setMode(false);
+                saveChanges();
               }}
               style={styles.editButton}
             >
@@ -167,7 +186,7 @@ const ThisRequestScreen = ({ route, navigation }) => {
                   maxLength={300} // max number of chars
                   multiline={true}
                   value={description}
-                  onChange={(text) => setDescription(text)}
+                  onChange={(text) => setDescription(text.nativeEvent.text)}
                   style={{
                     backgroundColor: "white",
                     padding: 5,
@@ -208,7 +227,7 @@ const ThisRequestScreen = ({ route, navigation }) => {
     return (
       <SafeAreaView style={{ flex: 1 }}>
         <View style={styles.container}>
-          <Text style={styles.title}>{request.subject}</Text>
+          <Text style={styles.title}>{subject}</Text>
 
           <View
             style={{
@@ -220,9 +239,7 @@ const ThisRequestScreen = ({ route, navigation }) => {
             <Text style={{ width: 95 }}></Text>
             <Text style={styles.subtitle}>{route.params.cat_name} </Text>
             <TouchableOpacity
-              onPress={() => {
-                setMode(true);
-              }}
+              onPress={() => setMode(true)}
               style={styles.editButton}
             >
               <Text style={styles.editButtonText}>EDIT</Text>
@@ -233,12 +250,7 @@ const ThisRequestScreen = ({ route, navigation }) => {
               <View>
                 <Text style={styles.boxheaders}>Description</Text>
                 <Text
-                  //numberOfLines={4}
-                  //maxLength={300} // max number of chars
-                  //multiline={true}
-                  //value={request.description}
                   style={{
-                    //  backgroundColor: "white",
                     padding: 5,
                     marginBottom: 20,
                     textAlignVertical: "top",
@@ -289,6 +301,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#EFEFEF",
     alignItems: "center",
     marginTop: height * 0.02,
+    minWidth: width * 0.99,
   },
 
   requestContainer: {

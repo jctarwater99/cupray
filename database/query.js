@@ -124,33 +124,6 @@ export function getRequest(id, callback) {
   });
 }
 
-export function updateRequest(reqID, request, callback) {
-  db.transaction((tx) => {
-    tx.executeSql(
-      "UPDATE requests(subject, description, create_time," +
-        "expire_time, remind_freq, remind_time, daily_weight, " +
-        "notification_weight, priority) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?) " +
-        "WHERE requests = ?;",
-      [
-        request.subject,
-        request.description,
-        request.create_time,
-        request.expire_time,
-        request.remind_freq,
-        request.remind_time,
-        request.daily_weight,
-        request.notification_weight,
-        request.priority,
-        reqID,
-      ],
-      () => void 0,
-      (tx, result) => {
-        console.log("Updating request failed", result);
-      }
-    );
-  });
-}
-
 export function getTagsForRequest(id, callback) {
   db.transaction((tx) => {
     tx.executeSql(
