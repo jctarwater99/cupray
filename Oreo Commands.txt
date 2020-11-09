@@ -18,13 +18,8 @@ Installing radio buttons to simplify user error
 Installing dropdown menu for picking categories when editing request
 	> npm install react-native-dropdown-picker --save
 
-Installing Firebase for notifications
-	https://www.youtube.com/watch?v=z6DEJXYQpP4
-	Just watch this. Might go through later and update the relevant files that need to be 
-	changed along with the installation to make it work. If not, just putting the link 
-	here is easier than saying run these 3 commands and update these 6 files by pasting 
-	these 20 lines and blah blah blah
-
+Installing expo notification handling
+	> expo install expo-notifications
 
 Installing React native navigation for multiple screens?
 	> npm install @react-navigation/native
