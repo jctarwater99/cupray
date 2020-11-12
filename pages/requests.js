@@ -11,6 +11,7 @@ import { populateDB } from "../database/populate";
 import { createDatabase } from "../database/create";
 import * as queries from "../database/query";
 import { Category } from "../database/objects";
+import { CheckBox } from "react-native-elements";
 
 var { height, width } = Dimensions.get("window");
 
@@ -40,6 +41,7 @@ const RequestsScreen = ({ route, navigation }) => {
       >
         <View style={styles.circle} />
         <Text style={styles.requestTitles}>{request.subject}</Text>
+         <Text style={styles.requestArrow}>{"➤"}</Text>
       </TouchableOpacity>
     );
   };
@@ -57,7 +59,9 @@ const RequestsScreen = ({ route, navigation }) => {
             keyExtractor={(item, index) => index.toString()}
             renderItem={({ item }) => listItemView(item)}
           />
+          
         </View>
+
       </View>
     </SafeAreaView>
   );
@@ -69,7 +73,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#EFEFEF",
     alignItems: "center",
-    marginTop: height * 0.02,
+    marginTop: height * 0.025,
   },
 
   requestContainer: {
@@ -94,8 +98,16 @@ const styles = StyleSheet.create({
     color: "#7E8C96",
     fontSize: 15,
     fontWeight: "700",
-    marginTop: height * 0.02,
+    marginTop: height * 0.025,
     marginLeft: width * 0.05,
+  },
+
+  requestArrow: {
+    color: "#D6C396",
+    fontSize: 20,
+    fontWeight: "700",
+    marginTop: height * 0.02,
+    textAlign: 'right',
   },
 
   circle: {
@@ -105,14 +117,14 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: "#D6C396",
     marginTop: height * 0.019,
-    marginLeft: width * 0.09,
+    marginLeft: width * 0.05,
   },
 
   title: {
     color: "#003A63",
     fontSize: 46,
     fontWeight: "700",
-    marginBottom: height * 0.02,
+    marginBottom: height * 0.005,
     marginLeft: width * -0.3,
   },
 

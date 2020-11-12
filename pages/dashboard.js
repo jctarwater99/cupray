@@ -8,6 +8,9 @@ var { height, width } = Dimensions.get("window");
 const Dashboard = ({ navigation }) => {
   return (
     <View style={styles.dashboardContainer}>
+       <Text style={styles.title}>
+        Home<Text style={styles.titleAccent}>.</Text>
+      </Text>
       <View style={styles.verseofDay}>
         <Text style={styles.verseOf}>Verse of the Day:</Text>
         <View style={styles.lineStyle} />
@@ -56,13 +59,16 @@ const Dashboard = ({ navigation }) => {
             });
           }}
         >
-          <Text style={{ marginTop: 50, marginLeft: 20 }}>New Request</Text>
+          <Text style={styles.plusSymbol}> + </Text>
+          <Text style={[styles.dashText, {marginTop: height * 0.07}]}>New Request</Text>
         </TouchableOpacity>
       </View>
+      <View>
       <Image
         style={styles.CUlogo}
         source={require("../assets/cuLogoColor.png")}
       />
+      </View>
     </View>
   );
 };
@@ -73,7 +79,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#EFEFEF",
     alignItems: "center",
     justifyContent: "center",
-    marginTop: height * 0.1,
+    marginTop: height * 0.08,
   },
 
   container: {
@@ -86,9 +92,24 @@ const styles = StyleSheet.create({
   container2: {
     flex: 3,
     flexDirection: "row",
-    marginTop: height * 0.04,
+    marginTop: height * 0.1,
     marginLeft: -40,
     alignContent: "center",
+  },
+
+  title: {
+    color: "#003A63",
+    fontSize: 46,
+    fontWeight: "700",
+    marginBottom: height * 0.01,
+    marginRight: width * 0.5,
+  },
+
+  titleAccent: {
+    color: "#003A63",
+    color: "#D6C396",
+    fontSize: 46,
+    fontWeight: "700",
   },
 
   dashButton: {
@@ -113,7 +134,7 @@ const styles = StyleSheet.create({
     width: 65,
     height: 95,
     marginLeft: width * 0.09,
-    marginTop: height * 0.03,
+    marginTop: height * 0.025,
   },
 
   dashText: {
@@ -126,10 +147,11 @@ const styles = StyleSheet.create({
   },
 
   CUlogo: {
-    width: 163,
-    height: 46,
+    width: 186,
+    height: 54,
     opacity: 0.85,
-    marginBottom: height * 0.03,
+    marginBottom: height * 0.04,
+    marginTop: height * 0.04,
   },
 
   verseOf: {
@@ -176,6 +198,15 @@ const styles = StyleSheet.create({
     marginTop: height * 0.01,
     width: 270,
   },
+
+  plusSymbol: {
+    color: "#003A63",
+    fontSize: 46,
+    fontWeight: "700",
+    marginLeft: width * 0.115,
+    marginTop: height * 0.045,
+  },
+
 });
 
 export default Dashboard;

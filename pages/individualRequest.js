@@ -160,7 +160,7 @@ const ThisRequestScreen = ({ route, navigation }) => {
               ]}
               defaultValue={country}
               containerStyle={{ height: 40 }}
-              style={{ backgroundColor: "#fafafa" }}
+              style={{ backgroundColor: "#fafafa", zIndex: 10 }}
               itemStyle={{
                 justifyContent: "flex-start",
               }}
@@ -192,6 +192,7 @@ const ThisRequestScreen = ({ route, navigation }) => {
                     padding: 5,
                     marginBottom: 20,
                     textAlignVertical: "top",
+                    fontWeight: "700",
                   }}
                 />
               </View>
@@ -210,6 +211,7 @@ const ThisRequestScreen = ({ route, navigation }) => {
                 {makeCheckBox("Box2", checked[1])}
                 {makeCheckBox("Box3", checked[2])}
               </View>
+              {/* these are not yet dynamic */}
               <Text style={styles.boxheaders}>Tags</Text>
               <Text style={styles.subtitle}>Family</Text>
 
@@ -333,7 +335,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontWeight: "700",
     marginBottom: height * 0.01,
-    marginTop: height * 0.05,
+    marginTop: height * 0.02,
   },
   subtitle: {
     color: "#7E8C96",
