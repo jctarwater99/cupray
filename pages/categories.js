@@ -18,7 +18,7 @@ const CategoriesScreen = ({ navigation }) => {
   let [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    queries.getCategories((results) => {
+    queries.getCategories() (results) => {
       setCategories(results);
     });
   }, []);
