@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#EFEFEF",
     alignItems: "center",
-    marginTop: height * 0.1,
+    marginTop: height * 0.08,
   },
 
   folderContainer: {

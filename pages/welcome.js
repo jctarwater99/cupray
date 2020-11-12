@@ -7,9 +7,12 @@ import { createDatabase, dropForTesting } from "../database/create";
 import * as queries from "../database/query";
 import * as Notifications from 'expo-notifications';
 
+var { height, width } = Dimensions.get("window");
+
 const WelcomeScreen = ({ navigation }) => {
   return (
     <View style={styles.welcomeContainer}>
+      <View style = {styles.contentContainer}>
       <Image style={styles.pray} source={require("../assets/pray.png")} />
 
       <Text style={styles.cu}>
@@ -54,6 +57,7 @@ const WelcomeScreen = ({ navigation }) => {
           <Text style={styles.prayButton}>Let's Start Praying</Text>
         </TouchableOpacity>
       </View>
+      </View>
       <StatusBar style="auto" />
     </View>
   );
@@ -67,10 +71,16 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 
+  contentContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: height * 0.3,
+  },
+
+
   pray: {
     width: 74,
     height: 103,
-    marginTop: 200,
   },
 
   cu: {
@@ -98,7 +108,7 @@ const styles = StyleSheet.create({
     fontSize: 19,
     fontWeight: "700",
     textAlign: "center",
-    marginTop: -10,
+    marginTop: height * -0.015,
   },
 
   bbutton: {
@@ -116,7 +126,7 @@ const styles = StyleSheet.create({
     elevation: 6,
     borderRadius: 20,
     backgroundColor: "#e8e7e4",
-    marginBottom: 100,
+    marginBottom: height * 0.12,
   },
 
   prayButton: {
