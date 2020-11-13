@@ -68,16 +68,16 @@ const ThisRequestScreen = ({ route, navigation }) => {
   */
   }
   let saveChanges = () => {
-    req = new Request();
-    req.subject = subject;
-    req.description = description;
+    reqst = new Request();
+    reqst.subject = subject;
+    reqst.description = description;
 
-    req.expire_time = request.expire_time;
-    req.remind_freq = request.remind_freq;
-    req.remind_time = request.remind_time;
-    req.priority = request.priority;
+    reqst.expire_time = request.expire_time;
+    reqst.remind_freq = request.remind_freq;
+    reqst.remind_time = request.remind_time;
+    reqst.priority = request.priority;
 
-    updates.updateRequest(route.params.req_id, req);
+    updates.updateRequest(route.params.req_id, reqst);
 
     // Also handle tag and category changes
   };
@@ -126,12 +126,9 @@ const ThisRequestScreen = ({ route, navigation }) => {
             multiline={false}
             value={subject}
             onChange={(text) => setSubject(text.nativeEvent.text)}
-            style={{
-              backgroundColor: "white",
-              padding: 5,
-              marginBottom: 20,
-              textAlignVertical: "top",
-            }}
+            style={[styles.title,
+              {backgroundColor: "white", padding: 5}]
+            }
           />
 
           <View
@@ -189,10 +186,11 @@ const ThisRequestScreen = ({ route, navigation }) => {
                   onChange={(text) => setDescription(text.nativeEvent.text)}
                   style={{
                     backgroundColor: "white",
+                    color: "#7E8C96",
                     padding: 5,
                     marginBottom: 20,
                     textAlignVertical: "top",
-                    fontWeight: "700",
+                    fontWeight: "600",
                   }}
                 />
               </View>
@@ -254,8 +252,10 @@ const ThisRequestScreen = ({ route, navigation }) => {
                 <Text
                   style={{
                     padding: 5,
+                    color: "#7E8C96",
                     marginBottom: 20,
                     textAlignVertical: "top",
+                    fontWeight: "600",
                   }}
                 >
                   {description}

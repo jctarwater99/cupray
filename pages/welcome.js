@@ -22,7 +22,8 @@ const WelcomeScreen = ({ navigation }) => {
         style={styles.thePrayer}
         onPress={() => {
           //dropForTesting();
-          queries.testQuery();
+          //queries.testQuery();
+          navigation.navigate("TempDash");
         }}
       >
         The prayer journal app for your 1000 days

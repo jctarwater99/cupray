@@ -11,7 +11,8 @@ const Dashboard = ({ navigation }) => {
        <Text style={styles.title}>
         Home<Text style={styles.titleAccent}>.</Text>
       </Text>
-      <View style={styles.verseofDay}>
+
+      <View style={styles.verseContainer}>
         <Text style={styles.verseOf}>Verse of the Day:</Text>
         <View style={styles.lineStyle} />
         <Text style={styles.nowMay}>
@@ -19,37 +20,46 @@ const Dashboard = ({ navigation }) => {
           every way. {"\n"}The Lord be with all of you.” {"\n"} (2 Thess. 3:16)
         </Text>
       </View>
-
-      <View style={styles.container}>
+      <View style={{flex: .1}}></View>
+      <View style={styles.iconRow}>
+        <View style= {{marginRight: width * 0.1}}>
         <TouchableOpacity
-          style={styles.dashButton}
+          style={styles.icon}
           onPress={() => navigation.navigate("Cat")}
         >
           <Image
             style={styles.dashImage}
             source={require("../assets/journal2.png")}
           />
-          <Text style={styles.dashText}>Prayer Journal</Text>
         </TouchableOpacity>
+        <Text style={styles.dashText}>Prayer Journal</Text>
+        </View>
 
-        <TouchableOpacity style={styles.dashButton} onPress={() => void 0}>
+        <View>
+        <TouchableOpacity style={styles.icon} onPress={() => void 0}>
           <Image
             style={styles.dashImage}
-            source={require("../assets/pray.png")}
+            source={require("../assets/pray_blue.png")}
           />
-          <Text style={styles.dashText}>Prayer Time</Text>
         </TouchableOpacity>
+        <Text style={styles.dashText}>Prayer Time</Text>
+        </View>
+
       </View>
-      <View style={styles.container2}>
-        <TouchableOpacity style={styles.dashButton}>
+      <View style={styles.iconRow}>
+        <View style= {{marginRight: width * 0.1}}>
+        <TouchableOpacity style={styles.icon}>
           <Image
             style={styles.dashImage}
             source={require("../assets/journal1.png")}
           />
-          <Text style={styles.dashText}>Scripture</Text>
         </TouchableOpacity>
+        <Text style={styles.dashText}>Scripture</Text>
+        </View>
+
+        <View>
         <TouchableOpacity
-          style={styles.dashButton}
+          style={styles.icon}
           onPress={() => {
             navigation.navigate("ThisRequest", {
               cat_id: 1,
@@ -59,11 +69,15 @@ const Dashboard = ({ navigation }) => {
             });
           }}
         >
-          <Text style={styles.plusSymbol}> + </Text>
-          <Text style={[styles.dashText, {marginTop: height * 0.07}]}>New Request</Text>
+          <Image
+            style={[styles.dashImage, {marginLeft: width * 0.13}]}
+            source={require("../assets/plus.png")}
+          />
         </TouchableOpacity>
+        <Text style={styles.dashText}>Add Request</Text>
+        </View>
       </View>
-      <View>
+      <View style={{marginBottom: height * 0.05}}>
       <Image
         style={styles.CUlogo}
         source={require("../assets/cuLogoColor.png")}
@@ -82,22 +96,8 @@ const styles = StyleSheet.create({
     marginTop: height * 0.08,
   },
 
-  container: {
-    flex: 2,
-    flexDirection: "row",
-    marginTop: height * -0.2,
-    marginLeft: width * -0.1,
-  },
-
-  container2: {
-    flex: 3,
-    flexDirection: "row",
-    marginTop: height * 0.1,
-    marginLeft: -40,
-    alignContent: "center",
-  },
-
   title: {
+    flex: .3,
     color: "#003A63",
     fontSize: 46,
     fontWeight: "700",
@@ -112,9 +112,14 @@ const styles = StyleSheet.create({
     fontWeight: "700",
   },
 
-  dashButton: {
-    width: 135,
-    height: 138,
+  iconRow: {
+    flex: .8,
+    flexDirection: "row",
+  },
+
+  icon: {
+    width: width * .35,
+    height: height * .16,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -126,13 +131,11 @@ const styles = StyleSheet.create({
     elevation: 3,
     borderRadius: 20,
     backgroundColor: "#e8e7e4",
-    marginLeft: width * 0.1,
-    alignContent: "center",
+
   },
 
   dashImage: {
-    width: 65,
-    height: 95,
+   
     marginLeft: width * 0.09,
     marginTop: height * 0.025,
   },
@@ -142,16 +145,15 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: "700",
     alignSelf: "center",
-    marginTop: height * 0.035,
-    marginLeft: width * -0.01,
+    marginLeft: width * 0.01,
+    marginTop: height * 0.01,
   },
+
 
   CUlogo: {
     width: 186,
     height: 54,
     opacity: 0.85,
-    marginBottom: height * 0.04,
-    marginTop: height * 0.04,
   },
 
   verseOf: {
@@ -160,7 +162,7 @@ const styles = StyleSheet.create({
     color: "#d6c396",
     fontSize: 20,
     fontWeight: "700",
-    marginTop: height * 0.05,
+    marginTop: height * 0.03,
     textAlign: "center",
   },
 
@@ -174,7 +176,8 @@ const styles = StyleSheet.create({
     marginTop: height * 0.02,
   },
 
-  verseofDay: {
+  verseContainer: {
+    flex: 1,
     width: 337,
     height: 230,
     alignItems: "center",
@@ -189,7 +192,6 @@ const styles = StyleSheet.create({
     elevation: 6,
     borderRadius: 20,
     backgroundColor: "#003A63",
-    marginBottom: 180,
   },
 
   lineStyle: {
