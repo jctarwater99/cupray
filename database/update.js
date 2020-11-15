@@ -7,13 +7,14 @@ export function updateRequest(reqID, request) {
   db.transaction((tx) => {
     tx.executeSql(
       "UPDATE requests SET subject = ?, description = ?, " +
-        "expire_time = ?, remind_freq = ?, remind_time = ?, " +
-        "priority = ? WHERE requests.id = ?;",
+        "expire_time = ?, remind_freq = ?, remind_days = ?, " +
+        "remind_time = ?, priority = ? WHERE requests.id = ?;",
       [
         request.subject,
         request.description,
         request.expire_time,
         request.remind_freq,
+        request.remind_days,
         request.remind_time,
         request.priority,
         reqID,
