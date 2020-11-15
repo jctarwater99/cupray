@@ -14,6 +14,7 @@ import {
 import { CheckBox } from "react-native-elements";
 import * as queries from "../database/query";
 import * as updates from "../database/update";
+import * as inserts from "../database/insert";
 import { Category } from "../database/objects";
 
 import DropDownPicker from "react-native-dropdown-picker";
@@ -40,6 +41,14 @@ const ThisRequestScreen = ({ route, navigation }) => {
       setRequest(results);
       setDescription(results.description);
       setSubject(results.subject);
+
+      let state = [true, true, false];
+      if (results.priority == 2) {
+        state[2] = true;
+      } else if (results.priority == 0) {
+        state[1] = false;
+      }
+      setBoxes(state);
     });
     // Loads categories
     queries.getCategories((results) => {
@@ -56,18 +65,33 @@ const ThisRequestScreen = ({ route, navigation }) => {
   }, []);
 
   let saveChanges = () => {
-    reqst = new Request();
-    reqst.subject = subject;
-    reqst.description = description;
+    // Creating request to pass to the update field
+    req = new Request();
+    req.subject = subject;
+    req.description = description;
 
-    reqst.expire_time = request.expire_time;
-    reqst.remind_freq = request.remind_freq;
-    reqst.remind_time = request.remind_time;
-    reqst.priority = request.priority;
+    req.expire_time = request.expire_time;
+    req.remind_freq = request.remind_freq;
+    req.remind_days = request.remind_days;
+    req.remind_time = request.remind_time;
 
-    updates.updateRequest(route.params.req_id, reqst);
+    let priority = 0;
+    if (checked[2]) {
+      priority = 2;
+    } else if (checked[1]) {
+      priority = 1;
+    }
+    req.priority = priority;
 
-    // Also handle tag and category changes
+    // Actuall update part
+    if (route.params.isNewReq) {
+      inserts.insertRequest(req);
+    } else {
+      updates.updateRequest(route.params.req_id, req);
+    }
+    // Queries to Update any tags??
+    // Queries to Update categores??
+    // Queries to Updadate request tags??
   };
 
   let handleCheckBoxPress = (box) => {
@@ -114,9 +138,7 @@ const ThisRequestScreen = ({ route, navigation }) => {
             multiline={false}
             value={subject}
             onChange={(text) => setSubject(text.nativeEvent.text)}
-            style={[styles.title,
-              {backgroundColor: "white", padding: 5}]
-            }
+            style={[styles.title, { backgroundColor: "white", padding: 5 }]}
           />
 
           <View
