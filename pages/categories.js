@@ -35,7 +35,9 @@ const CategoriesScreen = ({ navigation }) => {
           })
         }
       >
+
         {category.name}
+        
       </Text>
     );
   };
@@ -64,6 +66,7 @@ const CategoriesScreen = ({ navigation }) => {
         >
           <Text style={styles.plusSign}>+</Text>
         </TouchableOpacity>
+        <Text style={[styles.plusSign, {marginTop: height * 0.01}]}> Add Category </Text>
       </View>
     </View>
   );
@@ -100,9 +103,8 @@ const styles = StyleSheet.create({
     color: "#003a63",
     fontWeight: "700",
     flexDirection: "column",
-    marginTop: height * 0.02,
-    marginBottom: height * 0.02,
-    marginLeft: width * 0.1,
+    padding: height * 0.02,
+    marginLeft: width * 0.06,
   },
 
   lineStyle: {
@@ -114,10 +116,8 @@ const styles = StyleSheet.create({
   },
 
   addCat: {
-    flex: 2,
-    flexDirection: "column",
-    justifyContent: "flex-end",
-    margin: 60,
+    alignItems: "center",
+    margin: 20,
   },
 
   createCategoryButton: {

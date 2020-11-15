@@ -17,6 +17,9 @@ import * as updates from "../database/update";
 import { Category } from "../database/objects";
 
 import DropDownPicker from "react-native-dropdown-picker";
+import {
+  Dropdown }
+  from 'react-native-material-dropdown-v2';
 
 var { height, width } = Dimensions.get("window");
 
@@ -31,42 +34,27 @@ const ThisRequestScreen = ({ route, navigation }) => {
   let [description, setDescription] = useState("");
   let [subject, setSubject] = useState("");
 
-  let [country, setCountry] = useState("uk");
-
   useEffect(() => {
+    // Loads request
     queries.getRequest(route.params.req_id, (results) => {
       setRequest(results);
       setDescription(results.description);
       setSubject(results.subject);
     });
-    queries.getCategories((results) => setCategories(results));
+    // Loads categories
+    queries.getCategories((results) => {
+      let dropDownData = []
+      results.forEach(element => {
+        dropDownData.push({value: element.name, id: element.tagID });
+      });
+      setCategories(dropDownData);
+    });
     queries.getTagsForRequest(route.params.req_id, (results) =>
       setRTags(results)
     );
     queries.getTags((results) => setTags(results));
   }, []);
 
-  {
-    /*
-    I think we want something along the lines of the following
-
-    if editMode
-      return
-        button: save -> onPress -> db call, edit mode = false
-        textbox: title
-        dropdown: category
-        textbox: etc
-        buttons, with on press function
-
-    else
-      return
-        button: edit -> onPress -> edit mode = true
-        text: title
-        text: category
-        text: etc
-        buttons, but with no on press function
-  */
-  }
   let saveChanges = () => {
     reqst = new Request();
     reqst.subject = subject;
@@ -140,30 +128,11 @@ const ThisRequestScreen = ({ route, navigation }) => {
           >
             <Text style={{ width: 95 }}></Text>
             {/*<Text style={styles.subtitle}>{route.params.cat_name}</Text>*/}
-            <DropDownPicker
-              items={[
-                {
-                  label: "USA",
-                  value: "usa",
-                },
-                {
-                  label: "UK",
-                  value: "uk",
-                },
-                {
-                  label: "France",
-                  value: "france",
-                },
-              ]}
-              defaultValue={country}
-              containerStyle={{ height: 40 }}
-              style={{ backgroundColor: "#fafafa", zIndex: 10 }}
-              itemStyle={{
-                justifyContent: "flex-start",
-              }}
-              dropDownStyle={{ backgroundColor: "#fafafa" }}
-              onChangeItem={(item) => setCountry(item.value)}
-            />
+            <Dropdown
+              defaultValue = {route.params.cat_name}
+              style={{width: 100, height: 40,}}
+              data={categories} 
+              />
             <TouchableOpacity
               onPress={() => {
                 setMode(false);
@@ -195,7 +164,7 @@ const ThisRequestScreen = ({ route, navigation }) => {
                 />
               </View>
 
-              <Text style={styles.boxheaders}>Priority</Text>
+              <Text onPress={()=>{console.log(dropdownCatNames)}} style={styles.boxheaders}>Priority</Text>
               <View
                 style={{
                   flexDirection: "row",

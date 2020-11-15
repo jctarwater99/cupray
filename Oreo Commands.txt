@@ -17,6 +17,7 @@ Installing radio buttons to simplify user error
 
 Installing dropdown menu for picking categories when editing request
 	> npm install react-native-dropdown-picker --save
+	> yarn add react-native-material-dropdown-v2 react-native-paper
 
 Installing expo notification handling
 	> expo install expo-notifications
