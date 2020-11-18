@@ -18,22 +18,20 @@ import * as inserts from "../database/insert";
 import { Category } from "../database/objects";
 
 import DropDownPicker from "react-native-dropdown-picker";
-import {
-  Dropdown }
-  from 'react-native-material-dropdown-v2';
+import { Dropdown } from "react-native-material-dropdown-v2";
 
 var { height, width } = Dimensions.get("window");
 
 const ThisRequestScreen = ({ route, navigation }) => {
   let [request, setRequest] = useState([]);
-  let [tags, setTags] = useState([]);
   let [categories, setCategories] = useState([]);
-  let [requestCategory, setRC] = useState("None");
+  let [tags, setTags] = useState([]);
   let [requestTags, setRTags] = useState([]);
+
   let [inEditMode, setMode] = useState(route.params.isNewReq);
   let [checked, setBoxes] = useState([true, true, false]);
-  let [description, setDescription] = useState("");
   let [subject, setSubject] = useState("");
+  let [description, setDescription] = useState("");
 
   useEffect(() => {
     // Loads request
@@ -52,9 +50,9 @@ const ThisRequestScreen = ({ route, navigation }) => {
     });
     // Loads categories
     queries.getCategories((results) => {
-      let dropDownData = []
-      results.forEach(element => {
-        dropDownData.push({value: element.name, id: element.tagID });
+      let dropDownData = [];
+      results.forEach((element) => {
+        dropDownData.push({ value: element.name, id: element.tagID });
       });
       setCategories(dropDownData);
     });
@@ -86,12 +84,24 @@ const ThisRequestScreen = ({ route, navigation }) => {
     // Actuall update part
     if (route.params.isNewReq) {
       inserts.insertRequest(req);
+      inserts.insertRequestTag({ requestID: 8, tagID: 7 });
     } else {
       updates.updateRequest(route.params.req_id, req);
     }
     // Queries to Update any tags??
     // Queries to Update categores??
     // Queries to Updadate request tags??
+
+    // if is new request
+    //  add category tag
+    // else
+    //  update category tag
+
+    // On change tags,
+    // if added
+    //  add them to added tags array
+    // else
+    //  add then to deleted tags array
   };
 
   let handleCheckBoxPress = (box) => {
@@ -151,10 +161,10 @@ const ThisRequestScreen = ({ route, navigation }) => {
             <Text style={{ width: 95 }}></Text>
             {/*<Text style={styles.subtitle}>{route.params.cat_name}</Text>*/}
             <Dropdown
-              defaultValue = {route.params.cat_name}
-              style={{width: 100, height: 40,}}
-              data={categories} 
-              />
+              defaultValue={route.params.cat_name}
+              style={{ width: 100, height: 40 }}
+              data={categories}
+            />
             <TouchableOpacity
               onPress={() => {
                 setMode(false);
@@ -186,7 +196,14 @@ const ThisRequestScreen = ({ route, navigation }) => {
                 />
               </View>
 
-              <Text onPress={()=>{console.log(dropdownCatNames)}} style={styles.boxheaders}>Priority</Text>
+              <Text
+                onPress={() => {
+                  console.log(dropdownCatNames);
+                }}
+                style={styles.boxheaders}
+              >
+                Priority
+              </Text>
               <View
                 style={{
                   flexDirection: "row",
