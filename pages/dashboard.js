@@ -63,7 +63,7 @@ const Dashboard = ({ navigation }) => {
           onPress={() => {
             navigation.navigate("ThisRequest", {
               cat_id: 1,
-              cat_name: "Select Category",
+              cat_name: "Category",
               req_id: 1,
               isNewReq: true,
             });

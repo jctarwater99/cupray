@@ -38,8 +38,8 @@ export function populateDBwithRequests() {
 
   // 1
   request = new Request();
-  request.subject = "  ";
-  request.description = "  ";
+  request.subject = " Enter Title";
+  request.description = "Lorem Ipsum dolor sit amet, consectetur adipiscing el";
   request.create_time = "";
   request.expire_time = "";
   request.remind_freq = 0;

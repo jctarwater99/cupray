@@ -41,7 +41,9 @@ const RequestsScreen = ({ route, navigation }) => {
       >
         <View style={styles.circle} />
         <Text style={styles.requestTitles}>{request.subject}</Text>
-         <Text style={styles.requestArrow}>{"➤"}</Text>
+        <View>
+        <Text style={styles.requestArrow}>{"  ➤"}</Text>
+        </View>
       </TouchableOpacity>
     );
   };
@@ -59,7 +61,22 @@ const RequestsScreen = ({ route, navigation }) => {
             keyExtractor={(item, index) => index.toString()}
             renderItem={({ item }) => listItemView(item)}
           />
-          
+          <View style={styles.addReq}>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate("ThisRequest", {
+              cat_id: 1,
+              cat_name: "Category",
+              req_id: 1,
+              isNewReq: true,
+            });
+          }}
+          style={styles.createReqButton}
+        >
+          <Text style={[styles.plusSign, { marginTop: height * -0.001}]}>+</Text>
+        </TouchableOpacity>
+        <Text style={[styles.plusSign, {marginTop: height * 0.01}]}> Add Request </Text>
+      </View>
         </View>
 
       </View>
@@ -107,7 +124,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "700",
     marginTop: height * 0.02,
-    textAlign: 'right',
+    
   },
 
   circle: {
@@ -132,6 +149,28 @@ const styles = StyleSheet.create({
     color: "#D6C396",
     fontSize: 46,
     fontWeight: "700",
+  },
+
+  addReq: {
+    alignItems: "center",
+    margin: 20,
+    flex: 12,
+  },
+
+  createReqButton: {
+    width: 37,
+    height: 36,
+    borderRadius: 6,
+    backgroundColor: "#D6C396",
+    padding: 10,
+  },
+
+  plusSign: {
+    color: "#7E8C96",
+    fontSize: 15,
+    fontWeight: "700",
+    marginTop: height * 0.009,
+    textAlign: "center",
   },
 });
 
