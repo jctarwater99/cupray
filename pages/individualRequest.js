@@ -16,11 +16,14 @@ import * as queries from "../database/query";
 import * as updates from "../database/update";
 import * as inserts from "../database/insert";
 import { Category } from "../database/objects";
-
-import DropDownPicker from "react-native-dropdown-picker";
 import {
   Dropdown }
   from 'react-native-material-dropdown-v2';
+
+  import { LogBox } from 'react-native';
+
+// Ignore log notification by message
+LogBox.ignoreLogs(['Warning: componentWillReceiveProps has been renamed, and is not recommended for use. See https://fb.me/react-unsafe-component-lifecycles for details.']);
 
 var { height, width } = Dimensions.get("window");
 
@@ -152,7 +155,10 @@ const ThisRequestScreen = ({ route, navigation }) => {
             {/*<Text style={styles.subtitle}>{route.params.cat_name}</Text>*/}
             <Dropdown
               defaultValue = {route.params.cat_name}
-              style={{width: 100, height: 40,}}
+              style={{width: 100, height: 40, fontWeight: "600",}}
+              itemTextStyle={{
+              fontWeight: "600",}}
+              textColor= "#7E8C96"
               data={categories} 
               />
             <TouchableOpacity
@@ -294,10 +300,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#EFEFEF",
     alignItems: "center",
     marginTop: height * 0.02,
-    minWidth: width * 0.99,
   },
 
   requestContainer: {
+    width: 327,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -305,12 +311,13 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.27,
     shadowRadius: 3.65,
+    overflow: "visible",
 
     elevation: 6,
-    borderRadius: 10,
+    borderRadius: 20,
     backgroundColor: "#E8E7E4",
-    margin: height * 0.01,
-    padding: 25,
+    margin: height * 0.02,
+    padding: 23,
   },
 
   requestTitles: {
