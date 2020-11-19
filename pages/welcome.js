@@ -9,6 +9,17 @@ import * as Notifications from "expo-notifications";
 
 var { height, width } = Dimensions.get("window");
 
+async function requestPermissionsAsync() {
+  return await Notifications.requestPermissionsAsync({
+    ios: {
+      allowAlert: true,
+      allowBadge: true,
+      allowSound: true,
+      allowAnnouncements: true,
+    },
+  });
+}
+
 const WelcomeScreen = ({ navigation }) => {
   return (
     <View style={styles.welcomeContainer}>
@@ -34,9 +45,10 @@ const WelcomeScreen = ({ navigation }) => {
             onPress={() => {
               dropForTesting();
               createDatabase();
+              requestPermissionsAsync();
               populateDB();
               Notifications.setNotificationHandler({
-                handleNotification: async () => ({
+                handleNotification: async (notif) => ({
                   shouldShowAlert: true,
                   shouldPlaySound: false,
                   shouldSetBadge: false,
@@ -45,8 +57,8 @@ const WelcomeScreen = ({ navigation }) => {
 
               Notifications.scheduleNotificationAsync({
                 content: {
-                  title: "CU Pray",
-                  body: "Remember to pray for your church!",
+                  title: "CUPray",
+                  body: "Take a minute to pray for your friends in quarantine.",
                 },
                 trigger: {
                   seconds: 1,
