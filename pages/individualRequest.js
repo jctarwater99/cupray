@@ -16,20 +16,18 @@ import * as queries from "../database/query";
 import * as updates from "../database/update";
 import * as inserts from "../database/insert";
 import { Category } from "../database/objects";
-<<<<<<< HEAD
-
-import DropDownPicker from "react-native-dropdown-picker";
 import { Dropdown } from "react-native-material-dropdown-v2";
-=======
-import {
-  Dropdown }
-  from 'react-native-material-dropdown-v2';
->>>>>>> 9530d5d23c149ba6dd74ea6e7da9d5276813938f
 
-  import { LogBox } from 'react-native';
+import { LogBox } from "react-native";
 
 // Ignore log notification by message
-LogBox.ignoreLogs(['Warning: componentWillReceiveProps has been renamed, and is not recommended for use. See https://fb.me/react-unsafe-component-lifecycles for details.']);
+LogBox.ignoreLogs([
+  "Warning: componentWillReceiveProps has been renamed, and is not recommended for use. See https://fb.me/react-unsafe-component-lifecycles for details.",
+]);
+
+LogBox.ignoreLogs([
+  "Animated: `useNativeDriver` was not specified. This is a required option and must be explicitly set to `true` or `false`",
+]);
 
 var { height, width } = Dimensions.get("window");
 
@@ -43,6 +41,7 @@ const ThisRequestScreen = ({ route, navigation }) => {
   let [checked, setBoxes] = useState([true, true, false]);
   let [subject, setSubject] = useState("");
   let [description, setDescription] = useState("");
+  let [category, setCategory] = useState(route.params.cat_name); //
 
   useEffect(() => {
     // Loads request
@@ -92,13 +91,33 @@ const ThisRequestScreen = ({ route, navigation }) => {
     }
     req.priority = priority;
 
+    // If the user didn't select a category, don't save
+    if (route.params.isNewReq && category == "Category") {
+      setMode(true);
+      return;
+    }
+
+    let catID = -1;
+    categories.forEach((element) => {
+      console.log("Value", element.value, " ", category);
+      if (element.value == category) {
+        catID = element.id;
+        // break; // can't break out of forEach
+      }
+    });
     // Actuall update part
     if (route.params.isNewReq) {
-      inserts.insertRequest(req);
-      inserts.insertRequestTag({ requestID: 8, tagID: 7 });
+      inserts.insertNewRequest(req, catID);
     } else {
+      console.log(req);
+      console.log("Old ID:", route.params.cat_id, "/nNew ID:", catID);
       updates.updateRequest(route.params.req_id, req);
+      updates.updateRequestTag(route.params.req_id, route.params.cat_id, catID);
     }
+
+    // Remove later???
+    navigation.navigate("Cat");
+
     // Queries to Update any tags??
     // Queries to Update categores??
     // Queries to Updadate request tags??
@@ -153,7 +172,9 @@ const ThisRequestScreen = ({ route, navigation }) => {
     return (
       <SafeAreaView style={{ flex: 1 }}>
         <View style={styles.container}>
+          {/*subject*/}
           <TextInput
+            defaultValue={"Enter Subject"}
             style={{ marginTop: height * 0.02 }}
             maxLength={25} // max number of chars
             multiline={false}
@@ -170,22 +191,21 @@ const ThisRequestScreen = ({ route, navigation }) => {
             }}
           >
             <Text style={{ width: 95 }}></Text>
-            {/*<Text style={styles.subtitle}>{route.params.cat_name}</Text>*/}
+            {/*Category*/}
             <Dropdown
-<<<<<<< HEAD
               defaultValue={route.params.cat_name}
-              style={{ width: 100, height: 40 }}
-              data={categories}
-            />
-=======
-              defaultValue = {route.params.cat_name}
-              style={{width: 100, height: 40, fontWeight: "600",}}
+              style={{ width: 100, height: 40, fontWeight: "600" }}
               itemTextStyle={{
-              fontWeight: "600",}}
-              textColor= "#7E8C96"
-              data={categories} 
-              />
->>>>>>> 9530d5d23c149ba6dd74ea6e7da9d5276813938f
+                fontWeight: "600",
+              }}
+              itemCount={6}
+              dropdownPosition={0}
+              textColor="#7E8C96"
+              data={categories}
+              onChangeText={(text) => {
+                setCategory(text);
+              }}
+            />
             <TouchableOpacity
               onPress={() => {
                 setMode(false);

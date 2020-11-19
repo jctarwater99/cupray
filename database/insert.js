@@ -94,3 +94,30 @@ export function insertCategory(category) {
     );
   });
 }
+
+export function insertNewRequest(request, catID) {
+  db.transaction((tx) => {
+    tx.executeSql(
+      "INSERT INTO requests(subject, description, create_time," +
+        "expire_time, remind_freq, remind_days, remind_time, daily_weight, " +
+        "notification_weight, priority) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);",
+      [
+        request.subject,
+        request.description,
+        request.create_time,
+        request.expire_time,
+        request.remind_freq,
+        request.remind_days,
+        request.remind_time,
+        request.daily_weight,
+        request.notification_weight,
+        request.priority,
+      ],
+      (tx, result) =>
+        insertRequestTag({ requestID: result.insertId, tagID: catID }),
+      (tx, result) => {
+        console.log("Inserting request failed", result);
+      }
+    );
+  });
+}

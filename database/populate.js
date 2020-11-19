@@ -38,8 +38,8 @@ export function populateDBwithRequests() {
 
   // 1
   request = new Request();
-  request.subject = " Enter Title";
-  request.description = "Lorem Ipsum dolor sit amet, consectetur adipiscing el";
+  request.subject = "Subject";
+  request.description = "Description";
   request.create_time = "";
   request.expire_time = "";
   request.remind_freq = 0;
@@ -114,7 +114,7 @@ export function populateDBwithRequests() {
   desc =
     "We make time for the things we value, that God would put a desire in me to know Him " +
     "and a sense of urgency so that I will be motivated to spend daily time in the word meditating.";
-  addReq(sub, desc, 1);
+  addReq(sub, desc, 2);
 
   // 12
   sub = "Friends' Success";
@@ -130,7 +130,7 @@ export function populateDBwithRequests() {
     "A lot of my friends have jobs. I'm thankful that you have given them success. I ask that " +
     "You would also help my girlfriend and my roommates girlfriend to have the same success as " +
     "they begin to get more serious about looking for a job after graduation.";
-  addReq(sub, desc, 1);
+  addReq(sub, desc, 2);
 
   // 14
   sub = "Friends' Relationships";
@@ -183,14 +183,14 @@ export function populateDBwithRequests() {
     "Thank you for my grandmother and the impact she has had on my mother, myself, my siblings, " +
     "etc... Please help her move to go smoothly both for her and my parents as they figure out what " +
     "it's like to have an inlaw live with them.";
-  addReq(sub, desc, 1);
+  addReq(sub, desc, 0);
 
   // 21
   sub = "Aunt's surgery";
   desc =
     "Please help my aunt's surgery to go well, that there would be no complications, " +
     "and that she would have a rapid recovery";
-  addReq(sub, desc, 1);
+  addReq(sub, desc, 2);
 
   // 22
   sub = "Brother's Spiritual Growth";
@@ -204,7 +204,7 @@ export function populateDBwithRequests() {
   desc =
     "Heavenly Father, ....covid sucks. Please help it to end, and help me to stay motivated despite all " +
     "the demotivating factors surounding covid.";
-  addReq(sub, desc, 1);
+  addReq(sub, desc, 0);
 
   // 24
   sub = "Loving/aware";

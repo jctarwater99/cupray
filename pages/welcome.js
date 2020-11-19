@@ -5,59 +5,59 @@ import { StyleSheet, Button, Text, View } from "react-native";
 import { populateDB } from "../database/populate";
 import { createDatabase, dropForTesting } from "../database/create";
 import * as queries from "../database/query";
-import * as Notifications from 'expo-notifications';
+import * as Notifications from "expo-notifications";
 
 var { height, width } = Dimensions.get("window");
 
 const WelcomeScreen = ({ navigation }) => {
   return (
     <View style={styles.welcomeContainer}>
-      <View style = {styles.contentContainer}>
-      <Image style={styles.pray} source={require("../assets/pray.png")} />
+      <View style={styles.contentContainer}>
+        <Image style={styles.pray} source={require("../assets/pray.png")} />
 
-      <Text style={styles.cu}>
-        CU<Text style={styles.cupray}>Pray.</Text>
-      </Text>
-      <Text
-        style={styles.thePrayer}
-        onPress={() => {
-          //dropForTesting();
-          //queries.testQuery();
-          navigation.navigate("TempDash");
-        }}
-      >
-        The prayer journal app for your 1000 days
-      </Text>
-      <View style={{ flex: 1, justifyContent: "flex-end" }}>
-        <TouchableOpacity
-          style={styles.bbutton}
+        <Text style={styles.cu}>
+          CU<Text style={styles.cupray}>Pray.</Text>
+        </Text>
+        <Text
+          style={styles.thePrayer}
           onPress={() => {
-            dropForTesting();
-            createDatabase();
-            populateDB();
-            Notifications.setNotificationHandler(({
-              handleNotification: async () => ({
-                shouldShowAlert: true,
-                shouldPlaySound: false,
-                shouldSetBadge: false,
-              })
-            }));
-
-            Notifications.scheduleNotificationAsync({
-              content: {
-                title: "Yay!",
-                body: "You did it!",
-              },
-              trigger: {
-                seconds: 1,
-              },
-            });
-            navigation.navigate("Dash");
+            //dropForTesting();
+            //queries.testQuery();
+            navigation.navigate("TempDash");
           }}
         >
-          <Text style={styles.prayButton}>Let's Start Praying</Text>
-        </TouchableOpacity>
-      </View>
+          The prayer journal app for your 1000 days
+        </Text>
+        <View style={{ flex: 1, justifyContent: "flex-end" }}>
+          <TouchableOpacity
+            style={styles.bbutton}
+            onPress={() => {
+              dropForTesting();
+              createDatabase();
+              populateDB();
+              Notifications.setNotificationHandler({
+                handleNotification: async () => ({
+                  shouldShowAlert: true,
+                  shouldPlaySound: false,
+                  shouldSetBadge: false,
+                }),
+              });
+
+              Notifications.scheduleNotificationAsync({
+                content: {
+                  title: "CU Pray",
+                  body: "Remember to pray for your church!",
+                },
+                trigger: {
+                  seconds: 1,
+                },
+              });
+              navigation.navigate("Dash");
+            }}
+          >
+            <Text style={styles.prayButton}>Let's Start Praying</Text>
+          </TouchableOpacity>
+        </View>
       </View>
       <StatusBar style="auto" />
     </View>
@@ -77,7 +77,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginTop: height * 0.3,
   },
-
 
   pray: {
     width: 74,

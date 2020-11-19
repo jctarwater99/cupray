@@ -42,7 +42,7 @@ const RequestsScreen = ({ route, navigation }) => {
         <View style={styles.circle} />
         <Text style={styles.requestTitles}>{request.subject}</Text>
         <View>
-        <Text style={styles.requestArrow}>{"  ➤"}</Text>
+          <Text style={styles.requestArrow}>{"  ➤"}</Text>
         </View>
       </TouchableOpacity>
     );
@@ -62,23 +62,25 @@ const RequestsScreen = ({ route, navigation }) => {
             renderItem={({ item }) => listItemView(item)}
           />
           <View style={styles.addReq}>
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate("ThisRequest", {
-              cat_id: 1,
-              cat_name: "Category",
-              req_id: 1,
-              isNewReq: true,
-            });
-          }}
-          style={styles.createReqButton}
-        >
-          <Text style={[styles.plusSign, { marginTop: height * -0.001}]}>+</Text>
-        </TouchableOpacity>
-        <Text style={[styles.plusSign, {marginTop: height * 0.01}]}> Add Request </Text>
-      </View>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate("ThisRequest", {
+                  cat_id: 1,
+                  cat_name: route.params.cat_name,
+                  req_id: 1,
+                  isNewReq: true,
+                });
+              }}
+              style={styles.createReqButton}
+            >
+              <Text style={[styles.plusSign]}>+</Text>
+            </TouchableOpacity>
+            <Text style={[styles.plusSign, { marginTop: height * 0.01 }]}>
+              {" "}
+              Add Request{" "}
+            </Text>
+          </View>
         </View>
-
       </View>
     </SafeAreaView>
   );
@@ -124,7 +126,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "700",
     marginTop: height * 0.02,
-    
   },
 
   circle: {
@@ -161,15 +162,14 @@ const styles = StyleSheet.create({
     width: 37,
     height: 36,
     borderRadius: 6,
-    backgroundColor: "#D6C396",
-    padding: 10,
+    backgroundColor: "#D3D3D3",
+    padding: 6,
   },
 
   plusSign: {
     color: "#7E8C96",
     fontSize: 15,
     fontWeight: "700",
-    marginTop: height * 0.009,
     textAlign: "center",
   },
 });

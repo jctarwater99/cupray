@@ -26,3 +26,17 @@ export function updateRequest(reqID, request) {
     );
   });
 }
+
+export function updateRequestTag(reqID, oldCatID, newCatID) {
+  db.transaction((tx) => {
+    tx.executeSql(
+      "UPDATE request_tags SET tagID = ? " +
+        "WHERE requestID = ? AND tagID = ?;",
+      [newCatID, reqID, oldCatID],
+      () => void 0,
+      (tx, result) => {
+        console.log("Updating request failed", result);
+      }
+    );
+  });
+}

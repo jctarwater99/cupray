@@ -71,9 +71,8 @@ export function createDatabase() {
     // Categories
     tx.executeSql(
       "CREATE TABLE IF NOT EXISTS categories ( " +
-        "id INTEGER PRIMARY KEY, " +
+        "tagID INTEGER PRIMARY KEY, " +
         "name TEXT, " +
-        "tagID INT, " +
         "remind_freq INT, " +
         "remind_days TEXT," +
         "remind_time TEXT, " +

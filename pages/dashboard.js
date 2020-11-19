@@ -8,7 +8,7 @@ var { height, width } = Dimensions.get("window");
 const Dashboard = ({ navigation }) => {
   return (
     <View style={styles.dashboardContainer}>
-       <Text style={styles.title}>
+      <Text style={styles.title}>
         Home<Text style={styles.titleAccent}>.</Text>
       </Text>
 
@@ -20,68 +20,67 @@ const Dashboard = ({ navigation }) => {
           every way. {"\n"}The Lord be with all of you.” {"\n"} (2 Thess. 3:16)
         </Text>
       </View>
-      <View style={{flex: .1}}></View>
+      <View style={{ flex: 0.1 }}></View>
       <View style={styles.iconRow}>
-        <View style= {{marginRight: width * 0.1}}>
-        <TouchableOpacity
-          style={styles.icon}
-          onPress={() => navigation.navigate("Cat")}
-        >
-          <Image
-            style={styles.dashImage}
-            source={require("../assets/journal2.png")}
-          />
-        </TouchableOpacity>
-        <Text style={styles.dashText}>Prayer Journal</Text>
+        <View style={{ marginRight: width * 0.1 }}>
+          <TouchableOpacity
+            style={styles.icon}
+            onPress={() => navigation.navigate("Cat")}
+          >
+            <Image
+              style={styles.dashImage}
+              source={require("../assets/journal2.png")}
+            />
+          </TouchableOpacity>
+          <Text style={styles.dashText}>Prayer Journal</Text>
         </View>
 
         <View>
-        <TouchableOpacity style={styles.icon} onPress={() => void 0}>
-          <Image
-            style={styles.dashImage}
-            source={require("../assets/pray_blue.png")}
-          />
-        </TouchableOpacity>
-        <Text style={styles.dashText}>Prayer Time</Text>
+          <TouchableOpacity style={styles.icon} onPress={() => void 0}>
+            <Image
+              style={styles.dashImage}
+              source={require("../assets/pray_blue.png")}
+            />
+          </TouchableOpacity>
+          <Text style={styles.dashText}>Prayer Time</Text>
         </View>
-
       </View>
       <View style={styles.iconRow}>
-        <View style= {{marginRight: width * 0.1}}>
-        <TouchableOpacity style={styles.icon}>
-          <Image
-            style={styles.dashImage}
-            source={require("../assets/journal1.png")}
-          />
-        </TouchableOpacity>
-        <Text style={styles.dashText}>Scripture</Text>
+        <View style={{ marginRight: width * 0.1 }}>
+          <TouchableOpacity style={styles.icon}>
+            <Image
+              style={styles.dashImage}
+              source={require("../assets/journal1.png")}
+            />
+          </TouchableOpacity>
+          <Text style={styles.dashText}>Scripture</Text>
         </View>
 
         <View>
-        <TouchableOpacity
-          style={styles.icon}
-          onPress={() => {
-            navigation.navigate("ThisRequest", {
-              cat_id: 1,
-              cat_name: "Category",
-              req_id: 1,
-              isNewReq: true,
-            });
-          }}
-        >
-          <Image
-            style={[styles.dashImage, {marginLeft: width * 0.13}]}
-            source={require("../assets/plus.png")}
-          />
-        </TouchableOpacity>
-        <Text style={styles.dashText}>Add Request</Text>
+          <TouchableOpacity
+            style={styles.icon}
+            onPress={() => {
+              navigation.navigate("ThisRequest", {
+                cat_id: 1,
+                cat_name: "Category",
+                req_id: 1,
+                isNewReq: true,
+              });
+            }}
+          >
+            <Image
+              style={[styles.dashImage, { marginLeft: width * 0.13 }]}
+              source={require("../assets/plus.png")}
+            />
+          </TouchableOpacity>
+          <Text style={styles.dashText}>Add Request</Text>
         </View>
       </View>
-      <View style={{marginBottom: height * 0.05}}>
-      <Image
-        style={styles.CUlogo}
-        source={require("../assets/cuLogoColor.png")}
-      />
+      <View style={{ marginBottom: height * 0.05 }}>
+        <Image
+          style={styles.CUlogo}
+          source={require("../assets/cuLogoColor.png")}
+        />
       </View>
     </View>
   );
@@ -97,7 +96,7 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    flex: .3,
+    flex: 0.3,
     color: "#003A63",
     fontSize: 46,
     fontWeight: "700",
@@ -113,13 +112,13 @@ const styles = StyleSheet.create({
   },
 
   iconRow: {
-    flex: .8,
+    flex: 0.8,
     flexDirection: "row",
   },
 
   icon: {
-    width: width * .35,
-    height: height * .16,
+    width: width * 0.35,
+    height: height * 0.16,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -131,11 +130,9 @@ const styles = StyleSheet.create({
     elevation: 3,
     borderRadius: 20,
     backgroundColor: "#e8e7e4",
-
   },
 
   dashImage: {
-   
     marginLeft: width * 0.09,
     marginTop: height * 0.025,
   },
@@ -148,7 +145,6 @@ const styles = StyleSheet.create({
     marginLeft: width * 0.01,
     marginTop: height * 0.01,
   },
-
 
   CUlogo: {
     width: 186,
@@ -208,7 +204,6 @@ const styles = StyleSheet.create({
     marginLeft: width * 0.115,
     marginTop: height * 0.045,
   },
-
 });
 
 export default Dashboard;
