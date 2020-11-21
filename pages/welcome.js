@@ -6,8 +6,16 @@ import { populateDB } from "../database/populate";
 import { createDatabase, dropForTesting } from "../database/create";
 import * as queries from "../database/query";
 import * as Notifications from 'expo-notifications';
+import { scheduleNotifs } from '../schedule/scheduler';
 
 const WelcomeScreen = ({ navigation }) => {
+  Notifications.setNotificationHandler(({
+    handleNotification: async () => ({
+      shouldShowAlert: true,
+      shouldPlaySound: false,
+      shouldSetBadge: false,
+    })
+  }));
   return (
     <View style={styles.welcomeContainer}>
       <Image style={styles.pray} source={require("../assets/pray.png")} />
@@ -19,7 +27,8 @@ const WelcomeScreen = ({ navigation }) => {
         style={styles.thePrayer}
         onPress={() => {
           //dropForTesting();
-          queries.testQuery();
+          scheduleNotifs();
+          //queries.testQuery();
         }}
       >
         The prayer journal app for your 1000 days
@@ -31,23 +40,6 @@ const WelcomeScreen = ({ navigation }) => {
             dropForTesting();
             createDatabase();
             populateDB();
-            Notifications.setNotificationHandler(({
-              handleNotification: async () => ({
-                shouldShowAlert: true,
-                shouldPlaySound: false,
-                shouldSetBadge: false,
-              })
-            }));
-
-            Notifications.scheduleNotificationAsync({
-              content: {
-                title: "Yay!",
-                body: "You did it!",
-              },
-              trigger: {
-                seconds: 1,
-              },
-            });
             navigation.navigate("Dash");
           }}
         >
