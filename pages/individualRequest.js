@@ -99,10 +99,8 @@ const ThisRequestScreen = ({ route, navigation }) => {
 
     let catID = -1;
     categories.forEach((element) => {
-      console.log("Value", element.value, " ", category);
       if (element.value == category) {
         catID = element.id;
-        // break; // can't break out of forEach
       }
     });
     // Actuall update part

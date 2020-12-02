@@ -13,11 +13,11 @@ const Dashboard = ({ navigation }) => {
       </Text>
 
       <View style={styles.verseContainer}>
-        <Text style={styles.verseOf}>Verse of the Day:</Text>
+        <Text style={styles.verseOf}>Pray Without Ceasing</Text>
         <View style={styles.lineStyle} />
         <Text style={styles.nowMay}>
-          “Now may the Lord of Peace himself give you peace at all times and in
-          every way. {"\n"}The Lord be with all of you.” {"\n"} (2 Thess. 3:16)
+          "Rejoice always, pray without ceasing, in everything give thanks; 
+          for this is the will of God in Christ Jesus for you." {'\n'}1 Thessalonians 5:16-18
         </Text>
       </View>
       <View style={{ flex: 0.1 }}></View>
@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
   },
 
   verseOf: {
-    width: 169,
+    width: 250,
     height: 28,
     color: "#d6c396",
     fontSize: 20,

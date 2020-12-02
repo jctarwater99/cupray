@@ -121,3 +121,19 @@ export function insertNewRequest(request, catID) {
     );
   });
 }
+
+export function insertNewTag(tagName, Category) {
+  db.transaction((tx) => {
+    tx.executeSql(
+      "INSERT INTO tags(name) VALUES(?);",
+      [tagName],
+      (tx, result) => {
+        Category.tagID = result.insertId;
+        insertCategory(Category);
+      },
+      (tx, result) => {
+        console.log("Inserting requestTag failed", result);
+      }
+    );
+  });
+}

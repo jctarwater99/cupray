@@ -4,18 +4,24 @@ import {
   TouchableOpacity,
   Dimensions,
   StyleSheet,
+  TextInput,
   FlatList,
   Button,
   Text,
   View,
 } from "react-native";
 import * as queries from "../database/query";
+import * as inserts from "../database/insert";
 import { Category } from "../database/objects";
+import Modal from 'react-native-modal';
 
 var { height, width } = Dimensions.get("window");
 
 const CategoriesScreen = ({ navigation }) => {
+
   let [categories, setCategories] = useState([]);
+  let [newCategory, setNewCategory] = useState("e.g. My Pals")
+  let [createPopupVisible, toggleCreatePopupVisibility] = useState(false);
 
   useEffect(() => {
     queries.getCategories((results) => {
@@ -61,12 +67,64 @@ const CategoriesScreen = ({ navigation }) => {
       </View>
       <View style={styles.addCat}>
         <TouchableOpacity
-          onPress={() => void 0} // goto create category page or popup or something
+          onPress={() => { 
+            setNewCategory("e.g. My Pals");
+            toggleCreatePopupVisibility(!createPopupVisible); 
+          }} // goto create category page or popup or something
           style={styles.createCategoryButton}
         >
           <Text style={styles.plusSign}>+</Text>
         </TouchableOpacity>
         <Text style={[styles.plusSign, {marginTop: height * 0.01}]}> Add Category </Text>
+
+        <Modal 
+        isVisible={createPopupVisible}
+        backdropOpacity={0.25}
+        animationInTiming={400}
+        animationOutTiming={800}
+        >
+          <View style={styles.popUpContainer}>
+            <Text style={styles.popUpHeader}>Create New Category</Text>
+            <TextInput
+                  numberOfLines={4}
+                  maxLength={10} // max number of chars
+                  multiline={true}
+                  value={newCategory}
+                  onChange={(text) => setNewCategory(text.nativeEvent.text)}
+                  style={{
+                    backgroundColor: "white",
+                    color: "#7E8C96",
+                    padding: 5,
+                    textAlignVertical: "top",
+                    fontWeight: "600",
+                  }}
+                />
+            <Text style={styles.popUpHeader}>Add Reminders</Text>
+
+            <TouchableOpacity 
+            style={{marginLeft: width * 0.6}}
+            onPress={() => { 
+              toggleCreatePopupVisibility(!createPopupVisible); 
+              let cat = new Category();
+              cat.name = newCategory;
+              cat.tagID = -1; // filler value
+
+              cat.remind_freq = 0; // Set later
+              cat.remind_days = "MXWXFXX"; // Set later
+              cat.remind_time = "T10:43:17+0000"; // Set later
+
+              inserts.insertNewTag(newCategory, cat); // New category is the tag name
+              
+              setTimeout(() => { 
+                queries.getCategories((results) => {
+                  setCategories(results);
+                });
+              }, 100);
+            }}>
+              <Text style={styles.plusSign}>Save</Text>
+              </TouchableOpacity>
+            </View>
+        </Modal>
       </View>
     </View>
   );
@@ -105,6 +163,31 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     padding: height * 0.02,
     marginLeft: width * 0.06,
+  },
+
+  popUpContainer: {
+    width: 327,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    padding: height * 0.02,
+    shadowOpacity: 0.27,
+    shadowRadius: 4.65,
+
+    elevation: 6,
+    borderRadius: 20,
+    backgroundColor: "#D6C396",
+    alignItems: "center",
+  },
+
+  popUpHeader: {
+    flex: 0,
+    fontSize: 16,
+    color: "#fff",
+    fontWeight: "700",
+    padding: height * 0.01,
   },
 
   lineStyle: {
