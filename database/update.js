@@ -40,3 +40,74 @@ export function updateRequestTag(reqID, oldCatID, newCatID) {
     );
   });
 }
+
+export function deleteCategory(catID){
+  db.transaction((tx) => {
+    tx.executeSql(
+      "DELETE FROM categories WHERE tagID = ?", 
+      [catID],
+      () => void 0,
+      (tx, result) => {
+        console.log("Deleting category failed", result);
+      }
+    );
+  });
+}
+export function editCategory(newCatName, catID){
+  db.transaction((tx) => {
+    tx.executeSql(
+      "UPDATE categories SET name = ? WHERE tagID = ?", 
+      [newCatName, catID],
+      () => void 0,
+      (tx, result) => {
+        console.log("Updating category failed", result);
+      }
+    );
+  });
+}
+
+export function deleteRequestTagsInCategory(catID){
+  db.transaction((tx) => {
+    // delete request_tags in this list 
+    // select all requests tags in this list of requests
+    // select all requests in the category 
+    // This query is dumb
+    
+    tx.executeSql(
+      "DELETE FROM request_tags WHERE request_tags.id IN ( " + 
+      "SELECT request_tags.id FROM request_tags WHERE request_tags.requestID IN ( " +
+      "SELECT requests.id FROM requests " +
+      "INNER JOIN request_tags as RT ON RT.requestID = requests.id " +
+      "INNER JOIN tags ON RT.tagID = tags.id " +
+      "WHERE tags.id = ? ))",
+      [catID],
+      (tx, result) => { deleteRequestsInCategory(); },
+      (tx, result) => {
+        console.log("Deleting category failed", result);
+      }
+    );
+  });
+}
+
+export function deleteRequestsInCategory(){
+  db.transaction((tx) => {
+    // delete requests in this list 
+    // select all requests except these 
+    // select all distinct requests that are associated with tags
+    // also don't get the first request
+
+    tx.executeSql(
+      "DELETE FROM requests WHERE requests.id IN ( " +
+      "SELECT * FROM ( " + 
+      "SELECT requests.id FROM requests EXCEPT " +
+      "SELECT DISTINCT requests.id FROM requests " +
+      "INNER JOIN request_tags as RT ON RT.requestID = requests.id " +
+      "EXCEPT SELECT requests.id FROM requests WHERE requests.id = 1 ))",
+      [],
+      (tx, result) => {console.log("Success????", result);},
+      (tx, result) => {
+        console.log("Deleting category failed", result);
+      }
+    );
+  });
+}

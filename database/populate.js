@@ -306,14 +306,14 @@ export function populateDBwithRequestTags() {
   RTs.push(createRT(10, 10)); // Contentment          myself
   RTs.push(createRT(11, 10)); // Consistency in word  myself
 
-  RTs.push(createRT(12, 4));
+  RTs.push(createRT(12, 4)); // 13
   RTs.push(createRT(13, 4));
   RTs.push(createRT(14, 4));
   RTs.push(createRT(15, 6));
   RTs.push(createRT(16, 6));
-  RTs.push(createRT(17, 7));
-  RTs.push(createRT(18, 7));
-  RTs.push(createRT(19, 7));
+  RTs.push(createRT(17, 7)); // 18
+  RTs.push(createRT(18, 7)); // 19
+  RTs.push(createRT(19, 7)); // 20
   RTs.push(createRT(20, 8));
   RTs.push(createRT(21, 8));
   RTs.push(createRT(22, 8));

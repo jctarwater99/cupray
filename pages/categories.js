@@ -12,6 +12,7 @@ import {
 } from "react-native";
 import * as queries from "../database/query";
 import * as inserts from "../database/insert";
+import * as updates from "../database/update";
 import { Category } from "../database/objects";
 import Modal from 'react-native-modal';
 
@@ -22,6 +23,10 @@ const CategoriesScreen = ({ navigation }) => {
   let [categories, setCategories] = useState([]);
   let [newCategory, setNewCategory] = useState("e.g. My Pals")
   let [createPopupVisible, toggleCreatePopupVisibility] = useState(false);
+  let [editPopupVisible, toggleEditPopupVisibility] = useState(false);
+  let [selectedCatName, setSelectedCatName] = useState("None");
+  let [selectedCatID, setSelectedCatID] = useState(-1);
+
 
   useEffect(() => {
     queries.getCategories((results) => {
@@ -40,10 +45,13 @@ const CategoriesScreen = ({ navigation }) => {
             cat_name: category.name,
           })
         }
+        onLongPress={()=>{
+          setSelectedCatName(category.name);
+          setSelectedCatID(category.tagID);
+          toggleEditPopupVisibility(!editPopupVisible);
+        }}
       >
-
         {category.name}
-        
       </Text>
     );
   };
@@ -69,7 +77,7 @@ const CategoriesScreen = ({ navigation }) => {
         <TouchableOpacity
           onPress={() => { 
             setNewCategory("e.g. My Pals");
-            toggleCreatePopupVisibility(!createPopupVisible); 
+            toggleCreatePopupVisibility(!createPopupVisible);
           }} // goto create category page or popup or something
           style={styles.createCategoryButton}
         >
@@ -125,6 +133,68 @@ const CategoriesScreen = ({ navigation }) => {
               </TouchableOpacity>
             </View>
         </Modal>
+
+        <Modal 
+        isVisible={editPopupVisible}
+        backdropOpacity={0.25}
+        animationInTiming={400}
+        animationOutTiming={800}
+        >
+          <View style={styles.popUpContainer}>
+            <Text style={styles.popUpHeader}>Edit Category</Text>
+            <TextInput
+                  numberOfLines={4}
+                  maxLength={10} // max number of chars
+                  multiline={true}
+                  value={selectedCatName}
+                  onChange={(text) => setNewCategory(text.nativeEvent.text)}
+                  style={{
+                    backgroundColor: "white",
+                    color: "#7E8C96",
+                    padding: 5,
+                    textAlignVertical: "top",
+                    fontWeight: "600",
+                    marginBottom: height * 0.01,
+                  }}
+                />
+            <View>
+            <Text style={styles.popUpHeader}>Edit Reminders</Text>
+            <Text style={styles.plusSign}>Date stuff</Text>
+            </View>
+
+            <View style={{flexDirection: 'row', position: 'absolute', bottom: height * 0.03}}>
+            <TouchableOpacity 
+           style={{width: width * 0.6}}
+           onPress={() =>{
+            // Provide warning
+            alert('Deleting this Category will delete all the requests associated with it as well! Are you sure?');
+            // exit if necessary
+            updates.deleteRequestTagsInCategory(selectedCatID);
+            // Delete category
+            // Delete tag
+            toggleEditPopupVisibility(!editPopupVisible)
+           }}
+           >
+            <Text style={styles.plusSign}>Delete</Text>
+
+            </TouchableOpacity>
+
+            <TouchableOpacity 
+            style={{width: width * 0.58}}
+            onPress={() => { 
+              toggleEditPopupVisibility(!editPopupVisible); 
+              
+              setTimeout(() => { 
+                queries.getCategories((results) => {
+                  setCategories(results);
+                });
+              }, 100);
+            }}>
+              <Text style={styles.plusSign}>Save</Text>
+              </TouchableOpacity>
+              </View>
+            </View>
+        </Modal>
       </View>
     </View>
   );
@@ -167,6 +237,7 @@ const styles = StyleSheet.create({
 
   popUpContainer: {
     width: 327,
+    height: 200,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
