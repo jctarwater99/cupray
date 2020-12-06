@@ -107,8 +107,6 @@ const ThisRequestScreen = ({ route, navigation }) => {
     if (route.params.isNewReq) {
       inserts.insertNewRequest(req, catID);
     } else {
-      console.log(req);
-      console.log("Old ID:", route.params.cat_id, "/nNew ID:", catID);
       updates.updateRequest(route.params.req_id, req);
       updates.updateRequestTag(route.params.req_id, route.params.cat_id, catID);
     }

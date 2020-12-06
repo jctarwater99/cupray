@@ -41,10 +41,10 @@ export function updateRequestTag(reqID, oldCatID, newCatID) {
   });
 }
 
-export function deleteCategory(catID){
+export function deleteCategory(catID) {
   db.transaction((tx) => {
     tx.executeSql(
-      "DELETE FROM categories WHERE tagID = ?", 
+      "DELETE FROM categories WHERE tagID = ?",
       [catID],
       () => void 0,
       (tx, result) => {
@@ -53,35 +53,61 @@ export function deleteCategory(catID){
     );
   });
 }
-export function editCategory(newCatName, catID){
+export function deleteTag(tagID) {
   db.transaction((tx) => {
     tx.executeSql(
-      "UPDATE categories SET name = ? WHERE tagID = ?", 
-      [newCatName, catID],
+      "DELETE FROM tags WHERE id = ?",
+      [tagID],
       () => void 0,
+      (tx, result) => {
+        console.log("Deleting tag failed", result);
+      }
+    );
+  });
+}
+export function editCategory(newCatName, catID) {
+  db.transaction((tx) => {
+    tx.executeSql(
+      "UPDATE categories SET name = ? WHERE tagID = ?",
+      [newCatName, catID],
+      (tx, result) => console.log("huh?", result),
       (tx, result) => {
         console.log("Updating category failed", result);
       }
     );
   });
 }
-
-export function deleteRequestTagsInCategory(catID){
+export function editTag(newTagName, tagID) {
   db.transaction((tx) => {
-    // delete request_tags in this list 
-    // select all requests tags in this list of requests
-    // select all requests in the category 
-    // This query is dumb
-    
     tx.executeSql(
-      "DELETE FROM request_tags WHERE request_tags.id IN ( " + 
-      "SELECT request_tags.id FROM request_tags WHERE request_tags.requestID IN ( " +
-      "SELECT requests.id FROM requests " +
-      "INNER JOIN request_tags as RT ON RT.requestID = requests.id " +
-      "INNER JOIN tags ON RT.tagID = tags.id " +
-      "WHERE tags.id = ? ))",
+      "UPDATE tags SET name = ? WHERE id = ?",
+      [newTagName, tagID],
+      () => void 0,
+      (tx, result) => {
+        console.log("Updating tag failed", result);
+      }
+    );
+  });
+}
+
+export function deleteRequestTagsInCategory(catID) {
+  db.transaction((tx) => {
+    // delete request_tags in this list
+    // select all requests tags in this list of requests
+    // select all requests in the category
+    // This query is dumb
+
+    tx.executeSql(
+      "DELETE FROM request_tags WHERE request_tags.id IN ( " +
+        "SELECT request_tags.id FROM request_tags WHERE request_tags.requestID IN ( " +
+        "SELECT requests.id FROM requests " +
+        "INNER JOIN request_tags as RT ON RT.requestID = requests.id " +
+        "INNER JOIN tags ON RT.tagID = tags.id " +
+        "WHERE tags.id = ? ))",
       [catID],
-      (tx, result) => { deleteRequestsInCategory(); },
+      (tx, result) => {
+        deleteRequestsInCategory();
+      },
       (tx, result) => {
         console.log("Deleting category failed", result);
       }
@@ -89,22 +115,22 @@ export function deleteRequestTagsInCategory(catID){
   });
 }
 
-export function deleteRequestsInCategory(){
+export function deleteRequestsInCategory() {
   db.transaction((tx) => {
-    // delete requests in this list 
-    // select all requests except these 
+    // delete requests in this list
+    // select all requests except these
     // select all distinct requests that are associated with tags
     // also don't get the first request
 
     tx.executeSql(
       "DELETE FROM requests WHERE requests.id IN ( " +
-      "SELECT * FROM ( " + 
-      "SELECT requests.id FROM requests EXCEPT " +
-      "SELECT DISTINCT requests.id FROM requests " +
-      "INNER JOIN request_tags as RT ON RT.requestID = requests.id " +
-      "EXCEPT SELECT requests.id FROM requests WHERE requests.id = 1 ))",
+        "SELECT * FROM ( " +
+        "SELECT requests.id FROM requests EXCEPT " +
+        "SELECT DISTINCT requests.id FROM requests " +
+        "INNER JOIN request_tags as RT ON RT.requestID = requests.id " +
+        "EXCEPT SELECT requests.id FROM requests WHERE requests.id = 1 ))",
       [],
-      (tx, result) => {console.log("Success????", result);},
+      () => void 0,
       (tx, result) => {
         console.log("Deleting category failed", result);
       }

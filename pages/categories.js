@@ -14,19 +14,17 @@ import * as queries from "../database/query";
 import * as inserts from "../database/insert";
 import * as updates from "../database/update";
 import { Category } from "../database/objects";
-import Modal from 'react-native-modal';
+import Modal from "react-native-modal";
 
 var { height, width } = Dimensions.get("window");
 
 const CategoriesScreen = ({ navigation }) => {
-
   let [categories, setCategories] = useState([]);
-  let [newCategory, setNewCategory] = useState("e.g. My Pals")
+  let [newCategory, setNewCategory] = useState("e.g. My Pals");
   let [createPopupVisible, toggleCreatePopupVisibility] = useState(false);
   let [editPopupVisible, toggleEditPopupVisibility] = useState(false);
   let [selectedCatName, setSelectedCatName] = useState("None");
   let [selectedCatID, setSelectedCatID] = useState(-1);
-
 
   useEffect(() => {
     queries.getCategories((results) => {
@@ -45,7 +43,7 @@ const CategoriesScreen = ({ navigation }) => {
             cat_name: category.name,
           })
         }
-        onLongPress={()=>{
+        onLongPress={() => {
           setSelectedCatName(category.name);
           setSelectedCatID(category.tagID);
           toggleEditPopupVisibility(!editPopupVisible);
@@ -57,6 +55,14 @@ const CategoriesScreen = ({ navigation }) => {
   };
   let listViewItemSeparator = () => {
     return <View style={styles.lineStyle} />;
+  };
+
+  let refreshPage = () => {
+    setTimeout(() => {
+      queries.getCategories((results) => {
+        setCategories(results);
+      });
+    }, 150);
   };
 
   return (
@@ -75,7 +81,7 @@ const CategoriesScreen = ({ navigation }) => {
       </View>
       <View style={styles.addCat}>
         <TouchableOpacity
-          onPress={() => { 
+          onPress={() => {
             setNewCategory("e.g. My Pals");
             toggleCreatePopupVisibility(!createPopupVisible);
           }} // goto create category page or popup or something
@@ -83,120 +89,127 @@ const CategoriesScreen = ({ navigation }) => {
         >
           <Text style={styles.plusSign}>+</Text>
         </TouchableOpacity>
-        <Text style={[styles.plusSign, {marginTop: height * 0.01}]}> Add Category </Text>
+        <Text style={[styles.plusSign, { marginTop: height * 0.01 }]}>
+          {" "}
+          Add Category{" "}
+        </Text>
 
-        <Modal 
-        isVisible={createPopupVisible}
-        backdropOpacity={0.25}
-        animationInTiming={400}
-        animationOutTiming={800}
+        <Modal
+          isVisible={createPopupVisible}
+          backdropOpacity={0.25}
+          animationInTiming={400}
+          animationOutTiming={800}
         >
           <View style={styles.popUpContainer}>
             <Text style={styles.popUpHeader}>Create New Category</Text>
             <TextInput
-                  numberOfLines={4}
-                  maxLength={10} // max number of chars
-                  multiline={true}
-                  value={newCategory}
-                  onChange={(text) => setNewCategory(text.nativeEvent.text)}
-                  style={{
-                    backgroundColor: "white",
-                    color: "#7E8C96",
-                    padding: 5,
-                    textAlignVertical: "top",
-                    fontWeight: "600",
-                  }}
-                />
+              numberOfLines={4}
+              maxLength={10} // max number of chars
+              multiline={true}
+              value={newCategory}
+              onChange={(text) => setNewCategory(text.nativeEvent.text)}
+              style={{
+                backgroundColor: "white",
+                color: "#7E8C96",
+                padding: 5,
+                textAlignVertical: "top",
+                fontWeight: "600",
+              }}
+            />
             <Text style={styles.popUpHeader}>Add Reminders</Text>
 
-            <TouchableOpacity 
-            style={{marginLeft: width * 0.6}}
-            onPress={() => { 
-              toggleCreatePopupVisibility(!createPopupVisible); 
-              let cat = new Category();
-              cat.name = newCategory;
-              cat.tagID = -1; // filler value
+            <TouchableOpacity
+              style={{ marginLeft: width * 0.6 }}
+              onPress={() => {
+                toggleCreatePopupVisibility(!createPopupVisible);
+                let cat = new Category();
+                cat.name = newCategory;
+                cat.tagID = -1; // filler value
 
-              cat.remind_freq = 0; // Set later
-              cat.remind_days = "MXWXFXX"; // Set later
-              cat.remind_time = "T10:43:17+0000"; // Set later
+                cat.remind_freq = 0; // Set later
+                cat.remind_days = "MXWXFXX"; // Set later
+                cat.remind_time = "T10:43:17+0000"; // Set later
 
-              inserts.insertNewTag(newCategory, cat); // New category is the tag name
-              
-              setTimeout(() => { 
-                queries.getCategories((results) => {
-                  setCategories(results);
-                });
-              }, 100);
-            }}>
+                inserts.insertNewTag(newCategory, cat); // New category is the tag name, also inserts new category
+
+                refreshPage();
+              }}
+            >
               <Text style={styles.plusSign}>Save</Text>
-              </TouchableOpacity>
-            </View>
+            </TouchableOpacity>
+          </View>
         </Modal>
 
-        <Modal 
-        isVisible={editPopupVisible}
-        backdropOpacity={0.25}
-        animationInTiming={400}
-        animationOutTiming={800}
+        <Modal
+          isVisible={editPopupVisible}
+          backdropOpacity={0.25}
+          animationInTiming={400}
+          animationOutTiming={800}
         >
           <View style={styles.popUpContainer}>
             <Text style={styles.popUpHeader}>Edit Category</Text>
             <TextInput
-                  numberOfLines={4}
-                  maxLength={10} // max number of chars
-                  multiline={true}
-                  value={selectedCatName}
-                  onChange={(text) => setNewCategory(text.nativeEvent.text)}
-                  style={{
-                    backgroundColor: "white",
-                    color: "#7E8C96",
-                    padding: 5,
-                    textAlignVertical: "top",
-                    fontWeight: "600",
-                    marginBottom: height * 0.01,
-                  }}
-                />
+              numberOfLines={4}
+              maxLength={10} // max number of chars
+              multiline={true}
+              value={selectedCatName}
+              onChange={(text) => setSelectedCatName(text.nativeEvent.text)}
+              style={{
+                backgroundColor: "white",
+                color: "#7E8C96",
+                padding: 5,
+                textAlignVertical: "top",
+                fontWeight: "600",
+                marginBottom: height * 0.01,
+              }}
+            />
             <View>
-            <Text style={styles.popUpHeader}>Edit Reminders</Text>
-            <Text style={styles.plusSign}>Date stuff</Text>
+              <Text style={styles.popUpHeader}>Edit Reminders</Text>
+              <Text style={styles.plusSign}>Date stuff</Text>
             </View>
 
-            <View style={{flexDirection: 'row', position: 'absolute', bottom: height * 0.03}}>
-            <TouchableOpacity 
-           style={{width: width * 0.6}}
-           onPress={() =>{
-            // Provide warning
-            alert('Deleting this Category will delete all the requests associated with it as well! Are you sure?');
-            // exit if necessary
-            updates.deleteRequestTagsInCategory(selectedCatID);
-            // Delete category
-            // Delete tag
-            toggleEditPopupVisibility(!editPopupVisible)
-           }}
-           >
-            <Text style={styles.plusSign}>Delete</Text>
-
-            </TouchableOpacity>
-
-            <TouchableOpacity 
-            style={{width: width * 0.58}}
-            onPress={() => { 
-              toggleEditPopupVisibility(!editPopupVisible); 
-              
-              setTimeout(() => { 
-                queries.getCategories((results) => {
-                  setCategories(results);
-                });
-              }, 100);
-            }}>
-              <Text style={styles.plusSign}>Save</Text>
+            <View
+              style={{
+                flexDirection: "row",
+                position: "absolute",
+                bottom: height * 0.03,
+              }}
+            >
+              <TouchableOpacity
+                style={{ width: width * 0.6 }}
+                onPress={() => {
+                  // Provide warning
+                  alert(
+                    "Deleting this Category will delete all the requests associated with it as well. Are you sure?"
+                  );
+                  // exit if necessary
+                  updates.deleteRequestTagsInCategory(selectedCatID);
+                  updates.deleteCategory(selectedCatID);
+                  updates.deleteTag(selectedCatID);
+                  toggleEditPopupVisibility(!editPopupVisible);
+                  refreshPage();
+                }}
+              >
+                <Text style={styles.plusSign}>Delete</Text>
               </TouchableOpacity>
-              </View>
+
+              <TouchableOpacity
+                // This is the save button for the edit page?
+                style={{ width: width * 0.58 }}
+                onPress={() => {
+                  updates.editCategory(selectedCatName, selectedCatID);
+                  updates.editTag(selectedCatName, selectedCatID);
+                  toggleEditPopupVisibility(!editPopupVisible);
+                  refreshPage();
+                }}
+              >
+                <Text style={styles.plusSign}>Save</Text>
+              </TouchableOpacity>
             </View>
+          </View>
         </Modal>
       </View>
-    </View>
+    </View> // Nested much? lol
   );
 };
 
