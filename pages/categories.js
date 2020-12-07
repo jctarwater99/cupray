@@ -107,6 +107,7 @@ const CategoriesScreen = ({ navigation }) => {
               maxLength={10} // max number of chars
               multiline={true}
               value={newCategory}
+              onFocus={() => setNewCategory("")}
               onChange={(text) => setNewCategory(text.nativeEvent.text)}
               style={{
                 backgroundColor: "white",

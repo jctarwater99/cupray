@@ -174,6 +174,11 @@ const ThisRequestScreen = ({ route, navigation }) => {
             style={{ marginTop: height * 0.02 }}
             maxLength={25} // max number of chars
             multiline={false}
+            onFocus={() => {
+              if (route.params.isNewReq) {
+                setSubject("");
+              }
+            }}
             value={subject}
             onChange={(text) => setSubject(text.nativeEvent.text)}
             style={[styles.title, { backgroundColor: "white", padding: 5 }]}
@@ -220,6 +225,11 @@ const ThisRequestScreen = ({ route, navigation }) => {
                   numberOfLines={4}
                   maxLength={300} // max number of chars
                   multiline={true}
+                  onFocus={() => {
+                    if (route.params.isNewReq) {
+                      setDescription("");
+                    }
+                  }}
                   value={description}
                   onChange={(text) => setDescription(text.nativeEvent.text)}
                   style={{
