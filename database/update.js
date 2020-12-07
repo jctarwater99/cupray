@@ -137,3 +137,35 @@ export function deleteRequestsInCategory() {
     );
   });
 }
+
+export function deleteRequestTags(reqID) {
+  db.transaction((tx) => {
+    tx.executeSql(
+      "DELETE FROM request_tags WHERE request_tags.id IN ( " +
+        "SELECT request_tags.id FROM request_tags WHERE request_tags.requestID IN ( " +
+        "SELECT requests.id FROM requests " + 
+        "WHERE requests.id = ? ))",
+      [reqID],
+      (tx, result) => {
+        deleteRequest(reqID);
+      },
+      (tx, result) => {
+        console.log("Deleting request tags failed", result);
+      }
+    );
+  });
+}
+
+export function deleteRequest(reqID) {
+  db.transaction((tx) => {
+    tx.executeSql(
+      "DELETE FROM requests WHERE requests.id = ?",
+      [reqID],
+      () => void 0,
+      (tx, result) => {
+        console.log("Deleting request failed", result);
+      }
+    );
+  });
+}
+

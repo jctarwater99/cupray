@@ -7,6 +7,7 @@ import {
   TextInput,
   FlatList,
   Button,
+  Alert,
   Text,
   View,
 } from "react-native";
@@ -99,11 +100,11 @@ const CategoriesScreen = ({ navigation }) => {
           backdropOpacity={0.25}
           animationInTiming={400}
           animationOutTiming={800}
+          onBackdropPress={() => {toggleCreatePopupVisibility(!createPopupVisible)}}
         >
           <View style={styles.popUpContainer}>
             <Text style={styles.popUpHeader}>Create New Category</Text>
             <TextInput
-              numberOfLines={4}
               maxLength={10} // max number of chars
               multiline={true}
               value={newCategory}
@@ -146,11 +147,11 @@ const CategoriesScreen = ({ navigation }) => {
           backdropOpacity={0.25}
           animationInTiming={400}
           animationOutTiming={800}
+          onBackdropPress={() => {toggleEditPopupVisibility(!editPopupVisible)}}
         >
           <View style={styles.popUpContainer}>
             <Text style={styles.popUpHeader}>Edit Category</Text>
             <TextInput
-              numberOfLines={4}
               maxLength={10} // max number of chars
               multiline={true}
               value={selectedCatName}
@@ -164,7 +165,11 @@ const CategoriesScreen = ({ navigation }) => {
                 marginBottom: height * 0.01,
               }}
             />
-            <View>
+            <View 
+            style={{
+              padding: 20,
+            }}
+            >
               <Text style={styles.popUpHeader}>Edit Reminders</Text>
               <Text style={styles.plusSign}>Date stuff</Text>
             </View>
@@ -180,15 +185,26 @@ const CategoriesScreen = ({ navigation }) => {
                 style={{ width: width * 0.6 }}
                 onPress={() => {
                   // Provide warning
-                  alert(
-                    "Deleting this Category will delete all the requests associated with it as well. Are you sure?"
-                  );
-                  // exit if necessary
-                  updates.deleteRequestTagsInCategory(selectedCatID);
-                  updates.deleteCategory(selectedCatID);
-                  updates.deleteTag(selectedCatID);
-                  toggleEditPopupVisibility(!editPopupVisible);
-                  refreshPage();
+                  Alert.alert(
+                    "Warning", 
+                    "Deleting this Category will delete all the requests associated with it as well. Are you sure?",
+                    [
+                      {       
+                        text: "Delete",
+                        onPress: () => { 
+                          updates.deleteRequestTagsInCategory(selectedCatID);
+                          updates.deleteCategory(selectedCatID);
+                          updates.deleteTag(selectedCatID);
+                          toggleEditPopupVisibility(!editPopupVisible);
+                          refreshPage();
+                        }
+                       },
+                       {
+                         text: "Cancel",
+                         style: "cancel",
+                         onPress: ()=> { toggleEditPopupVisibility(!editPopupVisible)}
+                       }
+                    ] );                  
                 }}
               >
                 <Text style={styles.plusSign}>Delete</Text>
@@ -251,7 +267,6 @@ const styles = StyleSheet.create({
 
   popUpContainer: {
     width: 327,
-    height: 200,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,

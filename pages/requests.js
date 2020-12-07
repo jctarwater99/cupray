@@ -4,25 +4,38 @@ import {
   TouchableOpacity,
   Dimensions,
   FlatList,
+  Alert,
   SafeAreaView,
 } from "react-native";
 import { StyleSheet, Button, Text, View } from "react-native";
 import { populateDB } from "../database/populate";
 import { createDatabase } from "../database/create";
 import * as queries from "../database/query";
+import * as updates from "../database/update";
 import { Category } from "../database/objects";
 import { CheckBox } from "react-native-elements";
+import Modal from "react-native-modal";
 
 var { height, width } = Dimensions.get("window");
 
 const RequestsScreen = ({ route, navigation }) => {
   let [requests, setRequests] = useState([]);
+  let [deletePopupVisible, toggleDeletePopupVisibility] = useState(false);
+  let [requestID, setRequestID] = useState(-1);
 
   useEffect(() => {
     queries.getRequestsInCategory(route.params.cat_id, (results) =>
       setRequests(results)
     );
   }, []);
+
+  let refreshPage = () => {
+    setTimeout(() => {
+      queries.getRequestsInCategory(route.params.cat_id, (results) =>
+      setRequests(results)
+    );
+    }, 150);
+  };
 
   let listItemView = (request) => {
     return (
@@ -37,6 +50,10 @@ const RequestsScreen = ({ route, navigation }) => {
             req_id: request.id,
             isNewReq: false,
           });
+        }}
+        onLongPress={()=>{
+          setRequestID(request.id);
+          toggleDeletePopupVisibility(!deletePopupVisible);
         }}
       >
         <View style={styles.circle} />
@@ -82,6 +99,69 @@ const RequestsScreen = ({ route, navigation }) => {
           </View>
         </View>
       </View>
+
+      <Modal
+          isVisible={deletePopupVisible}
+          backdropOpacity={0.25}
+          animationInTiming={400}
+          animationOutTiming={800}
+          onBackdropPress={() => {toggleDeletePopupVisibility(!deletePopupVisible)}}
+        >
+          <View style={styles.popUpContainer}>
+            <View>
+              
+            <Text style={[styles.popUpHeader,{marginBottom: height * 0.04}]}>Delete Request?</Text>
+            </View>
+            <View
+              style={{
+                flexDirection: "row",
+                position: "absolute",
+                bottom: height * 0.03,
+              }}
+            >
+              <TouchableOpacity
+                style={{ width: width * 0.6 }}
+                onPress={() => {
+                  // Provide warning
+                  Alert.alert(
+                    "Warning", 
+                    "Are you sure you want to delete this prayer request?",
+                    [
+                      {       
+                        text: "Delete",
+                        onPress: () => { 
+                          updates.deleteRequestTags(requestID);
+                          toggleDeletePopupVisibility(!deletePopupVisible);
+                          refreshPage();
+                        }
+                       },
+                       {
+                         text: "Cancel",
+                         style: "cancel",
+                         onPress: ()=> { toggleDeletePopupVisibility(!deletePopupVisible)}
+                       }
+                    ] );                  
+                }}
+              >
+                <Text style={styles.plusSign}>Delete</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                // This is the save button for the edit page?
+                style={{ width: width * 0.58 }}
+                onPress={() => {
+                  /* updates.editCategory(selectedCatName, selectedCatID);
+                  updates.editTag(selectedCatName, selectedCatID); */
+                  toggleDeletePopupVisibility(!deletePopupVisible);
+                  refreshPage();
+                }}
+              >
+                <Text style={styles.plusSign}>Cancel</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
+        
     </SafeAreaView>
   );
 };
@@ -171,6 +251,31 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: "700",
     textAlign: "center",
+  },
+
+  popUpContainer: {
+    width: 327,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    padding: height * 0.02,
+    shadowOpacity: 0.27,
+    shadowRadius: 4.65,
+
+    elevation: 6,
+    borderRadius: 20,
+    backgroundColor: "#D6C396",
+    alignItems: "center",
+  },
+
+  popUpHeader: {
+    flex: 0,
+    fontSize: 16,
+    color: "#fff",
+    fontWeight: "700",
+    padding: height * 0.01,
   },
 });
 
