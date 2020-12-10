@@ -266,8 +266,8 @@ export function populateDBwithCategories() {
     var cat = new Category();
     cat.name = name;
     cat.tagID = tagID;
-    cat.reminder_freq = 8;
-    cat.reminder_time = "14:15:14+0000";
+    cat.remind_time = "14:15:14+0000";
+    cat.remind_days = "XMXWXFX";
     return cat;
   }
 

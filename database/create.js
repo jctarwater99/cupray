@@ -73,7 +73,6 @@ export function createDatabase() {
       "CREATE TABLE IF NOT EXISTS categories ( " +
         "tagID INTEGER PRIMARY KEY, " +
         "name TEXT, " +
-        "remind_freq INT, " +
         "remind_days TEXT," +
         "remind_time TEXT, " +
         "FOREIGN KEY (tagID) REFERENCES tags(id));",

@@ -16,6 +16,8 @@ import * as inserts from "../database/insert";
 import * as updates from "../database/update";
 import { Category } from "../database/objects";
 import Modal from "react-native-modal";
+import WeekdayPicker from "../customComponent/WeekdayPicker/WeekdayPicker";
+
 
 var { height, width } = Dimensions.get("window");
 
@@ -26,6 +28,7 @@ const CategoriesScreen = ({ navigation }) => {
   let [editPopupVisible, toggleEditPopupVisibility] = useState(false);
   let [selectedCatName, setSelectedCatName] = useState("None");
   let [selectedCatID, setSelectedCatID] = useState(-1);
+  let [days, setDays] = useState({ 0:0, 1:1, 2:0, 3:1, 4:0, 5:1, 6:0});
 
   useEffect(() => {
     queries.getCategories((results) => {
@@ -113,12 +116,22 @@ const CategoriesScreen = ({ navigation }) => {
               style={{
                 backgroundColor: "white",
                 color: "#7E8C96",
-                padding: 5,
+                padding: 8,
                 textAlignVertical: "top",
                 fontWeight: "600",
+                alignSelf: "stretch",
+                textAlign: "center",
+                marginLeft: width * 0.1,
+                marginRight: width * 0.1,
               }}
             />
-            <Text style={styles.popUpHeader}>Add Reminders</Text>
+            <Text style={styles.popUpHeader}>Reminder Days</Text>
+            <WeekdayPicker
+              days={days}
+              onChange={()=>{setDays(days);}}
+              style={styles.picker}
+              dayStyle={styles.day}
+            />
 
             <TouchableOpacity
               style={{ marginLeft: width * 0.6 }}
@@ -128,8 +141,7 @@ const CategoriesScreen = ({ navigation }) => {
                 cat.name = newCategory;
                 cat.tagID = -1; // filler value
 
-                cat.remind_freq = 0; // Set later
-                cat.remind_days = "MXWXFXX"; // Set later
+                cat.remind_days = "XMXWXFX"; // Set later
                 cat.remind_time = "T10:43:17+0000"; // Set later
 
                 inserts.insertNewTag(newCategory, cat); // New category is the tag name, also inserts new category
@@ -162,7 +174,10 @@ const CategoriesScreen = ({ navigation }) => {
                 padding: 5,
                 textAlignVertical: "top",
                 fontWeight: "600",
-                marginBottom: height * 0.01,
+                alignSelf: "stretch",
+                textAlign: "center",
+                marginLeft: width * 0.1,
+                marginRight: width * 0.1,
               }}
             />
             <View 
@@ -214,7 +229,15 @@ const CategoriesScreen = ({ navigation }) => {
                 // This is the save button for the edit page?
                 style={{ width: width * 0.58 }}
                 onPress={() => {
-                  updates.editCategory(selectedCatName, selectedCatID);
+                  cat = new Category();
+
+                  cat.name = newCategory;
+                  cat.tagID = selectedCatID;
+  
+                  cat.remind_days = "XMXWXFX"; // Set later
+                  cat.remind_time = "T10:43:17+0000"; // Set later
+
+                  updates.editCategory(cat);
                   updates.editTag(selectedCatName, selectedCatID);
                   toggleEditPopupVisibility(!editPopupVisible);
                   refreshPage();
@@ -278,14 +301,14 @@ const styles = StyleSheet.create({
 
     elevation: 6,
     borderRadius: 20,
-    backgroundColor: "#D6C396",
+    backgroundColor: "#E8E7E4",
     alignItems: "center",
   },
 
   popUpHeader: {
     flex: 0,
     fontSize: 16,
-    color: "#fff",
+    color: "#003A63",
     fontWeight: "700",
     padding: height * 0.01,
   },
@@ -331,6 +354,7 @@ const styles = StyleSheet.create({
     fontSize: 46,
     fontWeight: "700",
   },
+
 });
 
 export default CategoriesScreen;
