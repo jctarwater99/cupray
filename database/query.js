@@ -6,10 +6,7 @@ const db = SQLite.openDatabase("db.cupray");
 export function testQuery() {
   db.transaction((tx) => {
     tx.executeSql(
-      // requests.subject, requests.id //////instead of *
-      "SELECT * FROM requests " +
-        "INNER JOIN request_tags as RT ON RT.requestID = requests.id " +
-        "INNER JOIN tags ON RT.tagID = tags.id;",
+      "SELECT subject, weight, previous_weight FROM requests",
       [],
       (tx, result) => {
         console.log(result);

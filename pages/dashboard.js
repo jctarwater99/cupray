@@ -16,8 +16,9 @@ const Dashboard = ({ navigation }) => {
         <Text style={styles.verseOf}>Pray Without Ceasing</Text>
         <View style={styles.lineStyle} />
         <Text style={styles.nowMay}>
-          "Rejoice always, pray without ceasing, in everything give thanks; 
-          for this is the will of God in Christ Jesus for you." {'\n'}1 Thessalonians 5:16-18
+          "Rejoice always, pray without ceasing, in everything give thanks; for
+          this is the will of God in Christ Jesus for you." {"\n"}1
+          Thessalonians 5:16-18
         </Text>
       </View>
       <View style={{ flex: 0.1 }}></View>

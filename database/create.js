@@ -32,7 +32,7 @@ export function createDatabase() {
         "remind_days  TEXT," +
         "remind_time	TEXT," +
         "previous_weight INT," +
-        "notification_weight INT," +
+        "weight       INT," +
         "priority     INT);",
       null,
       () => void 0,

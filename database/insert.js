@@ -20,7 +20,7 @@ export function insertRequest(request) {
     tx.executeSql(
       "INSERT INTO requests(subject, description, create_time," +
         "expire_time, remind_freq, remind_days, remind_time, previous_weight, " +
-        "notification_weight, priority) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);",
+        "weight, priority) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);",
       [
         request.subject,
         request.description,
@@ -30,7 +30,7 @@ export function insertRequest(request) {
         request.remind_days,
         request.remind_time,
         request.previous_weight,
-        request.notification_weight,
+        request.weight,
         request.priority,
       ],
       () => void 0,
@@ -99,7 +99,7 @@ export function insertNewRequest(request, catID) {
     tx.executeSql(
       "INSERT INTO requests(subject, description, create_time," +
         "expire_time, remind_freq, remind_days, remind_time, previous_weight, " +
-        "notification_weight, priority) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);",
+        "weight, priority) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);",
       [
         request.subject,
         request.description,
@@ -109,7 +109,7 @@ export function insertNewRequest(request, catID) {
         request.remind_days,
         request.remind_time,
         request.previous_weight,
-        request.notification_weight,
+        request.weight,
         request.priority,
       ],
       (tx, result) =>

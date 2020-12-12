@@ -19,7 +19,7 @@ export function populateDB() {
 }
 
 export function populateDBwithRequests() {
-  function addReq(sub, desc, p) {
+  function addReq(sub, desc, priority) {
     request = new Request();
     request.subject = sub;
     request.description = desc;
@@ -28,9 +28,9 @@ export function populateDBwithRequests() {
     request.remind_freq = 1;
     request.remind_days = "";
     request.remind_time = "15:15:00";
-    request.daily_weight = 1;
-    request.notification_weight = 0;
-    request.priority = p;
+    request.previous_weight = 1;
+    request.weight = 3;
+    request.priority = priority;
     requests.push(request);
   }
 
@@ -45,8 +45,8 @@ export function populateDBwithRequests() {
   request.remind_freq = 0;
   request.remind_days = "";
   request.remind_time = "";
-  request.previous_weight = 1;
-  request.notification_weight = 0;
+  request.previous_weight = 5;
+  request.weight = 3;
   request.priority = 1;
   requests.push(request);
 
