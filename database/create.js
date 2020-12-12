@@ -29,6 +29,7 @@ export function createDatabase() {
         "create_time	TEXT," +
         "expire_time	TEXT," +
         "remind_freq	INT," +
+        "remind_days  TEXT," +
         "remind_time	TEXT," +
         "daily_weight INT," +
         "notification_weight INT," +
@@ -70,11 +71,10 @@ export function createDatabase() {
     // Categories
     tx.executeSql(
       "CREATE TABLE IF NOT EXISTS categories ( " +
-        "id INTEGER PRIMARY KEY, " +
+        "tagID INTEGER PRIMARY KEY, " +
         "name TEXT, " +
-        "tagID INT, " +
-        "reminder_freq INT, " +
-        "reminder_time TEXT, " +
+        "remind_days TEXT," +
+        "remind_time TEXT, " +
         "FOREIGN KEY (tagID) REFERENCES tags(id));",
       null,
       () => void 0,

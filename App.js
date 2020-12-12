@@ -18,6 +18,7 @@ import CategoriesScreen from "./pages/categories";
 import RequestsScreen from "./pages/requests";
 import RefactorRequestScreen from "./pages/refactorRequest";
 import ThisRequestScreen from "./pages/individualRequest";
+import TempDash from "./pages/tempDash";
 
 const Stack = createStackNavigator();
 
@@ -32,6 +33,7 @@ const App = () => {
         {<Stack.Screen name="Dash" component={Dashboard} />}
         {<Stack.Screen name="Cat" component={CategoriesScreen} />}
         {<Stack.Screen name="Requests" component={RequestsScreen} />}
+        {<Stack.Screen name="TempDash" component={TempDash} /> }
        {/*  {
           <Stack.Screen
             name="RefactorRequest"

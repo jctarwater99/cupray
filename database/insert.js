@@ -19,14 +19,15 @@ export function insertRequest(request) {
   db.transaction((tx) => {
     tx.executeSql(
       "INSERT INTO requests(subject, description, create_time," +
-        "expire_time, remind_freq, remind_time, daily_weight, " +
-        "notification_weight, priority) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?);",
+        "expire_time, remind_freq, remind_days, remind_time, daily_weight, " +
+        "notification_weight, priority) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);",
       [
         request.subject,
         request.description,
         request.create_time,
         request.expire_time,
         request.remind_freq,
+        request.remind_days,
         request.remind_time,
         request.daily_weight,
         request.notification_weight,
@@ -78,16 +79,59 @@ export function insertReminder(reminder) {
 export function insertCategory(category) {
   db.transaction((tx) => {
     tx.executeSql(
-      "INSERT INTO categories(name, tagID, reminder_freq, reminder_time) VALUES(?, ?, ?, ?);",
+      "INSERT INTO categories(name, tagID, remind_days, remind_time) VALUES(?, ?, ?, ?);",
       [
         category.name,
         category.tagID,
-        category.reminder_freq,
-        category.reminder_time,
+        category.remind_days,
+        category.remind_time,
       ],
       () => void 0,
       (tx, result) => {
-        console.log("Inserting reminder failed", result);
+        console.log("Inserting category failed", result);
+      }
+    );
+  });
+}
+
+export function insertNewRequest(request, catID) {
+  db.transaction((tx) => {
+    tx.executeSql(
+      "INSERT INTO requests(subject, description, create_time," +
+        "expire_time, remind_freq, remind_days, remind_time, daily_weight, " +
+        "notification_weight, priority) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);",
+      [
+        request.subject,
+        request.description,
+        request.create_time,
+        request.expire_time,
+        request.remind_freq,
+        request.remind_days,
+        request.remind_time,
+        request.daily_weight,
+        request.notification_weight,
+        request.priority,
+      ],
+      (tx, result) =>
+        insertRequestTag({ requestID: result.insertId, tagID: catID }),
+      (tx, result) => {
+        console.log("Inserting request failed", result);
+      }
+    );
+  });
+}
+
+export function insertNewTag(tagName, Category) {
+  db.transaction((tx) => {
+    tx.executeSql(
+      "INSERT INTO tags(name) VALUES(?);",
+      [tagName],
+      (tx, result) => {
+        Category.tagID = result.insertId;
+        insertCategory(Category);
+      },
+      (tx, result) => {
+        console.log("Inserting requestTag failed", result);
       }
     );
   });

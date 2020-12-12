@@ -4,24 +4,38 @@ import {
   TouchableOpacity,
   Dimensions,
   FlatList,
+  Alert,
   SafeAreaView,
 } from "react-native";
 import { StyleSheet, Button, Text, View } from "react-native";
 import { populateDB } from "../database/populate";
 import { createDatabase } from "../database/create";
 import * as queries from "../database/query";
+import * as updates from "../database/update";
 import { Category } from "../database/objects";
+import { CheckBox } from "react-native-elements";
+import Modal from "react-native-modal";
 
 var { height, width } = Dimensions.get("window");
 
 const RequestsScreen = ({ route, navigation }) => {
   let [requests, setRequests] = useState([]);
+  let [deletePopupVisible, toggleDeletePopupVisibility] = useState(false);
+  let [requestID, setRequestID] = useState(-1);
 
   useEffect(() => {
     queries.getRequestsInCategory(route.params.cat_id, (results) =>
       setRequests(results)
     );
   }, []);
+
+  let refreshPage = () => {
+    setTimeout(() => {
+      queries.getRequestsInCategory(route.params.cat_id, (results) =>
+      setRequests(results)
+    );
+    }, 150);
+  };
 
   let listItemView = (request) => {
     return (
@@ -37,9 +51,16 @@ const RequestsScreen = ({ route, navigation }) => {
             isNewReq: false,
           });
         }}
+        onLongPress={()=>{
+          setRequestID(request.id);
+          toggleDeletePopupVisibility(!deletePopupVisible);
+        }}
       >
         <View style={styles.circle} />
         <Text style={styles.requestTitles}>{request.subject}</Text>
+        <View>
+          <Text style={styles.requestArrow}>{"  ➤"}</Text>
+        </View>
       </TouchableOpacity>
     );
   };
@@ -57,8 +78,90 @@ const RequestsScreen = ({ route, navigation }) => {
             keyExtractor={(item, index) => index.toString()}
             renderItem={({ item }) => listItemView(item)}
           />
+          <View style={styles.addReq}>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate("ThisRequest", {
+                  cat_id: 1,
+                  cat_name: route.params.cat_name,
+                  req_id: 1,
+                  isNewReq: true,
+                });
+              }}
+              style={styles.createReqButton}
+            >
+              <Text style={[styles.plusSign]}>+</Text>
+            </TouchableOpacity>
+            <Text style={[styles.plusSign, { marginTop: height * 0.01 }]}>
+              {" "}
+              Add Request{" "}
+            </Text>
+          </View>
         </View>
       </View>
+
+      <Modal
+          isVisible={deletePopupVisible}
+          backdropOpacity={0.25}
+          animationInTiming={400}
+          animationOutTiming={800}
+          onBackdropPress={() => {toggleDeletePopupVisibility(!deletePopupVisible)}}
+        >
+          <View style={styles.popUpContainer}>
+            <View>
+              
+            <Text style={[styles.popUpHeader,{marginBottom: height * 0.04}]}>Delete Request?</Text>
+            </View>
+            <View
+              style={{
+                flexDirection: "row",
+                position: "absolute",
+                bottom: height * 0.03,
+              }}
+            >
+              <TouchableOpacity
+                style={{ width: width * 0.6 }}
+                onPress={() => {
+                  // Provide warning
+                  Alert.alert(
+                    "Warning", 
+                    "Are you sure you want to delete this prayer request?",
+                    [
+                      {       
+                        text: "Delete",
+                        onPress: () => { 
+                          updates.deleteRequestTags(requestID);
+                          toggleDeletePopupVisibility(!deletePopupVisible);
+                          refreshPage();
+                        }
+                       },
+                       {
+                         text: "Cancel",
+                         style: "cancel",
+                         onPress: ()=> { toggleDeletePopupVisibility(!deletePopupVisible)}
+                       }
+                    ] );                  
+                }}
+              >
+                <Text style={styles.plusSign}>Delete</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                // This is the save button for the edit page?
+                style={{ width: width * 0.58 }}
+                onPress={() => {
+                  /* updates.editCategory(selectedCatName, selectedCatID);
+                  updates.editTag(selectedCatName, selectedCatID); */
+                  toggleDeletePopupVisibility(!deletePopupVisible);
+                  refreshPage();
+                }}
+              >
+                <Text style={styles.plusSign}>Cancel</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
+        
     </SafeAreaView>
   );
 };
@@ -69,7 +172,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#EFEFEF",
     alignItems: "center",
-    marginTop: height * 0.02,
+    marginTop: height * 0.025,
   },
 
   requestContainer: {
@@ -94,8 +197,15 @@ const styles = StyleSheet.create({
     color: "#7E8C96",
     fontSize: 15,
     fontWeight: "700",
-    marginTop: height * 0.02,
+    marginTop: height * 0.025,
     marginLeft: width * 0.05,
+  },
+
+  requestArrow: {
+    color: "#D6C396",
+    fontSize: 20,
+    fontWeight: "700",
+    marginTop: height * 0.02,
   },
 
   circle: {
@@ -105,14 +215,14 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: "#D6C396",
     marginTop: height * 0.019,
-    marginLeft: width * 0.09,
+    marginLeft: width * 0.05,
   },
 
   title: {
     color: "#003A63",
     fontSize: 46,
     fontWeight: "700",
-    marginBottom: height * 0.02,
+    marginBottom: height * 0.005,
     marginLeft: width * -0.3,
   },
 
@@ -120,6 +230,52 @@ const styles = StyleSheet.create({
     color: "#D6C396",
     fontSize: 46,
     fontWeight: "700",
+  },
+
+  addReq: {
+    alignItems: "center",
+    margin: 20,
+    flex: 12,
+  },
+
+  createReqButton: {
+    width: 37,
+    height: 36,
+    borderRadius: 6,
+    backgroundColor: "#D3D3D3",
+    padding: 6,
+  },
+
+  plusSign: {
+    color: "#7E8C96",
+    fontSize: 15,
+    fontWeight: "700",
+    textAlign: "center",
+  },
+
+  popUpContainer: {
+    width: 327,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    padding: height * 0.02,
+    shadowOpacity: 0.27,
+    shadowRadius: 4.65,
+
+    elevation: 6,
+    borderRadius: 20,
+    backgroundColor: "#D6C396",
+    alignItems: "center",
+  },
+
+  popUpHeader: {
+    flex: 0,
+    fontSize: 16,
+    color: "#fff",
+    fontWeight: "700",
+    padding: height * 0.01,
   },
 });
 

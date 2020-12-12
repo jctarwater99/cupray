@@ -1,0 +1,56 @@
+{
+  "_from": "react-native-weekday-picker",
+  "_id": "react-native-weekday-picker@0.0.1",
+  "_inBundle": false,
+  "_integrity": "sha512-p0/nC0ZoUJkaw7dAHR8BQ4X26WtQZI7ynf+2S30QuqT2RG61mV3tmlcRNK4U2WaGIaAvtaVgL3Y6ePkRkWjrow==",
+  "_location": "/react-native-weekday-picker",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "react-native-weekday-picker",
+    "name": "react-native-weekday-picker",
+    "escapedName": "react-native-weekday-picker",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/react-native-weekday-picker/-/react-native-weekday-picker-0.0.1.tgz",
+  "_shasum": "e519e3f3f7d817ac423a7873db0a93567a56af00",
+  "_spec": "react-native-weekday-picker",
+  "_where": "/Users/yiradz/College/SENIOR_sem1/seniordesign/CuPrayGUI/cupray",
+  "author": {
+    "name": "kuzdogan"
+  },
+  "bugs": {
+    "url": "https://github.com/kuzdogan/react-native-weekday-picker/issues"
+  },
+  "bundleDependencies": false,
+  "deprecated": false,
+  "description": "A weekday picker for react-native and expo. Lets users pick days of the week, in a repeating alarm clock fashion",
+  "homepage": "https://github.com/kuzdogan/react-native-weekday-picker#readme",
+  "keywords": [
+    "react-native",
+    "weekday",
+    "picker",
+    "daypicker",
+    "repeat",
+    "day",
+    "alarm"
+  ],
+  "license": "MIT",
+  "main": "index.js",
+  "name": "react-native-weekday-picker",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kuzdogan/react-native-weekday-picker.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "0.0.1"
+}
