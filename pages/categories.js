@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import {
   Image,
   TouchableOpacity,
+  TouchableHighlight,
   Dimensions,
   StyleSheet,
   TextInput,
@@ -17,7 +18,7 @@ import * as updates from "../database/update";
 import { Category } from "../database/objects";
 import Modal from "react-native-modal";
 import WeekdayPicker from "../customComponent/WeekdayPicker/WeekdayPicker";
-
+//import { TouchableHighlight } from "react-native-gesture-handler";
 
 var { height, width } = Dimensions.get("window");
 
@@ -28,7 +29,17 @@ const CategoriesScreen = ({ navigation }) => {
   let [editPopupVisible, toggleEditPopupVisibility] = useState(false);
   let [selectedCatName, setSelectedCatName] = useState("None");
   let [selectedCatID, setSelectedCatID] = useState(-1);
-  let [days, setDays] = useState({ 0:0, 1:1, 2:0, 3:1, 4:0, 5:1, 6:0});
+  let [days, setDays] = useState({ 0: 0, 1: 1, 2: 0, 3: 1, 4: 0, 5: 1, 6: 0 });
+
+  var [isPress, setIsPress] = React.useState(false);
+  var touchProps = {
+    activeOpacity: 1,
+    underlayColor: "blue", // <-- "backgroundColor" will be always overwritten by "underlayColor"
+    style: isPress ? styles.btnPress : styles.btnNormal, // <-- but you can still apply other style changes
+    onHideUnderlay: () => setIsPress(false),
+    onShowUnderlay: () => setIsPress(true),
+    onPress: () => setIsPress(!isPress), // <-- "onPress" is apparently required
+  };
 
   useEffect(() => {
     queries.getCategories((results) => {
@@ -103,7 +114,9 @@ const CategoriesScreen = ({ navigation }) => {
           backdropOpacity={0.25}
           animationInTiming={400}
           animationOutTiming={800}
-          onBackdropPress={() => {toggleCreatePopupVisibility(!createPopupVisible)}}
+          onBackdropPress={() => {
+            toggleCreatePopupVisibility(!createPopupVisible);
+          }}
         >
           <View style={styles.popUpContainer}>
             <Text style={styles.popUpHeader}>Create New Category</Text>
@@ -128,11 +141,17 @@ const CategoriesScreen = ({ navigation }) => {
             <Text style={styles.popUpHeader}>Reminder Days</Text>
             <WeekdayPicker
               days={days}
-              onChange={()=>{setDays(days);}}
+              onChange={() => {
+                setDays(days);
+              }}
               style={styles.picker}
               dayStyle={styles.day}
             />
-
+            <View style={styles.cont}>
+              <TouchableHighlight {...touchProps}>
+                <Text>Do Stuff</Text>
+              </TouchableHighlight>
+            </View>
             <TouchableOpacity
               style={{ marginLeft: width * 0.6 }}
               onPress={() => {
@@ -159,7 +178,9 @@ const CategoriesScreen = ({ navigation }) => {
           backdropOpacity={0.25}
           animationInTiming={400}
           animationOutTiming={800}
-          onBackdropPress={() => {toggleEditPopupVisibility(!editPopupVisible)}}
+          onBackdropPress={() => {
+            toggleEditPopupVisibility(!editPopupVisible);
+          }}
         >
           <View style={styles.popUpContainer}>
             <Text style={styles.popUpHeader}>Edit Category</Text>
@@ -180,10 +201,10 @@ const CategoriesScreen = ({ navigation }) => {
                 marginRight: width * 0.1,
               }}
             />
-            <View 
-            style={{
-              padding: 20,
-            }}
+            <View
+              style={{
+                padding: 20,
+              }}
             >
               <Text style={styles.popUpHeader}>Edit Reminders</Text>
               <Text style={styles.plusSign}>Date stuff</Text>
@@ -201,25 +222,28 @@ const CategoriesScreen = ({ navigation }) => {
                 onPress={() => {
                   // Provide warning
                   Alert.alert(
-                    "Warning", 
+                    "Warning",
                     "Deleting this Category will delete all the requests associated with it as well. Are you sure?",
                     [
-                      {       
+                      {
                         text: "Delete",
-                        onPress: () => { 
+                        onPress: () => {
                           updates.deleteRequestTagsInCategory(selectedCatID);
                           updates.deleteCategory(selectedCatID);
                           updates.deleteTag(selectedCatID);
                           toggleEditPopupVisibility(!editPopupVisible);
                           refreshPage();
-                        }
-                       },
-                       {
-                         text: "Cancel",
-                         style: "cancel",
-                         onPress: ()=> { toggleEditPopupVisibility(!editPopupVisible)}
-                       }
-                    ] );                  
+                        },
+                      },
+                      {
+                        text: "Cancel",
+                        style: "cancel",
+                        onPress: () => {
+                          toggleEditPopupVisibility(!editPopupVisible);
+                        },
+                      },
+                    ]
+                  );
                 }}
               >
                 <Text style={styles.plusSign}>Delete</Text>
@@ -233,7 +257,7 @@ const CategoriesScreen = ({ navigation }) => {
 
                   cat.name = newCategory;
                   cat.tagID = selectedCatID;
-  
+
                   cat.remind_days = "XMXWXFX"; // Set later
                   cat.remind_time = "T10:43:17+0000"; // Set later
 
@@ -260,6 +284,25 @@ const styles = StyleSheet.create({
     backgroundColor: "#EFEFEF",
     alignItems: "center",
     marginTop: height * 0.08,
+  },
+
+  cont: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  btnNormal: {
+    borderColor: "blue",
+    borderWidth: 1,
+    borderRadius: 10,
+    height: 30,
+    width: 100,
+  },
+  btnPress: {
+    borderColor: "blue",
+    borderWidth: 1,
+    height: 30,
+    width: 100,
   },
 
   folderContainer: {
@@ -354,7 +397,6 @@ const styles = StyleSheet.create({
     fontSize: 46,
     fontWeight: "700",
   },
-
 });
 
 export default CategoriesScreen;
