@@ -143,7 +143,7 @@ export function deleteRequestTags(reqID) {
     tx.executeSql(
       "DELETE FROM request_tags WHERE request_tags.id IN ( " +
         "SELECT request_tags.id FROM request_tags WHERE request_tags.requestID IN ( " +
-        "SELECT requests.id FROM requests " + 
+        "SELECT requests.id FROM requests " +
         "WHERE requests.id = ? ))",
       [reqID],
       (tx, result) => {
@@ -169,3 +169,17 @@ export function deleteRequest(reqID) {
   });
 }
 
+export function rollbackNotificationWeight() {
+  db.transaction((tx) => {
+    tx.executeSql(
+      "UPDATE requests SET weight = previous_weight ",
+      [],
+      (tx, result) => {
+        console.log("Success ", result);
+      },
+      (tx, result) => {
+        console.log("Failed ", result);
+      }
+    );
+  });
+}
