@@ -5,11 +5,8 @@ import { StyleSheet, Button, Text, View } from "react-native";
 import { populateDB } from "../database/populate";
 import { createDatabase, dropForTesting } from "../database/create";
 import * as queries from "../database/query";
-<<<<<<< HEAD
 import * as Notifications from 'expo-notifications';
 import { scheduleNotifs } from '../schedule/scheduler';
-=======
-import * as Notifications from "expo-notifications";
 
 var { height, width } = Dimensions.get("window");
 
@@ -23,7 +20,6 @@ async function requestPermissionsAsync() {
     },
   });
 }
->>>>>>> develop
 
 const WelcomeScreen = ({ navigation }) => {
   Notifications.setNotificationHandler(({
@@ -46,6 +42,7 @@ const WelcomeScreen = ({ navigation }) => {
           onPress={() => {
             //dropForTesting();
             //queries.testQuery();
+            scheduleNotifs();
             navigation.navigate("TempDash");
           }}
         >

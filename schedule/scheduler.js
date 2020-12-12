@@ -36,20 +36,24 @@ export function executeNotification(title, body) {
 }
 
 export function scheduleNotifs() {
+    // TODO rewind weights
+    console.log("Scheduling");
     Notifications.cancelAllScheduledNotificationsAsync();
     scheduleForCat(0);
 }
 
 function scheduleForCat(catNum) {
+    console.log("Gonna get Cats");
     queries.getCategories((results) => {
         cat = results[catNum];
-        queries.getRequestsInCategory(cat.tagID, (results) => {
-            freq = cat.reminder_freq;
+        console.log("Gonna get requests");
+        queries.getRequestsInCategory(cat.tagID, (results, cat) => {
+            days = cat.remind_days;
             time = cat.reminder_time.split(":");
             date = new Date();
-            date += 1;
             date.setHours(time[0]);
             date.setMinutes(time[1]);
+            console.log("Print date");
             console.log(date);
         });
     });
