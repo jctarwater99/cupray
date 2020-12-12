@@ -8,6 +8,7 @@ import {
   TextInput,
   FlatList,
   Button,
+  Platform,
   Alert,
   Text,
   View,
@@ -18,7 +19,7 @@ import * as updates from "../database/update";
 import { Category } from "../database/objects";
 import Modal from "react-native-modal";
 import WeekdayPicker from "../customComponent/WeekdayPicker/WeekdayPicker";
-//import { TouchableHighlight } from "react-native-gesture-handler";
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 var { height, width } = Dimensions.get("window");
 
@@ -31,21 +32,38 @@ const CategoriesScreen = ({ navigation }) => {
   let [selectedCatID, setSelectedCatID] = useState(-1);
   let [days, setDays] = useState({ 0: 0, 1: 1, 2: 0, 3: 1, 4: 0, 5: 1, 6: 0 });
 
-  var [isPress, setIsPress] = React.useState(false);
-  var touchProps = {
-    activeOpacity: 1,
-    underlayColor: "blue", // <-- "backgroundColor" will be always overwritten by "underlayColor"
-    style: isPress ? styles.btnPress : styles.btnNormal, // <-- but you can still apply other style changes
-    onHideUnderlay: () => setIsPress(false),
-    onShowUnderlay: () => setIsPress(true),
-    onPress: () => setIsPress(!isPress), // <-- "onPress" is apparently required
-  };
-
   useEffect(() => {
     queries.getCategories((results) => {
       setCategories(results);
     });
   }, []);
+
+  const [date, setDate] = useState(new Date(1598051730000));
+  const [mode, setMode] = useState('time'); 
+  let [show, setShow] = useState(true);
+  if (Platform.OS == "android" ) {
+    [show, setShow] = useState(false);
+             }
+  
+
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setShow(Platform.OS === 'ios');
+    setDate(currentDate);
+  };
+
+  const showMode = (currentMode) => {
+    setShow(true);
+    setMode(currentMode);
+  };
+
+  const showDatepicker = () => {
+    showMode('date');
+  };
+
+  const showTimepicker = () => {
+    showMode('time');
+  };
 
   let listItemView = (category) => {
     return (
@@ -114,6 +132,7 @@ const CategoriesScreen = ({ navigation }) => {
           backdropOpacity={0.25}
           animationInTiming={400}
           animationOutTiming={800}
+          style={styles.modalContent}
           onBackdropPress={() => {
             toggleCreatePopupVisibility(!createPopupVisible);
           }}
@@ -121,7 +140,7 @@ const CategoriesScreen = ({ navigation }) => {
           <View style={styles.popUpContainer}>
             <Text style={styles.popUpHeader}>Create New Category</Text>
             <TextInput
-              maxLength={10} // max number of chars
+              maxLength={15} // max number of chars
               multiline={true}
               value={newCategory}
               onFocus={() => setNewCategory("")}
@@ -138,7 +157,7 @@ const CategoriesScreen = ({ navigation }) => {
                 marginRight: width * 0.1,
               }}
             />
-            <Text style={styles.popUpHeader}>Reminder Days</Text>
+            <Text style={styles.popUpHeader}> Set Days for Reminder</Text>
             <WeekdayPicker
               days={days}
               onChange={() => {
@@ -147,11 +166,38 @@ const CategoriesScreen = ({ navigation }) => {
               style={styles.picker}
               dayStyle={styles.day}
             />
-            <View style={styles.cont}>
-              <TouchableHighlight {...touchProps}>
-                <Text>Do Stuff</Text>
-              </TouchableHighlight>
-            </View>
+    
+              <Text style={styles.popUpHeader}> Set Time for Reminder</Text>
+              <View>
+              {Platform.OS == "android" && 
+                      <TouchableOpacity onPress={showTimepicker} style={styles.androidTimeButton}>
+                        <Text style={styles.androidTimeHeader}>Open Time Picker</Text>
+                      </TouchableOpacity>
+                    }
+                    {show && Platform.OS == "android" && (
+                      <DateTimePicker
+                        value={date}
+                        mode={mode}
+                        is24Hour={false}
+                        display="default"
+                        onChange={onChange}
+                      />
+                    )}
+
+              {Platform.OS == "ios" && 
+                            <TouchableOpacity onPress={showTimepicker} style={{ width: 250}}>
+                              </TouchableOpacity>
+                          }
+                    {show && Platform.OS == "ios" && (
+                            <DateTimePicker
+                              value={date}
+                              mode={mode}
+                              display="spinner"
+                              onChange={onChange}
+                            />
+                          )}
+                  </View>
+
             <TouchableOpacity
               style={{ marginLeft: width * 0.6 }}
               onPress={() => {
@@ -178,6 +224,7 @@ const CategoriesScreen = ({ navigation }) => {
           backdropOpacity={0.25}
           animationInTiming={400}
           animationOutTiming={800}
+          style={styles.modalContent}
           onBackdropPress={() => {
             toggleEditPopupVisibility(!editPopupVisible);
           }}
@@ -185,7 +232,7 @@ const CategoriesScreen = ({ navigation }) => {
           <View style={styles.popUpContainer}>
             <Text style={styles.popUpHeader}>Edit Category</Text>
             <TextInput
-              maxLength={10} // max number of chars
+              maxLength={15} // max number of chars
               multiline={true}
               value={selectedCatName}
               onChange={(text) => setSelectedCatName(text.nativeEvent.text)}
@@ -201,13 +248,47 @@ const CategoriesScreen = ({ navigation }) => {
                 marginRight: width * 0.1,
               }}
             />
-            <View
-              style={{
-                padding: 20,
+            
+            <Text style={styles.popUpHeader}> Edit Days for Reminder</Text>
+            <WeekdayPicker
+              days={days}
+              onChange={() => {
+                setDays(days); // this value needs to be read from database
               }}
-            >
-              <Text style={styles.popUpHeader}>Edit Reminders</Text>
-              <Text style={styles.plusSign}>Date stuff</Text>
+              style={styles.picker}
+              dayStyle={styles.day}
+            />
+    
+              <Text style={styles.popUpHeader}> Edit Time for Reminder</Text>
+              <View>
+              {Platform.OS == "android" && 
+                      <TouchableOpacity onPress={showTimepicker} style={[styles.androidTimeButton, {width: 150, marginBottom: height * 0.06}]}>
+                        <Text style={styles.androidTimeHeader}>Open Time Picker</Text>
+                      </TouchableOpacity>
+                    }
+                    {show && Platform.OS == "android" && (
+                      <DateTimePicker
+                        value={date} // this value needs to be read from database
+                        mode={mode}
+                        is24Hour={false}
+                        display="default"
+                        onChange={onChange}
+                      />
+                    )}
+
+              {Platform.OS == "ios" && 
+                            <TouchableOpacity onPress={showTimepicker} style={{ width: 250}}>
+                              </TouchableOpacity>
+                          }
+                    {show && Platform.OS == "ios" && (
+                            <DateTimePicker
+                              value={date} // this value needs to be read from database
+                              mode={mode}
+                              display="spinner"
+                              onChange={onChange}
+                            />
+                          )}
+                
             </View>
 
             <View
@@ -331,6 +412,12 @@ const styles = StyleSheet.create({
     marginLeft: width * 0.06,
   },
 
+  modalContent: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: 0
+},
+
   popUpContainer: {
     width: 327,
     shadowColor: "#000",
@@ -396,6 +483,20 @@ const styles = StyleSheet.create({
     color: "#003A63",
     fontSize: 46,
     fontWeight: "700",
+  },
+
+  androidTimeHeader: {
+    flex: 0,
+    fontSize: 16,
+    color: "#E8E7E4",
+    fontWeight: "700",
+    padding: height * 0.008,
+  },
+
+  androidTimeButton: {
+    borderRadius: 6,
+    backgroundColor: "#D6C396",
+    padding: 3,
   },
 });
 
