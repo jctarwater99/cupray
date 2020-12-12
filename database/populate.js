@@ -45,7 +45,7 @@ export function populateDBwithRequests() {
   request.remind_freq = 0;
   request.remind_days = "";
   request.remind_time = "";
-  request.daily_weight = 1;
+  request.previous_weight = 1;
   request.notification_weight = 0;
   request.priority = 1;
   requests.push(request);

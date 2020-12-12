@@ -19,7 +19,7 @@ export function insertRequest(request) {
   db.transaction((tx) => {
     tx.executeSql(
       "INSERT INTO requests(subject, description, create_time," +
-        "expire_time, remind_freq, remind_days, remind_time, daily_weight, " +
+        "expire_time, remind_freq, remind_days, remind_time, previous_weight, " +
         "notification_weight, priority) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);",
       [
         request.subject,
@@ -29,7 +29,7 @@ export function insertRequest(request) {
         request.remind_freq,
         request.remind_days,
         request.remind_time,
-        request.daily_weight,
+        request.previous_weight,
         request.notification_weight,
         request.priority,
       ],
@@ -98,7 +98,7 @@ export function insertNewRequest(request, catID) {
   db.transaction((tx) => {
     tx.executeSql(
       "INSERT INTO requests(subject, description, create_time," +
-        "expire_time, remind_freq, remind_days, remind_time, daily_weight, " +
+        "expire_time, remind_freq, remind_days, remind_time, previous_weight, " +
         "notification_weight, priority) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);",
       [
         request.subject,
@@ -108,7 +108,7 @@ export function insertNewRequest(request, catID) {
         request.remind_freq,
         request.remind_days,
         request.remind_time,
-        request.daily_weight,
+        request.previous_weight,
         request.notification_weight,
         request.priority,
       ],
