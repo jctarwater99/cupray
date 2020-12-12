@@ -79,17 +79,16 @@ export function insertReminder(reminder) {
 export function insertCategory(category) {
   db.transaction((tx) => {
     tx.executeSql(
-      "INSERT INTO categories(name, tagID, remind_freq, remind_days, remind_time) VALUES(?, ?, ?, ?, ?);",
+      "INSERT INTO categories(name, tagID, remind_days, remind_time) VALUES(?, ?, ?, ?);",
       [
         category.name,
         category.tagID,
-        category.remind_freq,
         category.remind_days,
         category.remind_time,
       ],
       () => void 0,
       (tx, result) => {
-        console.log("Inserting reminder failed", result);
+        console.log("Inserting category failed", result);
       }
     );
   });

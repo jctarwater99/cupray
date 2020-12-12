@@ -35,7 +35,7 @@ export function updateRequestTag(reqID, oldCatID, newCatID) {
       [newCatID, reqID, oldCatID],
       () => void 0,
       (tx, result) => {
-        console.log("Updating request failed", result);
+        console.log("Updating request tag failed", result);
       }
     );
   });
@@ -65,11 +65,11 @@ export function deleteTag(tagID) {
     );
   });
 }
-export function editCategory(newCatName, catID) {
+export function editCategory(cat) {
   db.transaction((tx) => {
     tx.executeSql(
-      "UPDATE categories SET name = ? WHERE tagID = ?",
-      [newCatName, catID],
+      "UPDATE categories SET name = ?, remind_days = ?, remind_time = ? WHERE tagID = ?",
+      [cat.name, cat.remind_days, cat.remind_time, cat.tagId],
       (tx, result) => console.log("huh?", result),
       (tx, result) => {
         console.log("Updating category failed", result);
@@ -137,3 +137,35 @@ export function deleteRequestsInCategory() {
     );
   });
 }
+
+export function deleteRequestTags(reqID) {
+  db.transaction((tx) => {
+    tx.executeSql(
+      "DELETE FROM request_tags WHERE request_tags.id IN ( " +
+        "SELECT request_tags.id FROM request_tags WHERE request_tags.requestID IN ( " +
+        "SELECT requests.id FROM requests " + 
+        "WHERE requests.id = ? ))",
+      [reqID],
+      (tx, result) => {
+        deleteRequest(reqID);
+      },
+      (tx, result) => {
+        console.log("Deleting request tags failed", result);
+      }
+    );
+  });
+}
+
+export function deleteRequest(reqID) {
+  db.transaction((tx) => {
+    tx.executeSql(
+      "DELETE FROM requests WHERE requests.id = ?",
+      [reqID],
+      () => void 0,
+      (tx, result) => {
+        console.log("Deleting request failed", result);
+      }
+    );
+  });
+}
+
