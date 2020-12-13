@@ -60,7 +60,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     display: 'flex',
     height: 50,
-    marginBottom: height * 0.02,
     alignItems: 'center'
   },
   day: {

@@ -25,6 +25,9 @@ Installing popup library
 Installing expo notification handling
 	> expo install expo-notifications
 
+Installing time picker 
+	> expo install @react-native-community/datetimepicker
+
 Installing React native navigation for multiple screens?
 	> npm install @react-navigation/native
 	> npm install @react-navigation/stack
