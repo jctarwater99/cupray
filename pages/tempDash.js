@@ -8,6 +8,7 @@ var { height, width } = Dimensions.get("window");
 
 const TempDash = ({ navigation }) => {
   let [isPressed, setIsPressed] = useState(false);
+  let [test, setTest] = useState([0, 1, 0]);
 
   return (
     <View style={{ flex: 1 }}>
@@ -15,7 +16,17 @@ const TempDash = ({ navigation }) => {
       <View style={{ flex: 10, backgroundColor: "#000000" }} />
 
       {/*Verse*/}
-      <View style={{ flex: 20, backgroundColor: "#00FF00" }} />
+      <View style={{ flex: 20, backgroundColor: "#00FF00" }}>
+        <TouchableOpacity
+          style={(styles.default, test[0] ? styles.pressed : styles.unpressed)}
+          onPress={() => {
+            setTest([!test[0], test[1], test[2]]);
+            console.log(test);
+          }}
+        >
+          <Text>M</Text>
+        </TouchableOpacity>
+      </View>
 
       {/*Buttons 1 */}
       <View
@@ -73,6 +84,25 @@ const styles = StyleSheet.create({
   unpressed: {
     backgroundColor: "#FFFFFF",
     height: 45,
+  },
+  default: {
+    height: 35,
+    width: 35,
+    borderRadius: 35,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  active: {
+    backgroundColor: "#D6C396",
+  },
+  inactive: {
+    backgroundColor: "#D3D3D3",
+  },
+  activeText: {
+    color: "#fff",
+  },
+  inactiveText: {
+    color: "#003A63",
   },
 });
 

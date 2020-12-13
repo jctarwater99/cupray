@@ -19,7 +19,7 @@ import * as updates from "../database/update";
 import { Category } from "../database/objects";
 import Modal from "react-native-modal";
 import WeekdayPicker from "../customComponent/WeekdayPicker/WeekdayPicker";
-import DateTimePicker from '@react-native-community/datetimepicker';
+import DateTimePicker from "@react-native-community/datetimepicker";
 
 var { height, width } = Dimensions.get("window");
 
@@ -30,7 +30,15 @@ const CategoriesScreen = ({ navigation }) => {
   let [editPopupVisible, toggleEditPopupVisibility] = useState(false);
   let [selectedCatName, setSelectedCatName] = useState("None");
   let [selectedCatID, setSelectedCatID] = useState(-1);
-  let [days, setDays] = useState({ 0: 0, 1: 1, 2: 0, 3: 1, 4: 0, 5: 1, 6: 0 });
+  let [days, setDays] = useState([
+    false,
+    true,
+    false,
+    true,
+    false,
+    true,
+    false,
+  ]);
 
   useEffect(() => {
     queries.getCategories((results) => {
@@ -38,17 +46,55 @@ const CategoriesScreen = ({ navigation }) => {
     });
   }, []);
 
+  let handleDayPress = (number) => {
+    let newDays = [...days];
+    // if (day == "S") {
+    //   newDays[0] = !newDays[0];
+    // } else if (day == "M") {
+    //   newDays[1] = !newDays[1];
+    // } else if (day == "T") {
+    //   newDays[2] = !newDays[2];
+    // } else if (day == "W") {
+    //   newDays[3] = !newDays[3];
+    // } else if (day == "R") {
+    //   newDays[4] = !newDays[4];
+    // } else if (day == "F") {
+    //   newDays[5] = !newDays[5];
+    // } else {
+    //   newDays[6] = !newDays[6];
+    // }
+    newDays[number] = !newDays[number];
+    setDays(newDays);
+  };
+
+  let dayOfTheWeek = (letter, number) => {
+    return (
+      <TouchableOpacity
+        style={[
+          styles.dayOfTheWeek,
+          days[number] ? styles.active : styles.inactive,
+        ]}
+        onPress={() => {
+          handleDayPress(number);
+        }}
+      >
+        <Text style={days[number] ? styles.activeText : styles.inactiveText}>
+          {letter}
+        </Text>
+      </TouchableOpacity>
+    );
+  };
+
   const [date, setDate] = useState(new Date(1598051730000));
-  const [mode, setMode] = useState('time'); 
+  const [mode, setMode] = useState("time");
   let [show, setShow] = useState(true);
-  if (Platform.OS == "android" ) {
+  if (Platform.OS == "android") {
     [show, setShow] = useState(false);
-             }
-  
+  }
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
-    setShow(Platform.OS === 'ios');
+    setShow(Platform.OS === "ios");
     setDate(currentDate);
   };
 
@@ -58,11 +104,11 @@ const CategoriesScreen = ({ navigation }) => {
   };
 
   const showDatepicker = () => {
-    showMode('date');
+    showMode("date");
   };
 
   const showTimepicker = () => {
-    showMode('time');
+    showMode("time");
   };
 
   let listItemView = (category) => {
@@ -123,8 +169,7 @@ const CategoriesScreen = ({ navigation }) => {
           <Text style={styles.plusSign}>+</Text>
         </TouchableOpacity>
         <Text style={[styles.plusSign, { marginTop: height * 0.01 }]}>
-          {" "}
-          Add Category{" "}
+          Add Category
         </Text>
 
         <Modal
@@ -158,45 +203,58 @@ const CategoriesScreen = ({ navigation }) => {
               }}
             />
             <Text style={styles.popUpHeader}> Set Days for Reminder</Text>
-            <WeekdayPicker
+            {/* <WeekdayPicker
               days={days}
               onChange={() => {
                 setDays(days);
+                console.log(days);
               }}
-              style={styles.picker}
-              dayStyle={styles.day}
-            />
-    
-              <Text style={styles.popUpHeader}> Set Time for Reminder</Text>
-              <View>
-              {Platform.OS == "android" && 
-                      <TouchableOpacity onPress={showTimepicker} style={styles.androidTimeButton}>
-                        <Text style={styles.androidTimeHeader}>Open Time Picker</Text>
-                      </TouchableOpacity>
-                    }
-                    {show && Platform.OS == "android" && (
-                      <DateTimePicker
-                        value={date}
-                        mode={mode}
-                        is24Hour={false}
-                        display="default"
-                        onChange={onChange}
-                      />
-                    )}
+            /> */}
+            <View style={styles.weekContainer}>
+              {dayOfTheWeek("S", 0)}
+              {dayOfTheWeek("M", 1)}
+              {dayOfTheWeek("T", 2)}
+              {dayOfTheWeek("W", 3)}
+              {dayOfTheWeek("R", 4)}
+              {dayOfTheWeek("F", 5)}
+              {dayOfTheWeek("A", 6)}
+            </View>
 
-              {Platform.OS == "ios" && 
-                            <TouchableOpacity onPress={showTimepicker} style={{ width: 250}}>
-                              </TouchableOpacity>
-                          }
-                    {show && Platform.OS == "ios" && (
-                            <DateTimePicker
-                              value={date}
-                              mode={mode}
-                              display="spinner"
-                              onChange={onChange}
-                            />
-                          )}
-                  </View>
+            <Text style={styles.popUpHeader}> Set Time for Reminder</Text>
+            <View>
+              {Platform.OS == "android" && (
+                <TouchableOpacity
+                  onPress={showTimepicker}
+                  style={styles.androidTimeButton}
+                >
+                  <Text style={styles.androidTimeHeader}>Open Time Picker</Text>
+                </TouchableOpacity>
+              )}
+              {show && Platform.OS == "android" && (
+                <DateTimePicker
+                  value={date}
+                  mode={mode}
+                  is24Hour={false}
+                  display="default"
+                  onChange={onChange}
+                />
+              )}
+
+              {Platform.OS == "ios" && (
+                <TouchableOpacity
+                  onPress={showTimepicker}
+                  style={{ width: 250 }}
+                ></TouchableOpacity>
+              )}
+              {show && Platform.OS == "ios" && (
+                <DateTimePicker
+                  value={date}
+                  mode={mode}
+                  display="spinner"
+                  onChange={onChange}
+                />
+              )}
+            </View>
 
             <TouchableOpacity
               style={{ marginLeft: width * 0.6 }}
@@ -248,47 +306,52 @@ const CategoriesScreen = ({ navigation }) => {
                 marginRight: width * 0.1,
               }}
             />
-            
+
             <Text style={styles.popUpHeader}> Edit Days for Reminder</Text>
             <WeekdayPicker
               days={days}
               onChange={() => {
                 setDays(days); // this value needs to be read from database
               }}
-              style={styles.picker}
-              dayStyle={styles.day}
             />
-    
-              <Text style={styles.popUpHeader}> Edit Time for Reminder</Text>
-              <View>
-              {Platform.OS == "android" && 
-                      <TouchableOpacity onPress={showTimepicker} style={[styles.androidTimeButton, {width: 150, marginBottom: height * 0.06}]}>
-                        <Text style={styles.androidTimeHeader}>Open Time Picker</Text>
-                      </TouchableOpacity>
-                    }
-                    {show && Platform.OS == "android" && (
-                      <DateTimePicker
-                        value={date} // this value needs to be read from database
-                        mode={mode}
-                        is24Hour={false}
-                        display="default"
-                        onChange={onChange}
-                      />
-                    )}
 
-              {Platform.OS == "ios" && 
-                            <TouchableOpacity onPress={showTimepicker} style={{ width: 250}}>
-                              </TouchableOpacity>
-                          }
-                    {show && Platform.OS == "ios" && (
-                            <DateTimePicker
-                              value={date} // this value needs to be read from database
-                              mode={mode}
-                              display="spinner"
-                              onChange={onChange}
-                            />
-                          )}
-                
+            <Text style={styles.popUpHeader}> Edit Time for Reminder</Text>
+            <View>
+              {Platform.OS == "android" && (
+                <TouchableOpacity
+                  onPress={showTimepicker}
+                  style={[
+                    styles.androidTimeButton,
+                    { width: 150, marginBottom: height * 0.06 },
+                  ]}
+                >
+                  <Text style={styles.androidTimeHeader}>Open Time Picker</Text>
+                </TouchableOpacity>
+              )}
+              {show && Platform.OS == "android" && (
+                <DateTimePicker
+                  value={date} // this value needs to be read from database
+                  mode={mode}
+                  is24Hour={false}
+                  display="default"
+                  onChange={onChange}
+                />
+              )}
+
+              {Platform.OS == "ios" && (
+                <TouchableOpacity
+                  onPress={showTimepicker}
+                  style={{ width: 250 }}
+                ></TouchableOpacity>
+              )}
+              {show && Platform.OS == "ios" && (
+                <DateTimePicker
+                  value={date} // this value needs to be read from database
+                  mode={mode}
+                  display="spinner"
+                  onChange={onChange}
+                />
+              )}
             </View>
 
             <View
@@ -413,10 +476,10 @@ const styles = StyleSheet.create({
   },
 
   modalContent: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    margin: 0
-},
+    justifyContent: "center",
+    alignItems: "center",
+    margin: 0,
+  },
 
   popUpContainer: {
     width: 327,
@@ -497,6 +560,34 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     backgroundColor: "#D6C396",
     padding: 3,
+  },
+  weekContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    display: "flex",
+    height: 50,
+    alignItems: "center",
+  },
+
+  dayOfTheWeek: {
+    margin: 3,
+    height: 35,
+    width: 35,
+    borderRadius: 35,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  active: {
+    backgroundColor: "#D6C396",
+  },
+  inactive: {
+    backgroundColor: "#D3D3D3",
+  },
+  activeText: {
+    color: "#fff",
+  },
+  inactiveText: {
+    color: "#003A63",
   },
 });
 
