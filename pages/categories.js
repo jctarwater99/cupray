@@ -18,8 +18,6 @@ import * as inserts from "../database/insert";
 import * as updates from "../database/update";
 import { Category } from "../database/objects";
 import Modal from "react-native-modal";
-import WeekdayPicker from "../customComponent/WeekdayPicker/WeekdayPicker";
-import DateTimePicker from "@react-native-community/datetimepicker";
 
 var { height, width } = Dimensions.get("window");
 
@@ -29,7 +27,7 @@ const CategoriesScreen = ({ navigation }) => {
   let [createPopupVisible, toggleCreatePopupVisibility] = useState(false);
   let [editPopupVisible, toggleEditPopupVisibility] = useState(false);
   let [selectedCatName, setSelectedCatName] = useState("None");
-  let [selectedCatID, setSelectedCatID] = useState(-1);
+  let [selectedCategory, setSelectedCategory] = useState();
   let [days, setDays] = useState([
     false,
     true,
@@ -43,26 +41,12 @@ const CategoriesScreen = ({ navigation }) => {
   useEffect(() => {
     queries.getCategories((results) => {
       setCategories(results);
+      console.log(results);
     });
   }, []);
 
   let handleDayPress = (number) => {
-    let newDays = [...days];
-    // if (day == "S") {
-    //   newDays[0] = !newDays[0];
-    // } else if (day == "M") {
-    //   newDays[1] = !newDays[1];
-    // } else if (day == "T") {
-    //   newDays[2] = !newDays[2];
-    // } else if (day == "W") {
-    //   newDays[3] = !newDays[3];
-    // } else if (day == "R") {
-    //   newDays[4] = !newDays[4];
-    // } else if (day == "F") {
-    //   newDays[5] = !newDays[5];
-    // } else {
-    //   newDays[6] = !newDays[6];
-    // }
+    let newDays = [...days]; // can't change days manually, must create deep copy
     newDays[number] = !newDays[number];
     setDays(newDays);
   };
@@ -123,8 +107,15 @@ const CategoriesScreen = ({ navigation }) => {
           })
         }
         onLongPress={() => {
+          setSelectedCategory(category);
           setSelectedCatName(category.name);
-          setSelectedCatID(category.tagID);
+          let newDays = [0, 0, 0, 0, 0, 0, 0];
+          let i = 0;
+          for (const day of category.remind_days) {
+            newDays[i] = day == 1;
+            i++;
+          }
+          setDays(newDays);
           toggleEditPopupVisibility(!editPopupVisible);
         }}
       >
@@ -203,13 +194,6 @@ const CategoriesScreen = ({ navigation }) => {
               }}
             />
             <Text style={styles.popUpHeader}> Set Days for Reminder</Text>
-            {/* <WeekdayPicker
-              days={days}
-              onChange={() => {
-                setDays(days);
-                console.log(days);
-              }}
-            /> */}
             <View style={styles.weekContainer}>
               {dayOfTheWeek("S", 0)}
               {dayOfTheWeek("M", 1)}
@@ -308,12 +292,15 @@ const CategoriesScreen = ({ navigation }) => {
             />
 
             <Text style={styles.popUpHeader}> Edit Days for Reminder</Text>
-            <WeekdayPicker
-              days={days}
-              onChange={() => {
-                setDays(days); // this value needs to be read from database
-              }}
-            />
+            <View style={styles.weekContainer}>
+              {dayOfTheWeek("S", 0)}
+              {dayOfTheWeek("M", 1)}
+              {dayOfTheWeek("T", 2)}
+              {dayOfTheWeek("W", 3)}
+              {dayOfTheWeek("R", 4)}
+              {dayOfTheWeek("F", 5)}
+              {dayOfTheWeek("A", 6)}
+            </View>
 
             <Text style={styles.popUpHeader}> Edit Time for Reminder</Text>
             <View>
@@ -372,9 +359,9 @@ const CategoriesScreen = ({ navigation }) => {
                       {
                         text: "Delete",
                         onPress: () => {
-                          updates.deleteRequestTagsInCategory(selectedCatID);
-                          updates.deleteCategory(selectedCatID);
-                          updates.deleteTag(selectedCatID);
+                          updates.deleteRequestTagsInCategory(category.tagID);
+                          updates.deleteCategory(category.tagID);
+                          updates.deleteTag(category.tagID);
                           toggleEditPopupVisibility(!editPopupVisible);
                           refreshPage();
                         },
@@ -400,13 +387,13 @@ const CategoriesScreen = ({ navigation }) => {
                   cat = new Category();
 
                   cat.name = newCategory;
-                  cat.tagID = selectedCatID;
+                  cat.tagID = category.tagID;
 
                   cat.remind_days = "XMXWXFX"; // Set later
                   cat.remind_time = "T10:43:17+0000"; // Set later
 
                   updates.editCategory(cat);
-                  updates.editTag(selectedCatName, selectedCatID);
+                  updates.editTag(selectedCatName, category.tagID);
                   toggleEditPopupVisibility(!editPopupVisible);
                   refreshPage();
                 }}
