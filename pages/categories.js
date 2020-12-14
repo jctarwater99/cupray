@@ -18,16 +18,21 @@ import * as inserts from "../database/insert";
 import * as updates from "../database/update";
 import { Category } from "../database/objects";
 import Modal from "react-native-modal";
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 var { height, width } = Dimensions.get("window");
 
 const CategoriesScreen = ({ navigation }) => {
+  const [mode, setMode] = useState("time"); // Tells date time picker we are only interested in "time"
+  const [date, setDate] = useState(new Date());
+  let [show, setShow] = useState(true);
   let [categories, setCategories] = useState([]);
   let [newCategory, setNewCategory] = useState("e.g. My Pals");
   let [createPopupVisible, toggleCreatePopupVisibility] = useState(false);
   let [editPopupVisible, toggleEditPopupVisibility] = useState(false);
   let [selectedCatName, setSelectedCatName] = useState("None");
   let [selectedCategory, setSelectedCategory] = useState();
+  let [selectedTime, setSelectedTime] = useState();
   let [days, setDays] = useState([
     false,
     true,
@@ -41,7 +46,6 @@ const CategoriesScreen = ({ navigation }) => {
   useEffect(() => {
     queries.getCategories((results) => {
       setCategories(results);
-      console.log(results);
     });
   }, []);
 
@@ -68,15 +72,13 @@ const CategoriesScreen = ({ navigation }) => {
       </TouchableOpacity>
     );
   };
+  
 
-  const [date, setDate] = useState(new Date(1598051730000));
-  const [mode, setMode] = useState("time");
-  let [show, setShow] = useState(true);
   if (Platform.OS == "android") {
     [show, setShow] = useState(false);
   }
 
-  const onChange = (event, selectedDate) => {
+  const handleChangeTime = (event, selectedDate) => {
     const currentDate = selectedDate || date;
     setShow(Platform.OS === "ios");
     setDate(currentDate);
@@ -109,6 +111,7 @@ const CategoriesScreen = ({ navigation }) => {
         onLongPress={() => {
           setSelectedCategory(category);
           setSelectedCatName(category.name);
+          setSelectedTime(category.remind_time); 
           let newDays = [0, 0, 0, 0, 0, 0, 0];
           let i = 0;
           for (const day of category.remind_days) {
@@ -220,7 +223,10 @@ const CategoriesScreen = ({ navigation }) => {
                   mode={mode}
                   is24Hour={false}
                   display="default"
-                  onChange={onChange}
+                  onChange={(event, date) => { 
+                    handleChangeTime(event, date); 
+                    console.log(date);
+                  }}
                 />
               )}
 
@@ -235,7 +241,10 @@ const CategoriesScreen = ({ navigation }) => {
                   value={date}
                   mode={mode}
                   display="spinner"
-                  onChange={onChange}
+                  onChange={(e, date) => { 
+                    handleChangeTime(e, date); 
+                    console.log(date.getMinutes());
+                  }}
                 />
               )}
             </View>
@@ -309,10 +318,10 @@ const CategoriesScreen = ({ navigation }) => {
                   onPress={showTimepicker}
                   style={[
                     styles.androidTimeButton,
-                    { width: 150, marginBottom: height * 0.06 },
+                    {marginBottom: height * 0.06 },
                   ]}
                 >
-                  <Text style={styles.androidTimeHeader}>Open Time Picker</Text>
+                  <Text style={styles.androidTimeHeader}>{selectedTime}</Text> 
                 </TouchableOpacity>
               )}
               {show && Platform.OS == "android" && (
@@ -321,7 +330,7 @@ const CategoriesScreen = ({ navigation }) => {
                   mode={mode}
                   is24Hour={false}
                   display="default"
-                  onChange={onChange}
+                  onChange={(event, date) => { handleChangeTime(event, date)}}
                 />
               )}
 
@@ -336,7 +345,7 @@ const CategoriesScreen = ({ navigation }) => {
                   value={date} // this value needs to be read from database
                   mode={mode}
                   display="spinner"
-                  onChange={onChange}
+                  onChange={(event, date) => { handleChangeTime(event, date)}}
                 />
               )}
             </View>
@@ -359,9 +368,9 @@ const CategoriesScreen = ({ navigation }) => {
                       {
                         text: "Delete",
                         onPress: () => {
-                          updates.deleteRequestTagsInCategory(category.tagID);
-                          updates.deleteCategory(category.tagID);
-                          updates.deleteTag(category.tagID);
+                          updates.deleteRequestTagsInCategory(selectedCategory.tagID);
+                          updates.deleteCategory(selectedCategory.tagID);
+                          updates.deleteTag(selectedCategory.tagID);
                           toggleEditPopupVisibility(!editPopupVisible);
                           refreshPage();
                         },
@@ -387,13 +396,13 @@ const CategoriesScreen = ({ navigation }) => {
                   cat = new Category();
 
                   cat.name = newCategory;
-                  cat.tagID = category.tagID;
+                  cat.tagID = selectedCategory.tagID;
 
                   cat.remind_days = "XMXWXFX"; // Set later
                   cat.remind_time = "T10:43:17+0000"; // Set later
 
                   updates.editCategory(cat);
-                  updates.editTag(selectedCatName, category.tagID);
+                  updates.editTag(selectedCatName, selectedCategory.tagID);
                   toggleEditPopupVisibility(!editPopupVisible);
                   refreshPage();
                 }}

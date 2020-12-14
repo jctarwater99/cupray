@@ -262,21 +262,21 @@ export function populateDBwithTags() {
 }
 
 export function populateDBwithCategories() {
-  function createCat(name, tagID, days) {
+  function createCat(name, tagID, days, time) {
     var cat = new Category();
     cat.name = name;
     cat.tagID = tagID;
-    cat.remind_time = "14:15:14+0000";
+    cat.remind_time = time;
     cat.remind_days = days;
     return cat;
   }
 
   var cats = new Array();
-  cats.push(createCat("Friends", 4, "0101010"));
-  cats.push(createCat("Church", 6, "0010001"));
-  cats.push(createCat("Missions", 7, "1000000"));
-  cats.push(createCat("Family", 8, "0010101"));
-  cats.push(createCat("Myself", 10, "0101011"));
+  cats.push(createCat("Friends", 4, "0101010", "13:00"));
+  cats.push(createCat("Church", 6, "0010001", "14:00"));
+  cats.push(createCat("Missions", 7, "1000000", "15:00"));
+  cats.push(createCat("Family", 8, "0010101", "17:00"));
+  cats.push(createCat("Myself", 10, "0101011", "20:00"));
 
   cats.forEach((element) => {
     db_insert.insertCategory(element);
