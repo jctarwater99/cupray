@@ -18,21 +18,20 @@ import * as inserts from "../database/insert";
 import * as updates from "../database/update";
 import { Category } from "../database/objects";
 import Modal from "react-native-modal";
-import DateTimePicker from '@react-native-community/datetimepicker';
+import DateTimePicker from "@react-native-community/datetimepicker";
 
 var { height, width } = Dimensions.get("window");
 
 const CategoriesScreen = ({ navigation }) => {
-  const [mode, setMode] = useState("time"); // Tells date time picker we are only interested in "time"
-  const [date, setDate] = useState(new Date());
-  let [show, setShow] = useState(true);
+  let [time, setTime] = useState(new Date());
+  let [timePickerVisibility, setTimePickerVisibility] = useState(false);
   let [categories, setCategories] = useState([]);
-  let [newCategory, setNewCategory] = useState("e.g. My Pals");
+  let [newCategory, setNewCategory] = useState("");
   let [createPopupVisible, toggleCreatePopupVisibility] = useState(false);
   let [editPopupVisible, toggleEditPopupVisibility] = useState(false);
   let [selectedCatName, setSelectedCatName] = useState("None");
   let [selectedCategory, setSelectedCategory] = useState();
-  let [selectedTime, setSelectedTime] = useState();
+  let [selectedTime, setSelectedTime] = useState("3:00 PM");
   let [days, setDays] = useState([
     false,
     true,
@@ -47,6 +46,9 @@ const CategoriesScreen = ({ navigation }) => {
     queries.getCategories((results) => {
       setCategories(results);
     });
+    if (Platform.OS == "ios") {
+      setTimePickerVisibility(true);
+    }
   }, []);
 
   let handleDayPress = (number) => {
@@ -72,29 +74,67 @@ const CategoriesScreen = ({ navigation }) => {
       </TouchableOpacity>
     );
   };
-  
 
-  if (Platform.OS == "android") {
-    [show, setShow] = useState(false);
-  }
+  let timePickerButton = Platform.select({
+    ios: () => {
+      return (
+        <TouchableOpacity
+          onPress={() => {
+            setTimePickerVisibility(true);
+          }}
+          style={{ width: 250 }}
+        ></TouchableOpacity>
+      );
+    },
+    android: () => {
+      return (
+        <TouchableOpacity
+          onPress={() => {
+            setTimePickerVisibility(true);
+          }}
+          style={[styles.androidTimeButton, { marginBottom: height * 0.06 }]}
+        >
+          <Text style={styles.androidTimeHeader}>{selectedTime}</Text>
+        </TouchableOpacity>
+      );
+    },
+  })();
+  let timePicker = Platform.select({
+    ios: () => {
+      if (timePickerVisibility) {
+        return (
+          <DateTimePicker
+            value={time} // this value needs to be read from database
+            mode={"time"}
+            display="spinner"
+            onChange={(event, date) => {
+              handleChangeTime(event, date);
+            }}
+          />
+        );
+      }
+    },
+    android: () => {
+      if (timePickerVisibility) {
+        return (
+          <DateTimePicker
+            value={time}
+            mode={"time"}
+            is24Hour={false}
+            display="default"
+            onChange={(event, date) => {
+              handleChangeTime(event, date);
+            }}
+          />
+        );
+      }
+    },
+  })();
 
   const handleChangeTime = (event, selectedDate) => {
-    const currentDate = selectedDate || date;
-    setShow(Platform.OS === "ios");
-    setDate(currentDate);
-  };
-
-  const showMode = (currentMode) => {
-    setShow(true);
-    setMode(currentMode);
-  };
-
-  const showDatepicker = () => {
-    showMode("date");
-  };
-
-  const showTimepicker = () => {
-    showMode("time");
+    const currentDate = selectedDate || time;
+    setTimePickerVisibility(Platform.OS === "ios"); // This is pretty creative, I like it :)
+    setTime(currentDate);
   };
 
   let listItemView = (category) => {
@@ -111,7 +151,7 @@ const CategoriesScreen = ({ navigation }) => {
         onLongPress={() => {
           setSelectedCategory(category);
           setSelectedCatName(category.name);
-          setSelectedTime(category.remind_time); 
+          setSelectedTime(category.remind_time);
           let newDays = [0, 0, 0, 0, 0, 0, 0];
           let i = 0;
           for (const day of category.remind_days) {
@@ -135,7 +175,7 @@ const CategoriesScreen = ({ navigation }) => {
       queries.getCategories((results) => {
         setCategories(results);
       });
-    }, 150);
+    }, 200);
   };
 
   return (
@@ -209,44 +249,8 @@ const CategoriesScreen = ({ navigation }) => {
 
             <Text style={styles.popUpHeader}> Set Time for Reminder</Text>
             <View>
-              {Platform.OS == "android" && (
-                <TouchableOpacity
-                  onPress={showTimepicker}
-                  style={styles.androidTimeButton}
-                >
-                  <Text style={styles.androidTimeHeader}>Open Time Picker</Text>
-                </TouchableOpacity>
-              )}
-              {show && Platform.OS == "android" && (
-                <DateTimePicker
-                  value={date}
-                  mode={mode}
-                  is24Hour={false}
-                  display="default"
-                  onChange={(event, date) => { 
-                    handleChangeTime(event, date); 
-                    console.log(date);
-                  }}
-                />
-              )}
-
-              {Platform.OS == "ios" && (
-                <TouchableOpacity
-                  onPress={showTimepicker}
-                  style={{ width: 250 }}
-                ></TouchableOpacity>
-              )}
-              {show && Platform.OS == "ios" && (
-                <DateTimePicker
-                  value={date}
-                  mode={mode}
-                  display="spinner"
-                  onChange={(e, date) => { 
-                    handleChangeTime(e, date); 
-                    console.log(date.getMinutes());
-                  }}
-                />
-              )}
+              {timePickerButton}
+              {timePicker}
             </View>
 
             <TouchableOpacity
@@ -257,7 +261,12 @@ const CategoriesScreen = ({ navigation }) => {
                 cat.name = newCategory;
                 cat.tagID = -1; // filler value
 
-                cat.remind_days = "XMXWXFX"; // Set later
+                let daysString = "";
+                days.forEach((day) => {
+                  daysString += day == 1 ? 1 : 0;
+                });
+                cat.remind_days = daysString;
+
                 cat.remind_time = "T10:43:17+0000"; // Set later
 
                 inserts.insertNewTag(newCategory, cat); // New category is the tag name, also inserts new category
@@ -313,41 +322,8 @@ const CategoriesScreen = ({ navigation }) => {
 
             <Text style={styles.popUpHeader}> Edit Time for Reminder</Text>
             <View>
-              {Platform.OS == "android" && (
-                <TouchableOpacity
-                  onPress={showTimepicker}
-                  style={[
-                    styles.androidTimeButton,
-                    {marginBottom: height * 0.06 },
-                  ]}
-                >
-                  <Text style={styles.androidTimeHeader}>{selectedTime}</Text> 
-                </TouchableOpacity>
-              )}
-              {show && Platform.OS == "android" && (
-                <DateTimePicker
-                  value={date} // this value needs to be read from database
-                  mode={mode}
-                  is24Hour={false}
-                  display="default"
-                  onChange={(event, date) => { handleChangeTime(event, date)}}
-                />
-              )}
-
-              {Platform.OS == "ios" && (
-                <TouchableOpacity
-                  onPress={showTimepicker}
-                  style={{ width: 250 }}
-                ></TouchableOpacity>
-              )}
-              {show && Platform.OS == "ios" && (
-                <DateTimePicker
-                  value={date} // this value needs to be read from database
-                  mode={mode}
-                  display="spinner"
-                  onChange={(event, date) => { handleChangeTime(event, date)}}
-                />
-              )}
+              {timePickerButton}
+              {timePicker}
             </View>
 
             <View
@@ -368,7 +344,9 @@ const CategoriesScreen = ({ navigation }) => {
                       {
                         text: "Delete",
                         onPress: () => {
-                          updates.deleteRequestTagsInCategory(selectedCategory.tagID);
+                          updates.deleteRequestTagsInCategory(
+                            selectedCategory.tagID
+                          );
                           updates.deleteCategory(selectedCategory.tagID);
                           updates.deleteTag(selectedCategory.tagID);
                           toggleEditPopupVisibility(!editPopupVisible);
@@ -395,12 +373,17 @@ const CategoriesScreen = ({ navigation }) => {
                 onPress={() => {
                   cat = new Category();
 
-                  cat.name = newCategory;
+                  cat.name = selectedCatName;
                   cat.tagID = selectedCategory.tagID;
 
-                  cat.remind_days = "XMXWXFX"; // Set later
-                  cat.remind_time = "T10:43:17+0000"; // Set later
+                  let daysString = "";
+                  days.forEach((day) => {
+                    daysString += day == 1 ? 1 : 0;
+                  });
+                  cat.remind_days = daysString;
 
+                  cat.remind_time = "T10:43:17+0000"; // Set later
+                  console.log(cat);
                   updates.editCategory(cat);
                   updates.editTag(selectedCatName, selectedCategory.tagID);
                   toggleEditPopupVisibility(!editPopupVisible);

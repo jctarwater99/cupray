@@ -69,8 +69,10 @@ export function editCategory(cat) {
   db.transaction((tx) => {
     tx.executeSql(
       "UPDATE categories SET name = ?, remind_days = ?, remind_time = ? WHERE tagID = ?",
-      [cat.name, cat.remind_days, cat.remind_time, cat.tagId],
-      (tx, result) => console.log("huh?", result),
+      [cat.name, cat.remind_days, cat.remind_time, cat.tagID],
+      (tx, result) => {
+        console.log("Why tho:", result);
+      },
       (tx, result) => {
         console.log("Updating category failed", result);
       }
