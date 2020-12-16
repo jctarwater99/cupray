@@ -23,7 +23,6 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 var { height, width } = Dimensions.get("window");
 
 const CategoriesScreen = ({ navigation }) => {
-  let [time, setTime] = useState(new Date());
   let [timePickerVisibility, setTimePickerVisibility] = useState(false);
   let [categories, setCategories] = useState([]);
   let [newCategory, setNewCategory] = useState("");
@@ -105,7 +104,7 @@ const CategoriesScreen = ({ navigation }) => {
       if (timePickerVisibility) {
         return (
           <DateTimePicker
-            value={time} // this value needs to be read from database
+            value={selectedTime} // this value needs to be read from database
             mode={"time"}
             display="spinner"
             onChange={(event, date) => {
@@ -119,7 +118,7 @@ const CategoriesScreen = ({ navigation }) => {
       if (timePickerVisibility) {
         return (
           <DateTimePicker
-            value={time}
+            value={selectedTime}
             mode={"time"}
             is24Hour={false}
             display="default"
