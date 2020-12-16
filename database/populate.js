@@ -272,11 +272,36 @@ export function populateDBwithCategories() {
   }
 
   var cats = new Array();
-  cats.push(createCat("Friends", 4, "0101010", "13:00"));
-  cats.push(createCat("Church", 6, "0010001", "14:00"));
-  cats.push(createCat("Missions", 7, "1000000", "15:00"));
-  cats.push(createCat("Family", 8, "0010101", "17:00"));
-  cats.push(createCat("Myself", 10, "0101011", "20:00"));
+  cats.push(
+    createCat(
+      "Friends",
+      4,
+      "0101010",
+      "Wed Dec 16 2020 13:00:00 GMT-0500 (EST)"
+    )
+  );
+  cats.push(
+    createCat("Church", 6, "0010001", "Wed Dec 16 2020 14:00:00 GMT-0500 (EST)")
+  );
+  cats.push(
+    createCat(
+      "Missions",
+      7,
+      "1000000",
+      "Wed Dec 16 2020 15:00:00 GMT-0500 (EST)"
+    )
+  );
+  cats.push(
+    createCat("Family", 8, "0010101", "Wed Dec 16 2020 18:00:00 GMT-0500 (EST)")
+  );
+  cats.push(
+    createCat(
+      "Myself",
+      10,
+      "0101011",
+      "Wed Dec 16 2020 20:00:00 GMT-0500 (EST)"
+    )
+  );
 
   cats.forEach((element) => {
     db_insert.insertCategory(element);

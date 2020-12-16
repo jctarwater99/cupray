@@ -31,7 +31,8 @@ const CategoriesScreen = ({ navigation }) => {
   let [editPopupVisible, toggleEditPopupVisibility] = useState(false);
   let [selectedCatName, setSelectedCatName] = useState("None");
   let [selectedCategory, setSelectedCategory] = useState();
-  let [selectedTime, setSelectedTime] = useState("3:00 PM");
+  let [selectedTime, setSelectedTime] = useState(new Date());
+  let [displayTime, setDisplayTime] = useState("3:00 PM");
   let [days, setDays] = useState([
     false,
     true,
@@ -94,7 +95,7 @@ const CategoriesScreen = ({ navigation }) => {
           }}
           style={[styles.androidTimeButton, { marginBottom: height * 0.06 }]}
         >
-          <Text style={styles.androidTimeHeader}>{selectedTime}</Text>
+          <Text style={styles.androidTimeHeader}>{displayTime}</Text>
         </TouchableOpacity>
       );
     },
@@ -134,7 +135,30 @@ const CategoriesScreen = ({ navigation }) => {
   const handleChangeTime = (event, selectedDate) => {
     const currentDate = selectedDate || time;
     setTimePickerVisibility(Platform.OS === "ios"); // This is pretty creative, I like it :)
-    setTime(currentDate);
+    setSelectedTime(currentDate);
+    parseTime(currentDate, setDisplayTime);
+  };
+
+  let parseTime = (date, callback) => {
+    let parsedTime = "";
+    let hours = date.getHours();
+    let minutes = date.getMinutes();
+    console.log(hours);
+    let ampm = " PM";
+    let colon = ":";
+    if (hours > 12) {
+      hours -= 12;
+    } else if (hours < 12) {
+      ampm = " AM";
+      if (hours == 0) {
+        hours = 12;
+      }
+    }
+    if (minutes < 10) {
+      colon += "0";
+    }
+    parsedTime = hours.toString() + colon + minutes.toString() + ampm;
+    callback(parsedTime);
   };
 
   let listItemView = (category) => {
@@ -151,7 +175,7 @@ const CategoriesScreen = ({ navigation }) => {
         onLongPress={() => {
           setSelectedCategory(category);
           setSelectedCatName(category.name);
-          setSelectedTime(category.remind_time);
+          setSelectedTime(new Date(category.remind_time));
           let newDays = [0, 0, 0, 0, 0, 0, 0];
           let i = 0;
           for (const day of category.remind_days) {
@@ -159,6 +183,9 @@ const CategoriesScreen = ({ navigation }) => {
             i++;
           }
           setDays(newDays);
+
+          parseTime(new Date(category.remind_time), setDisplayTime);
+
           toggleEditPopupVisibility(!editPopupVisible);
         }}
       >
@@ -267,7 +294,7 @@ const CategoriesScreen = ({ navigation }) => {
                 });
                 cat.remind_days = daysString;
 
-                cat.remind_time = "T10:43:17+0000"; // Set later
+                cat.remind_time = selectedTime.toString();
 
                 inserts.insertNewTag(newCategory, cat); // New category is the tag name, also inserts new category
 
@@ -382,8 +409,8 @@ const CategoriesScreen = ({ navigation }) => {
                   });
                   cat.remind_days = daysString;
 
-                  cat.remind_time = "T10:43:17+0000"; // Set later
-                  console.log(cat);
+                  cat.remind_time = selectedTime.toString();
+
                   updates.editCategory(cat);
                   updates.editTag(selectedCatName, selectedCategory.tagID);
                   toggleEditPopupVisibility(!editPopupVisible);
