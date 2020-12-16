@@ -132,7 +132,7 @@ const CategoriesScreen = ({ navigation }) => {
   })();
 
   const handleChangeTime = (event, selectedDate) => {
-    const currentDate = selectedDate || time;
+    const currentDate = selectedDate || selectedTime;
     setTimePickerVisibility(Platform.OS === "ios"); // This is pretty creative, I like it :)
     setSelectedTime(currentDate);
     parseTime(currentDate, setDisplayTime);
