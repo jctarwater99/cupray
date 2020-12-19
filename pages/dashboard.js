@@ -37,7 +37,7 @@ const Dashboard = ({ navigation }) => {
         </View>
 
         <View>
-          <TouchableOpacity style={styles.icon} onPress={() => void 0}>
+          <TouchableOpacity style={styles.icon} onPress={() => navigation.navigate("Pray")}>
             <Image
               style={styles.dashImage}
               source={require("../assets/pray_blue.png")}

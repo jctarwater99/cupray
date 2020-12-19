@@ -8,6 +8,7 @@ import {
   TextInput,
   FlatList,
   Button,
+  Platform,
   Alert,
   Text,
   View,
@@ -17,35 +18,147 @@ import * as inserts from "../database/insert";
 import * as updates from "../database/update";
 import { Category } from "../database/objects";
 import Modal from "react-native-modal";
-import WeekdayPicker from "../customComponent/WeekdayPicker/WeekdayPicker";
-//import { TouchableHighlight } from "react-native-gesture-handler";
+import DateTimePicker from "@react-native-community/datetimepicker";
 
 var { height, width } = Dimensions.get("window");
 
 const CategoriesScreen = ({ navigation }) => {
+  let [timePickerVisibility, setTimePickerVisibility] = useState(false);
   let [categories, setCategories] = useState([]);
-  let [newCategory, setNewCategory] = useState("e.g. My Pals");
+  let [newCategory, setNewCategory] = useState("");
   let [createPopupVisible, toggleCreatePopupVisibility] = useState(false);
   let [editPopupVisible, toggleEditPopupVisibility] = useState(false);
   let [selectedCatName, setSelectedCatName] = useState("None");
-  let [selectedCatID, setSelectedCatID] = useState(-1);
-  let [days, setDays] = useState({ 0: 0, 1: 1, 2: 0, 3: 1, 4: 0, 5: 1, 6: 0 });
-
-  var [isPress, setIsPress] = React.useState(false);
-  var touchProps = {
-    activeOpacity: 1,
-    underlayColor: "blue", // <-- "backgroundColor" will be always overwritten by "underlayColor"
-    style: isPress ? styles.btnPress : styles.btnNormal, // <-- but you can still apply other style changes
-    onHideUnderlay: () => setIsPress(false),
-    onShowUnderlay: () => setIsPress(true),
-    onPress: () => setIsPress(!isPress), // <-- "onPress" is apparently required
-  };
+  let [selectedCategory, setSelectedCategory] = useState();
+  let [selectedTime, setSelectedTime] = useState(new Date());
+  let [displayTime, setDisplayTime] = useState("3:00 PM");
+  let [days, setDays] = useState([
+    false,
+    true,
+    false,
+    true,
+    false,
+    true,
+    false,
+  ]);
 
   useEffect(() => {
     queries.getCategories((results) => {
       setCategories(results);
     });
+    if (Platform.OS == "ios") {
+      setTimePickerVisibility(true);
+    }
   }, []);
+
+  let handleDayPress = (number) => {
+    let newDays = [...days]; // can't change days manually, must create deep copy
+    newDays[number] = !newDays[number];
+    setDays(newDays);
+  };
+
+  let dayOfTheWeek = (letter, number) => {
+    return (
+      <TouchableOpacity
+        style={[
+          styles.dayOfTheWeek,
+          days[number] ? styles.active : styles.inactive,
+        ]}
+        onPress={() => {
+          handleDayPress(number);
+        }}
+      >
+        <Text style={days[number] ? styles.activeText : styles.inactiveText}>
+          {letter}
+        </Text>
+      </TouchableOpacity>
+    );
+  };
+
+  let timePickerButton = Platform.select({
+    ios: () => {
+      return (
+        <TouchableOpacity
+          onPress={() => {
+            setTimePickerVisibility(true);
+          }}
+          style={{ width: 250 }}
+        ></TouchableOpacity>
+      );
+    },
+    android: () => {
+      return (
+        <TouchableOpacity
+          onPress={() => {
+            setTimePickerVisibility(true);
+          }}
+          style={[styles.androidTimeButton, { marginBottom: height * 0.06 }]}
+        >
+          <Text style={styles.androidTimeHeader}>{displayTime}</Text>
+        </TouchableOpacity>
+      );
+    },
+  })();
+  let timePicker = Platform.select({
+    ios: () => {
+      if (timePickerVisibility) {
+        return (
+          <DateTimePicker
+            value={selectedTime} // this value needs to be read from database
+            mode={"time"}
+            display="spinner"
+            onChange={(event, date) => {
+              handleChangeTime(event, date);
+            }}
+          />
+        );
+      }
+    },
+    android: () => {
+      if (timePickerVisibility) {
+        return (
+          <DateTimePicker
+            value={selectedTime}
+            mode={"time"}
+            is24Hour={false}
+            display="default"
+            onChange={(event, date) => {
+              handleChangeTime(event, date);
+            }}
+          />
+        );
+      }
+    },
+  })();
+
+  const handleChangeTime = (event, selectedDate) => {
+    const currentDate = selectedDate || selectedTime;
+    setTimePickerVisibility(Platform.OS === "ios"); // This is pretty creative, I like it :)
+    setSelectedTime(currentDate);
+    parseTime(currentDate, setDisplayTime);
+  };
+
+  let parseTime = (date, callback) => {
+    let parsedTime = "";
+    let hours = date.getHours();
+    let minutes = date.getMinutes();
+    console.log(hours);
+    let ampm = " PM";
+    let colon = ":";
+    if (hours > 12) {
+      hours -= 12;
+    } else if (hours < 12) {
+      ampm = " AM";
+      if (hours == 0) {
+        hours = 12;
+      }
+    }
+    if (minutes < 10) {
+      colon += "0";
+    }
+    parsedTime = hours.toString() + colon + minutes.toString() + ampm;
+    callback(parsedTime);
+  };
 
   let listItemView = (category) => {
     return (
@@ -59,8 +172,19 @@ const CategoriesScreen = ({ navigation }) => {
           })
         }
         onLongPress={() => {
+          setSelectedCategory(category);
           setSelectedCatName(category.name);
-          setSelectedCatID(category.tagID);
+          setSelectedTime(new Date(category.remind_time));
+          let newDays = [0, 0, 0, 0, 0, 0, 0];
+          let i = 0;
+          for (const day of category.remind_days) {
+            newDays[i] = day == 1;
+            i++;
+          }
+          setDays(newDays);
+
+          parseTime(new Date(category.remind_time), setDisplayTime);
+
           toggleEditPopupVisibility(!editPopupVisible);
         }}
       >
@@ -77,7 +201,7 @@ const CategoriesScreen = ({ navigation }) => {
       queries.getCategories((results) => {
         setCategories(results);
       });
-    }, 150);
+    }, 200);
   };
 
   return (
@@ -105,8 +229,7 @@ const CategoriesScreen = ({ navigation }) => {
           <Text style={styles.plusSign}>+</Text>
         </TouchableOpacity>
         <Text style={[styles.plusSign, { marginTop: height * 0.01 }]}>
-          {" "}
-          Add Category{" "}
+          Add Category
         </Text>
 
         <Modal
@@ -114,6 +237,7 @@ const CategoriesScreen = ({ navigation }) => {
           backdropOpacity={0.25}
           animationInTiming={400}
           animationOutTiming={800}
+          style={styles.modalContent}
           onBackdropPress={() => {
             toggleCreatePopupVisibility(!createPopupVisible);
           }}
@@ -121,7 +245,7 @@ const CategoriesScreen = ({ navigation }) => {
           <View style={styles.popUpContainer}>
             <Text style={styles.popUpHeader}>Create New Category</Text>
             <TextInput
-              maxLength={10} // max number of chars
+              maxLength={15} // max number of chars
               multiline={true}
               value={newCategory}
               onFocus={() => setNewCategory("")}
@@ -138,20 +262,23 @@ const CategoriesScreen = ({ navigation }) => {
                 marginRight: width * 0.1,
               }}
             />
-            <Text style={styles.popUpHeader}>Reminder Days</Text>
-            <WeekdayPicker
-              days={days}
-              onChange={() => {
-                setDays(days);
-              }}
-              style={styles.picker}
-              dayStyle={styles.day}
-            />
-            <View style={styles.cont}>
-              <TouchableHighlight {...touchProps}>
-                <Text>Do Stuff</Text>
-              </TouchableHighlight>
+            <Text style={styles.popUpHeader}> Set Days for Reminder</Text>
+            <View style={styles.weekContainer}>
+              {dayOfTheWeek("S", 0)}
+              {dayOfTheWeek("M", 1)}
+              {dayOfTheWeek("T", 2)}
+              {dayOfTheWeek("W", 3)}
+              {dayOfTheWeek("R", 4)}
+              {dayOfTheWeek("F", 5)}
+              {dayOfTheWeek("A", 6)}
             </View>
+
+            <Text style={styles.popUpHeader}> Set Time for Reminder</Text>
+            <View>
+              {timePickerButton}
+              {timePicker}
+            </View>
+
             <TouchableOpacity
               style={{ marginLeft: width * 0.6 }}
               onPress={() => {
@@ -160,8 +287,13 @@ const CategoriesScreen = ({ navigation }) => {
                 cat.name = newCategory;
                 cat.tagID = -1; // filler value
 
-                cat.remind_days = "XMXWXFX"; // Set later
-                cat.remind_time = "T10:43:17+0000"; // Set later
+                let daysString = "";
+                days.forEach((day) => {
+                  daysString += day == 1 ? 1 : 0;
+                });
+                cat.remind_days = daysString;
+
+                cat.remind_time = selectedTime.toString();
 
                 inserts.insertNewTag(newCategory, cat); // New category is the tag name, also inserts new category
 
@@ -178,6 +310,7 @@ const CategoriesScreen = ({ navigation }) => {
           backdropOpacity={0.25}
           animationInTiming={400}
           animationOutTiming={800}
+          style={styles.modalContent}
           onBackdropPress={() => {
             toggleEditPopupVisibility(!editPopupVisible);
           }}
@@ -185,7 +318,7 @@ const CategoriesScreen = ({ navigation }) => {
           <View style={styles.popUpContainer}>
             <Text style={styles.popUpHeader}>Edit Category</Text>
             <TextInput
-              maxLength={10} // max number of chars
+              maxLength={15} // max number of chars
               multiline={true}
               value={selectedCatName}
               onChange={(text) => setSelectedCatName(text.nativeEvent.text)}
@@ -201,13 +334,22 @@ const CategoriesScreen = ({ navigation }) => {
                 marginRight: width * 0.1,
               }}
             />
-            <View
-              style={{
-                padding: 20,
-              }}
-            >
-              <Text style={styles.popUpHeader}>Edit Reminders</Text>
-              <Text style={styles.plusSign}>Date stuff</Text>
+
+            <Text style={styles.popUpHeader}> Edit Days for Reminder</Text>
+            <View style={styles.weekContainer}>
+              {dayOfTheWeek("S", 0)}
+              {dayOfTheWeek("M", 1)}
+              {dayOfTheWeek("T", 2)}
+              {dayOfTheWeek("W", 3)}
+              {dayOfTheWeek("R", 4)}
+              {dayOfTheWeek("F", 5)}
+              {dayOfTheWeek("A", 6)}
+            </View>
+
+            <Text style={styles.popUpHeader}> Edit Time for Reminder</Text>
+            <View>
+              {timePickerButton}
+              {timePicker}
             </View>
 
             <View
@@ -228,9 +370,11 @@ const CategoriesScreen = ({ navigation }) => {
                       {
                         text: "Delete",
                         onPress: () => {
-                          updates.deleteRequestTagsInCategory(selectedCatID);
-                          updates.deleteCategory(selectedCatID);
-                          updates.deleteTag(selectedCatID);
+                          updates.deleteRequestTagsInCategory(
+                            selectedCategory.tagID
+                          );
+                          updates.deleteCategory(selectedCategory.tagID);
+                          updates.deleteTag(selectedCategory.tagID);
                           toggleEditPopupVisibility(!editPopupVisible);
                           refreshPage();
                         },
@@ -255,14 +399,19 @@ const CategoriesScreen = ({ navigation }) => {
                 onPress={() => {
                   cat = new Category();
 
-                  cat.name = newCategory;
-                  cat.tagID = selectedCatID;
+                  cat.name = selectedCatName;
+                  cat.tagID = selectedCategory.tagID;
 
-                  cat.remind_days = "XMXWXFX"; // Set later
-                  cat.remind_time = "T10:43:17+0000"; // Set later
+                  let daysString = "";
+                  days.forEach((day) => {
+                    daysString += day == 1 ? 1 : 0;
+                  });
+                  cat.remind_days = daysString;
+
+                  cat.remind_time = selectedTime.toString();
 
                   updates.editCategory(cat);
-                  updates.editTag(selectedCatName, selectedCatID);
+                  updates.editTag(selectedCatName, selectedCategory.tagID);
                   toggleEditPopupVisibility(!editPopupVisible);
                   refreshPage();
                 }}
@@ -331,6 +480,12 @@ const styles = StyleSheet.create({
     marginLeft: width * 0.06,
   },
 
+  modalContent: {
+    justifyContent: "center",
+    alignItems: "center",
+    margin: 0,
+  },
+
   popUpContainer: {
     width: 327,
     shadowColor: "#000",
@@ -396,6 +551,48 @@ const styles = StyleSheet.create({
     color: "#003A63",
     fontSize: 46,
     fontWeight: "700",
+  },
+
+  androidTimeHeader: {
+    flex: 0,
+    fontSize: 16,
+    color: "#E8E7E4",
+    fontWeight: "700",
+    padding: height * 0.008,
+  },
+
+  androidTimeButton: {
+    borderRadius: 6,
+    backgroundColor: "#D6C396",
+    padding: 3,
+  },
+  weekContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    display: "flex",
+    height: 50,
+    alignItems: "center",
+  },
+
+  dayOfTheWeek: {
+    margin: 3,
+    height: 35,
+    width: 35,
+    borderRadius: 35,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  active: {
+    backgroundColor: "#D6C396",
+  },
+  inactive: {
+    backgroundColor: "#D3D3D3",
+  },
+  activeText: {
+    color: "#fff",
+  },
+  inactiveText: {
+    color: "#003A63",
   },
 });
 

@@ -27,7 +27,7 @@ export class Reminder {
 }
 export class Category {
   name = ""; // Max 10?
-  TagID = 0;
+  tagID = 0;
   remind_freq = 0;
   remind_days = "";
   remind_time = "";

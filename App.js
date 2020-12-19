@@ -19,6 +19,7 @@ import RequestsScreen from "./pages/requests";
 import RefactorRequestScreen from "./pages/refactorRequest";
 import ThisRequestScreen from "./pages/individualRequest";
 import TempDash from "./pages/tempDash";
+import ScheduledPrayers from "./pages/prayerTime";
 
 const Stack = createStackNavigator();
 
@@ -34,6 +35,7 @@ const App = () => {
         {<Stack.Screen name="Cat" component={CategoriesScreen} />}
         {<Stack.Screen name="Requests" component={RequestsScreen} />}
         {<Stack.Screen name="TempDash" component={TempDash} /> }
+        {<Stack.Screen name="Pray" component={ScheduledPrayers} /> }
        {/*  {
           <Stack.Screen
             name="RefactorRequest"

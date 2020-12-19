@@ -1,69 +1,68 @@
-import React, {useState} from 'react';
+import React, { useState } from "react";
 import {
   View,
   Dimensions,
   StyleSheet,
   Text,
-  TouchableOpacity
-} from 'react-native';
-import Day from './Day';
-import { MaterialIcons } from '@expo/vector-icons';
+  TouchableOpacity,
+} from "react-native";
+import { MaterialIcons } from "@expo/vector-icons";
 
 let { height, width } = Dimensions.get("window");
-WeekdayPicker.defaultProps = {
-    onChange: null,
-    style: null,
-    dayStyle: null,
-    days: { 0:0, 1:1, 2:0, 3:1, 4:0, 5:1, 6:0 }    
-}
 
-export default function WeekdayPicker(props){
-  let { onChange, style, dayStyle, days } = props;
-  /**
-   * Function for toggling the day
-   * 
-   * @param {String} day - Day of the week in one or two letters. e.g. M, Tu, W
-   */
-  const toggleDay = (day) => {
-    // If the day is 0 set it 1, if 1 set 0
-    days[day]
-    ? days[day] = 0
-    : days[day] = 1
-    // Call the parent function to set the new reminder in the state
-    onChange(days)
-  }
-  
+export default function WeekdayPicker(props) {
+  let { onChange, days } = props;
+
   // Populate days of the week
-  // 
   let daysContainer = [];
-
-  Object.keys(days).forEach( (day, i) => {
-    daysContainer.push(<Day 
-      key = {i}
-      toggleDay={toggleDay} 
-      day={day} 
-      style={[styles.day, dayStyle]} 
-      activeTextColor='38dfe1'
-      isActive={1 === days[day]} // Pass boolean
-      />)
+  Object.keys(days).forEach((day, i) => {
+    let daysMapping = ["S", "M", "T", "W", "T", "F", "S"];
+    daysContainer.push(
+      <TouchableOpacity
+        key={i}
+        style={[styles.default, days[i] ? styles.active : styles.inactive]}
+        onPress={() => {
+          days[day] = !days[day];
+          // Call the parent function to set the new reminder in the state
+          onChange(days);
+        }}
+      >
+        <Text style={days[i] ? styles.activeText : styles.inactiveText}>
+          {daysMapping[day]}
+        </Text>
+      </TouchableOpacity>
+    );
   });
-  return (
-    <View style={[styles.container, style]}>
-        {daysContainer}
-    </View>
-  );
+  return <View style={[styles.container]}>{daysContainer}</View>;
 }
 
 const styles = StyleSheet.create({
-  container:{
-    flexDirection: 'row',
-    justifyContent: 'center',
-    display: 'flex',
+  weekContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    display: "flex",
     height: 50,
-    marginBottom: height * 0.02,
-    alignItems: 'center'
+    alignItems: "center",
   },
-  day: {
-    margin:3
-  }
+
+  dayOfTheWeek: {
+    margin: 3,
+    height: 35,
+    width: 35,
+    borderRadius: 35,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  active: {
+    backgroundColor: "#D6C396",
+  },
+  inactive: {
+    backgroundColor: "#D3D3D3",
+  },
+  activeText: {
+    color: "#fff",
+  },
+  inactiveText: {
+    color: "#003A63",
+  },
 });

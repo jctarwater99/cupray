@@ -58,8 +58,9 @@ const RequestsScreen = ({ route, navigation }) => {
       >
         <View style={styles.circle} />
         <Text style={styles.requestTitles}>{request.subject}</Text>
+        <View style={{ flex: 1}}></View>
         <View>
-          <Text style={styles.requestArrow}>{"  ➤"}</Text>
+          <Text style={styles.requestArrow}>{"➤"}</Text>
         </View>
       </TouchableOpacity>
     );
@@ -206,6 +207,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "700",
     marginTop: height * 0.02,
+    marginRight: width * 0.04,
   },
 
   circle: {
