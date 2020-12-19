@@ -48,13 +48,14 @@ function scheduleForCat(catNum) {
         cat = results[catNum];
         console.log("Gonna get requests");
         queries.getRequestsInCategory(cat.tagID, (results, cat) => {
-            days = cat.remind_days;
+            console.log(cat);
+            /*days = cat.remind_days;
             time = cat.reminder_time.split(":");
             date = new Date();
             date.setHours(time[0]);
             date.setMinutes(time[1]);
             console.log("Print date");
-            console.log(date);
+            console.log(date);*/
         });
     });
 }
