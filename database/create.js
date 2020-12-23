@@ -3,12 +3,11 @@ import * as SQLite from "expo-sqlite";
 export function dropForTesting() {
   const db = SQLite.openDatabase("db.cupray");
   db.transaction((tx) => {
-    // TODO: These 5 commands will need to be removed eventually
-    // TODO: These are only for keeping a clean DB while testing/developing
-    tx.executeSql("DROP TABLE IF EXISTS requests", []);
-    tx.executeSql("DROP TABLE IF EXISTS tags", []);
-    tx.executeSql("DROP TABLE IF EXISTS request_tags", []);
-    tx.executeSql("DROP TABLE IF EXISTS categories", []);
+    tx.executeSql("DROP TABLE IF EXISTS requests");
+    tx.executeSql("DROP TABLE IF EXISTS tags");
+    tx.executeSql("DROP TABLE IF EXISTS request_tags");
+    tx.executeSql("DROP TABLE IF EXISTS categories");
+    tx.executeSql("DROP TABLE IF EXISTS daily_requests");
     tx.executeSql("DROP TABLE IF EXISTS reminders", [], () => {
       console.log("Last drop");
     });
@@ -93,6 +92,32 @@ export function createDatabase() {
       () => void 0,
       (tx, result) => {
         console.log("Creating 'reminders' table failed", result);
+      }
+    );
+
+    // Daily
+    tx.executeSql(
+      "CREATE TABLE IF NOT EXISTS daily_requests ( " +
+        "id INTEGER PRIMARY KEY, " +
+        "requestID INT, " +
+        "isPrayedFor INT, " +
+        "FOREIGN KEY (requestID) REFERENCES requests(id));",
+      null,
+      () => void 0,
+      (tx, result) => {
+        console.log("Creating 'categories' table failed", result);
+      }
+    );
+
+    // Misc Variables
+    tx.executeSql(
+      "CREATE TABLE IF NOT EXISTS misc_vars ( " +
+        "id INTEGER PRIMARY KEY, " +
+        "has_logged_in_before INT);",
+      null,
+      () => void 0,
+      (tx, result) => {
+        console.log("Creating 'categories' table failed", result);
       }
     );
   });

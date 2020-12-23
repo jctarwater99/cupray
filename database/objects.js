@@ -21,6 +21,10 @@ export class RequestTag {
   requestID = 0;
   tagID = 0;
 }
+export class DailyRequest {
+  requestID = 0;
+  isPrayedFor = 0;
+}
 export class Reminder {
   requestID = 0;
   reminderID = 0;
