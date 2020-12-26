@@ -137,3 +137,19 @@ export function getTagsForRequest(id, callback) {
     );
   });
 }
+
+export function getDailyRequests(callback) {
+  db.transaction((tx) => {
+    tx.executeSql(
+      "SELECT * FROM daily_requests, requests " +
+        "WHERE requests.id = daily_requests.requestID;",
+      [],
+      (tx, result) => {
+        callback(result.rows._array);
+      },
+      (tx, result) => {
+        console.log("getDailyRequests query failed", result);
+      }
+    );
+  });
+}

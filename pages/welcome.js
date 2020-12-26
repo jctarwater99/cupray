@@ -40,9 +40,6 @@ const WelcomeScreen = ({ navigation }) => {
         <Text
           style={styles.thePrayer}
           onPress={() => {
-            //dropForTesting();
-            //queries.testQuery();
-            scheduleNotifs();
             navigation.navigate("TempDash");
           }}
         >

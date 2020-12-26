@@ -136,3 +136,15 @@ export function insertNewTag(tagName, Category) {
     );
   });
 }
+export function insertDailyRequest(request) {
+  db.transaction((tx) => {
+    tx.executeSql(
+      "INSERT INTO daily_requests(requestID, isPrayedFor) VALUES(?, ?);",
+      [request.requestID, request.isPrayedFor],
+      () => void 0,
+      (tx, result) => {
+        console.log("Inserting Daily Request failed", result);
+      }
+    );
+  });
+}

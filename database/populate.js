@@ -7,6 +7,7 @@ import {
   Reminder,
   Frequency,
   Category,
+  DailyRequest,
 } from "./objects";
 
 export function populateDB() {
@@ -16,6 +17,7 @@ export function populateDB() {
   populateDBwithReminders();
   populateDBwithReminders();
   populateDBwithCategories();
+  populateDBwithDailyRequests();
 }
 
 export function populateDBwithRequests() {
@@ -23,8 +25,8 @@ export function populateDBwithRequests() {
     request = new Request();
     request.subject = sub;
     request.description = desc;
-    request.create_time = "2020-11-14T10:43:17+0000";
-    request.expire_time = "2020-12-29T10:43:17+0000";
+    request.create_time = "2021-1-12T10:43:17+0000";
+    request.expire_time = "2021-2-15T10:43:17+0000";
     request.remind_freq = 1;
     request.remind_days = "";
     request.remind_time = "15:15:00";
@@ -351,6 +353,27 @@ export function populateDBwithRequestTags() {
     db_insert.insertRequestTag(element);
   });
   console.log("Finished Inserting RequestTags");
+}
+
+export function populateDBwithDailyRequests() {
+  function createDR(reqID, isPrayedFor) {
+    var DR = new DailyRequest();
+    DR.requestID = reqID;
+    DR.isPrayedFor = isPrayedFor;
+    return DR;
+  }
+
+  var DRs = new Array();
+  DRs.push(createDR(8, 0)); // Bob's career,        Bob
+  DRs.push(createDR(5, 1)); // Division in church   church
+  DRs.push(createDR(4, 0)); // Sisters rela-ship    sister
+  DRs.push(createDR(2, 0)); // SD                   myself
+  DRs.push(createDR(18, 0)); // Camino Global       missions
+
+  DRs.forEach((element) => {
+    db_insert.insertDailyRequest(element);
+  });
+  console.log("Finished Inserting Daily Requests");
 }
 
 export function populateDBwithReminders() {

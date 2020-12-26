@@ -33,7 +33,22 @@ const TempDash = ({ navigation }) => {
         style={{ flex: 15, flexDirection: "row", backgroundColor: "#0000FF" }}
       >
         <View style={{ flex: 2, backgroundColor: "#FFFF00" }}>
-          <Button title="Button3"></Button>
+          <Button
+            title="Button3"
+            onPress={() => {
+              queries.getCategories((categories) => {
+                categories.forEach((cat) => {
+                  if (cat.name == "Missions") {
+                    queries.getRequestsInCategory(cat.tagID, (reqs) => {
+                      reqs.forEach((req) => {
+                        console.log(req.subject);
+                      });
+                    });
+                  }
+                });
+              });
+            }}
+          ></Button>
         </View>
         <View style={{ flex: 2, backgroundColor: "#00FFFF" }}>
           <TouchableOpacity
