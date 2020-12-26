@@ -33,11 +33,7 @@ export function getAllTables() {
 export function getCategories(callback) {
   db.transaction((tx) => {
     tx.executeSql(
-<<<<<<< HEAD
-      "SELECT name, tagID, remind_days, remind_time from categories ORDER BY name;",
-=======
       "SELECT * from categories ORDER BY name;",
->>>>>>> develop
       [],
       (tx, result) => {
         callback(result.rows._array);

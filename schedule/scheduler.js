@@ -42,10 +42,13 @@ export function scheduleNotifs() {
     scheduleForCat(0);
 }
 
+import React, { useEffect, useState } from "react";
+
 function scheduleForCat(catNum) {
     console.log("Gonna get Cats");
     queries.getCategories((results) => {
         cat = results[catNum];
+        console.log(cat);
         console.log("Gonna get requests");
         queries.getRequestsInCategory(cat.tagID, (results, cat) => {
             console.log(cat);
