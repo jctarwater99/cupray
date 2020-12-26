@@ -30,8 +30,13 @@ export function getAllTables() {
   });
 }
 
-export function getCategories(callback) {
-  db.transaction((tx) => {
+export function getCategories(callback, catNum) {
+  db.transaction(getCats2(callback, catNum));
+}
+
+function getCats2(callback, catNum) {
+  return function(tx) {
+    console.log("CatNum2: " + catNum);
     tx.executeSql(
       "SELECT * from categories ORDER BY name;",
       [],
@@ -42,7 +47,7 @@ export function getCategories(callback) {
         console.log("getCategories query failed", result);
       }
     );
-  });
+  }
 }
 
 // Broken? or not populated?

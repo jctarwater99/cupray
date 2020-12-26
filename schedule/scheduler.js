@@ -39,7 +39,7 @@ export function scheduleNotifs() {
     // TODO rewind weights
     console.log("Scheduling");
     Notifications.cancelAllScheduledNotificationsAsync();
-    scheduleForCat(0);
+    scheduleForCat(1);
 }
 
 import React, { useEffect, useState } from "react";
@@ -50,7 +50,7 @@ function scheduleForCat(catNum) {
         cat = results[catNum];
         console.log(cat);
         console.log("Gonna get requests");
-        queries.getRequestsInCategory(cat.tagID, (results, cat) => {
+        queries.getRequestsInCategory(cat.tagID, (results) => {
             console.log(cat);
             /*days = cat.remind_days;
             time = cat.reminder_time.split(":");
@@ -60,5 +60,5 @@ function scheduleForCat(catNum) {
             console.log("Print date");
             console.log(date);*/
         });
-    });
+    }, catNum);
 }
