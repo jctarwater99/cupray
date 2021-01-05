@@ -126,7 +126,7 @@ export function getTagsForRequest(id, callback) {
     tx.executeSql(
       "SELECT DISTINCT tags.name, tags.id FROM tags, request_tags " +
         "ON request_tags.tagID = tags.id " +
-        "WHERE request_tags.requestID = ?;",
+        "WHERE request_tags.requestID = ? ORDER BY name;",
       [id],
       (tx, result) => {
         callback(result.rows._array);

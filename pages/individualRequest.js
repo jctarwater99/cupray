@@ -36,12 +36,14 @@ const ThisRequestScreen = ({ route, navigation }) => {
   let [categories, setCategories] = useState([]);
   let [tags, setTags] = useState([]);
   let [requestTags, setRTags] = useState([]);
+  let [tagStates, setTagStates] = useState([]);
+  let [changedTags, changeTags] = useState([]);
 
   let [inEditMode, setMode] = useState(route.params.isNewReq);
   let [checked, setBoxes] = useState([true, true, false]);
   let [subject, setSubject] = useState("");
   let [description, setDescription] = useState("");
-  let [category, setCategory] = useState(route.params.cat_name); //
+  let [category, setCategory] = useState(route.params.cat_name);
 
   useEffect(() => {
     // Loads request
@@ -66,15 +68,75 @@ const ThisRequestScreen = ({ route, navigation }) => {
       });
       setCategories(dropDownData);
     });
-    queries.getTagsForRequest(route.params.req_id, (results) =>
-      setRTags(results)
-    );
-    queries.getTags((results) => setTags(results));
+    queries.getTagsForRequest(route.params.req_id, (rTags) => {
+      setRTags(rTags);
+      queries.getTags((tags) => {
+        setTags(tags);
+
+        let i = 0;
+        let newTagValues = [];
+        let changeValues = [];
+        for(const tag in tags){
+          if(tags[tag].name == rTags[i].name){
+            if(i != rTags.length - 1){
+              i++; 
+            }
+            newTagValues.push(1);
+          }
+          else newTagValues.push(0);
+          changeValues.push(0);
+        }
+        setTagStates(newTagValues);
+        changeTags(changeValues);
+      });
+    });
   }, []);
+
+  let handleTagPress = (number) => {
+    if(category == tags[number].name){
+      return;
+    }
+
+    let states = [...tagStates]; // can't change states manually, must create deep copy
+    states[number] = !states[number];
+    setTagStates(states);
+
+    // Keep track of which tags changed so we know what to add or delete
+    let changed = [...changedTags];
+    changed[number] = !changed[number];
+    changeTags(changed);
+  };
+
+  let createButton = (name, index) =>{
+    return (
+      <TouchableOpacity 
+      key={index} 
+      onPress={()=>handleTagPress(index)}
+      style={[
+        styles.tagBubble,
+        tagStates[index] ? styles.active : inEditMode ? styles.inactive : styles.hidden,
+      ]}>
+      <Text style={[
+        styles.tagBubbleText,
+        tagStates[index] ? styles.activeText : styles.inactiveText,
+        ]}>{name}</Text>
+      </TouchableOpacity>
+    )
+  }
+
+  let tagButtons = () => {
+    let buttonList = [];
+    let i = 0;
+    for(const tag of tags){
+      buttonList.push(createButton(tag.name, i));
+      i++;
+    }
+    return buttonList;
+  }
 
   let saveChanges = () => {
     // Creating request to pass to the update field
-    req = new Request();
+    let req = new Request();
     req.subject = subject;
     req.description = description;
 
@@ -111,9 +173,6 @@ const ThisRequestScreen = ({ route, navigation }) => {
       updates.updateRequestTag(route.params.req_id, route.params.cat_id, catID);
     }
 
-    // Remove later???
-    navigation.navigate("Cat");
-
     // Queries to Update any tags??
     // Queries to Update categores??
     // Queries to Updadate request tags??
@@ -127,7 +186,10 @@ const ThisRequestScreen = ({ route, navigation }) => {
     // if added
     //  add them to added tags array
     // else
-    //  add then to deleted tags array
+    //  add them to deleted tags array
+
+    // Remove later???
+    navigation.navigate("Cat");
   };
 
   let handleCheckBoxPress = (box) => {
@@ -266,7 +328,13 @@ const ThisRequestScreen = ({ route, navigation }) => {
               </View>
               {/* these are not yet dynamic */}
               <Text style={styles.boxheaders}>Tags</Text>
-              <Text style={styles.subtitle}>Family</Text>
+              <View style={[{ 
+                flexDirection: "row", 
+                alignSelf: "flex-start",
+                flexWrap: "wrap",
+                }]}>
+              {tagButtons()}
+              </View>
 
               <Text style={styles.boxheaders}>Frequency</Text>
               <Text style={styles.subtitle}>Daily</Text>
@@ -332,7 +400,13 @@ const ThisRequestScreen = ({ route, navigation }) => {
                 {makeCheckBox("Box3", checked[2])}
               </View>
               <Text style={styles.boxheaders}>Tags</Text>
-              <Text style={styles.subtitle}>Family</Text>
+              <View style={[{ 
+                flexDirection: "row", 
+                alignSelf: "flex-start",
+                flexWrap: "wrap",
+                }]}>
+              {tagButtons()}
+              </View>
 
               <Text style={styles.boxheaders}>Frequency</Text>
               <Text style={styles.subtitle}>Daily</Text>
@@ -429,6 +503,40 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginTop: height * 0.01,
   },
+
+  tagBubble: {
+    flexDirection: "row",
+    alignSelf: 'flex-start',
+    borderRadius: 5,
+    borderWidth: 2,
+    borderColor: "#D6C396",
+    marginBottom: height * 0.01,
+    marginRight: width * 0.01,
+    
+  },
+
+  tagBubbleText: {
+    color: "#D6C396",
+    fontSize: 15,
+    fontWeight: "700",
+    textAlign: "center",
+    padding: 2,
+  },
+
+  active: {
+    backgroundColor: "#D6C396",
+  },
+  inactive: {
+  },
+  activeText: {
+    color: "#EFEFEF",
+  },
+  inactiveText: {
+    color: "#D6C396",
+  },
+  hidden:{
+    display: "none",
+  }
 });
 
 export default ThisRequestScreen;
