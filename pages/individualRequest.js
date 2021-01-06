@@ -76,14 +76,13 @@ const ThisRequestScreen = ({ route, navigation }) => {
         let i = 0;
         let newTagValues = [];
         let changeValues = [];
-        for(const tag in tags){
-          if(tags[tag].name == rTags[i].name){
-            if(i != rTags.length - 1){
-              i++; 
+        for (const tag in tags) {
+          if (tags[tag].name == rTags[i].name) {
+            if (i != rTags.length - 1) {
+              i++;
             }
             newTagValues.push(1);
-          }
-          else newTagValues.push(0);
+          } else newTagValues.push(0);
           changeValues.push(0);
         }
         setTagStates(newTagValues);
@@ -93,7 +92,7 @@ const ThisRequestScreen = ({ route, navigation }) => {
   }, []);
 
   let handleTagPress = (number) => {
-    if(category == tags[number].name){
+    if (category == tags[number].name) {
       return;
     }
 
@@ -120,19 +119,45 @@ const ThisRequestScreen = ({ route, navigation }) => {
         styles.tagBubbleText,
         tagStates[index] ? styles.activeText : styles.inactiveText,
         ]}>{name}</Text>
-      </TouchableOpacity>
+        </TouchableOpacity>
     )
   }
+
+  let createButton = (name, index) => {
+    return (
+      <TouchableOpacity
+        key={index}
+        onPress={() => handleTagPress(index)}
+        style={[
+          styles.tagBubble,
+          tagStates[index]
+            ? styles.active
+            : inEditMode
+            ? styles.inactive
+            : styles.hidden,
+        ]}
+      >
+        <Text
+          style={[
+            styles.tagBubbleText,
+            tagStates[index] ? styles.activeText : styles.inactiveText,
+          ]}
+        >
+          {name}
+        </Text>
+      </TouchableOpacity>
+    );
+  };
 
   let tagButtons = () => {
     let buttonList = [];
     let i = 0;
-    for(const tag of tags){
+    for (const tag of tags) {
       buttonList.push(createButton(tag.name, i));
       i++;
     }
     return buttonList;
-  }
+  };
 
   let saveChanges = () => {
     // Creating request to pass to the update field
@@ -167,20 +192,13 @@ const ThisRequestScreen = ({ route, navigation }) => {
     });
     // Actuall update part
     if (route.params.isNewReq) {
-      inserts.insertNewRequest(req, catID);
+      inserts.insertNewRequest(req, catID); // Inserts new reqTag as well, had to do it in callback bc needed the insert id or something
     } else {
       updates.updateRequest(route.params.req_id, req);
       updates.updateRequestTag(route.params.req_id, route.params.cat_id, catID);
     }
 
-    // Queries to Update any tags??
-    // Queries to Update categores??
     // Queries to Updadate request tags??
-
-    // if is new request
-    //  add category tag
-    // else
-    //  update category tag
 
     // On change tags,
     // if added
@@ -266,7 +284,25 @@ const ThisRequestScreen = ({ route, navigation }) => {
               textColor="#7E8C96"
               data={categories}
               onChangeText={(text) => {
+                let oldCat = category;
+                let newCat = text;
                 setCategory(text);
+
+                let states = [...tagStates]; // can't change manually, must create deep copy
+                let changed = [...changedTags];
+
+                for (const tag in tags) {
+                  if (tags[tag].name == oldCat) {
+                    states[tag] = !states[tag];
+                    changed[tag] = !changed[tag];
+                  }
+                  if (tags[tag].name == newCat) {
+                    states[tag] = 1;
+                    changed[tag] = !changed[tag];
+                  }
+                }
+                setTagStates(states);
+                changeTags(changed);
               }}
             />
             <TouchableOpacity
@@ -305,14 +341,7 @@ const ThisRequestScreen = ({ route, navigation }) => {
                 />
               </View>
 
-              <Text
-                onPress={() => {
-                  console.log(dropdownCatNames);
-                }}
-                style={styles.boxheaders}
-              >
-                Priority
-              </Text>
+              <Text style={styles.boxheaders}>Priority</Text>
               <View
                 style={{
                   flexDirection: "row",
@@ -328,12 +357,16 @@ const ThisRequestScreen = ({ route, navigation }) => {
               </View>
               {/* these are not yet dynamic */}
               <Text style={styles.boxheaders}>Tags</Text>
-              <View style={[{ 
-                flexDirection: "row", 
-                alignSelf: "flex-start",
-                flexWrap: "wrap",
-                }]}>
-              {tagButtons()}
+              <View
+                style={[
+                  {
+                    flexDirection: "row",
+                    alignSelf: "flex-start",
+                    flexWrap: "wrap",
+                  },
+                ]}
+              >
+                {tagButtons()}
               </View>
 
               <Text style={styles.boxheaders}>Frequency</Text>
@@ -400,12 +433,16 @@ const ThisRequestScreen = ({ route, navigation }) => {
                 {makeCheckBox("Box3", checked[2])}
               </View>
               <Text style={styles.boxheaders}>Tags</Text>
-              <View style={[{ 
-                flexDirection: "row", 
-                alignSelf: "flex-start",
-                flexWrap: "wrap",
-                }]}>
-              {tagButtons()}
+              <View
+                style={[
+                  {
+                    flexDirection: "row",
+                    alignSelf: "flex-start",
+                    flexWrap: "wrap",
+                  },
+                ]}
+              >
+                {tagButtons()}
               </View>
 
               <Text style={styles.boxheaders}>Frequency</Text>
@@ -506,13 +543,12 @@ const styles = StyleSheet.create({
 
   tagBubble: {
     flexDirection: "row",
-    alignSelf: 'flex-start',
+    alignSelf: "flex-start",
     borderRadius: 5,
     borderWidth: 2,
     borderColor: "#D6C396",
     marginBottom: height * 0.01,
     marginRight: width * 0.01,
-    
   },
 
   tagBubbleText: {
@@ -526,17 +562,16 @@ const styles = StyleSheet.create({
   active: {
     backgroundColor: "#D6C396",
   },
-  inactive: {
-  },
+  inactive: {},
   activeText: {
     color: "#EFEFEF",
   },
   inactiveText: {
     color: "#D6C396",
   },
-  hidden:{
+  hidden: {
     display: "none",
-  }
+  },
 });
 
 export default ThisRequestScreen;
