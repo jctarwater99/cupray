@@ -108,7 +108,7 @@ const ThisRequestScreen = ({ route, navigation }) => {
   };
 
   let createButton = (name, index) =>{
-    return (
+    return ( 
       <TouchableOpacity 
       key={index} 
       onPress={()=>handleTagPress(index)}
