@@ -16,6 +16,7 @@ import * as queries from "../database/query";
 import * as updates from "../database/update";
 import * as inserts from "../database/insert";
 import { Category } from "../database/objects";
+import Modal from "react-native-modal";
 import { Dropdown } from "react-native-material-dropdown-v2";
 
 import { LogBox } from "react-native";
@@ -44,6 +45,8 @@ const ThisRequestScreen = ({ route, navigation }) => {
   let [subject, setSubject] = useState("");
   let [description, setDescription] = useState("");
   let [category, setCategory] = useState(route.params.cat_name);
+  let [newTagPopup, toggleNewTagPopup] = useState(false);
+  let [newTag, setNewTag] = useState("");
 
   useEffect(() => {
     // Loads request
@@ -106,23 +109,6 @@ const ThisRequestScreen = ({ route, navigation }) => {
     changeTags(changed);
   };
 
-  let createButton = (name, index) =>{
-    return ( 
-      <TouchableOpacity 
-      key={index} 
-      onPress={()=>handleTagPress(index)}
-      style={[
-        styles.tagBubble,
-        tagStates[index] ? styles.active : inEditMode ? styles.inactive : styles.hidden,
-      ]}>
-      <Text style={[
-        styles.tagBubbleText,
-        tagStates[index] ? styles.activeText : styles.inactiveText,
-        ]}>{name}</Text>
-        </TouchableOpacity>
-    )
-  }
-
   let createButton = (name, index) => {
     return (
       <TouchableOpacity
@@ -149,6 +135,30 @@ const ThisRequestScreen = ({ route, navigation }) => {
     );
   };
 
+  let newTagButton = (name, index) => {
+    return (
+      <TouchableOpacity
+        key={index}
+        onPress={() => toggleNewTagPopup(!newTagPopup)}
+        style={[
+          styles.tagBubble,
+          inEditMode
+          ? styles.inactive
+          : styles.hidden,
+        ]}
+      >
+        <Text
+          style={[
+            styles.tagBubbleText,
+            styles.inactiveText,
+          ]}
+        >
+          {name}
+        </Text>
+      </TouchableOpacity>
+    );
+  }
+
   let tagButtons = () => {
     let buttonList = [];
     let i = 0;
@@ -156,6 +166,7 @@ const ThisRequestScreen = ({ route, navigation }) => {
       buttonList.push(createButton(tag.name, i));
       i++;
     }
+    buttonList.push(newTagButton("New Tag", i));
     return buttonList;
   };
 
@@ -369,6 +380,52 @@ const ThisRequestScreen = ({ route, navigation }) => {
                 {tagButtons()}
               </View>
 
+          <Modal
+          isVisible={newTagPopup}
+          backdropOpacity={0.25}
+          animationInTiming={400}
+          animationOutTiming={800}
+          style={styles.modalContent}
+          onBackdropPress={() => {
+            toggleNewTagPopup(!newTagPopup);
+          }}
+        >
+          <View style={styles.popUpContainer}>
+            <Text style={styles.popUpHeader}>Create New Tag</Text>
+            <TextInput
+              maxLength={15} // max number of chars
+              multiline={true}
+              value={newTag}
+              onFocus={() => ("")}
+              onChange={(text) => setNewTag(text.nativeEvent.text)}
+              style={{
+                backgroundColor: "white",
+                color: "#7E8C96",
+                padding: 8,
+                textAlignVertical: "top",
+                fontWeight: "600",
+                alignSelf: "stretch",
+                textAlign: "center",
+                marginLeft: width * 0.1,
+                marginRight: width * 0.1,
+              }}
+            />
+            <TouchableOpacity
+              style={{ marginLeft: width * 0.6 }}
+              onPress={() => {
+                toggleNewTagPopup(!newTagPopup);
+                //let cat = new Category();
+                // cat.name = newCategory;
+                //  cat.tagID = -1; // filler value
+
+                //refreshPage();
+              }}
+            >
+              <Text style={styles.subtitle}>Save</Text>
+            </TouchableOpacity>
+            </View>
+            </Modal>
+
               <Text style={styles.boxheaders}>Frequency</Text>
               <Text style={styles.subtitle}>Daily</Text>
 
@@ -571,6 +628,38 @@ const styles = StyleSheet.create({
   },
   hidden: {
     display: "none",
+  },
+
+
+  modalContent: {
+    justifyContent: "center",
+    alignItems: "center",
+    margin: 0,
+  },
+
+  popUpContainer: {
+    width: 327,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    padding: height * 0.02,
+    shadowOpacity: 0.27,
+    shadowRadius: 4.65,
+
+    elevation: 6,
+    borderRadius: 20,
+    backgroundColor: "#E8E7E4",
+    alignItems: "center",
+  },
+
+  popUpHeader: {
+    flex: 0,
+    fontSize: 16,
+    color: "#003A63",
+    fontWeight: "700",
+    padding: height * 0.01,
   },
 });
 
