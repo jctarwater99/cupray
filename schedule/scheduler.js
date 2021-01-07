@@ -1,5 +1,6 @@
-import * as queries from "../database/query";
+import * as queries from "../database/passThroughQuery";
 import * as Notifications from 'expo-notifications';
+import React, { useEffect, useState } from "react";
 
 export function scheduleNotificationWait(title, body, wait) {
     Notifications.scheduleNotificationAsync({
@@ -42,11 +43,10 @@ export function scheduleNotifs() {
     scheduleForCat(1);
 }
 
-import React, { useEffect, useState } from "react";
-
 function scheduleForCat(catNum) {
     console.log("Gonna get Cats");
-    queries.getCategories((results) => {
+    queries.getCategories((results, catNum) => {
+        console.log("CatNum: " + catNum);
         cat = results[catNum];
         console.log(cat);
         console.log("Gonna get requests");
