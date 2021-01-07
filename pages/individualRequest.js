@@ -16,6 +16,7 @@ import * as queries from "../database/query";
 import * as updates from "../database/update";
 import * as inserts from "../database/insert";
 import { Category } from "../database/objects";
+import Modal from "react-native-modal";
 import { Dropdown } from "react-native-material-dropdown-v2";
 
 import { LogBox } from "react-native";
@@ -36,12 +37,16 @@ const ThisRequestScreen = ({ route, navigation }) => {
   let [categories, setCategories] = useState([]);
   let [tags, setTags] = useState([]);
   let [requestTags, setRTags] = useState([]);
+  let [tagStates, setTagStates] = useState([]);
+  let [changedTags, changeTags] = useState([]);
 
   let [inEditMode, setMode] = useState(route.params.isNewReq);
   let [checked, setBoxes] = useState([true, true, false]);
   let [subject, setSubject] = useState("");
   let [description, setDescription] = useState("");
-  let [category, setCategory] = useState(route.params.cat_name); //
+  let [category, setCategory] = useState(route.params.cat_name);
+  let [newTagPopup, toggleNewTagPopup] = useState(false);
+  let [newTag, setNewTag] = useState("");
 
   useEffect(() => {
     // Loads request
@@ -66,15 +71,108 @@ const ThisRequestScreen = ({ route, navigation }) => {
       });
       setCategories(dropDownData);
     });
-    queries.getTagsForRequest(route.params.req_id, (results) =>
-      setRTags(results)
-    );
-    queries.getTags((results) => setTags(results));
+    queries.getTagsForRequest(route.params.req_id, (rTags) => {
+      setRTags(rTags);
+      queries.getTags((tags) => {
+        setTags(tags);
+
+        let i = 0;
+        let newTagValues = [];
+        let changeValues = [];
+        for (const tag in tags) {
+          if (tags[tag].name == rTags[i].name) {
+            if (i != rTags.length - 1) {
+              i++;
+            }
+            newTagValues.push(1);
+          } else newTagValues.push(0);
+          changeValues.push(0);
+        }
+        setTagStates(newTagValues);
+        changeTags(changeValues);
+      });
+    });
   }, []);
+
+  let handleTagPress = (number) => {
+    if (category == tags[number].name) {
+      return;
+    }
+
+    let states = [...tagStates]; // can't change states manually, must create deep copy
+    states[number] = !states[number];
+    setTagStates(states);
+
+    // Keep track of which tags changed so we know what to add or delete
+    let changed = [...changedTags];
+    changed[number] = !changed[number];
+    changeTags(changed);
+  };
+
+  let createButton = (name, index) => {
+    return (
+      <TouchableOpacity
+        key={index}
+        onPress={() => handleTagPress(index)}
+        style={[
+          styles.tagBubble,
+          tagStates[index]
+            ? styles.active
+            : inEditMode
+            ? styles.inactive
+            : styles.hidden,
+        ]}
+      >
+        <Text
+          style={[
+            styles.tagBubbleText,
+            tagStates[index] ? styles.activeText : styles.inactiveText,
+          ]}
+        >
+          {name}
+        </Text>
+      </TouchableOpacity>
+    );
+  };
+
+  let newTagButton = (name, index) => {
+    return (
+      <TouchableOpacity
+        key={index}
+        onPress={() => toggleNewTagPopup(!newTagPopup)}
+        style={[
+          styles.tagBubble,
+          inEditMode
+          ? styles.inactive
+          : styles.hidden,
+        ]}
+      >
+        <Text
+          style={[
+            styles.tagBubbleText,
+            styles.inactiveText,
+          ]}
+        >
+          {name}
+        </Text>
+      </TouchableOpacity>
+    );
+  }
+
+  let tagButtons = () => {
+    let buttonList = [];
+    let i = 0;
+    for (const tag of tags) {
+      buttonList.push(createButton(tag.name, i));
+      i++;
+    }
+    buttonList.push(newTagButton("New Tag", i));
+    return buttonList;
+  };
 
   let saveChanges = () => {
     // Creating request to pass to the update field
-    req = new Request();
+    let req = new Request();
     req.subject = subject;
     req.description = description;
 
@@ -105,29 +203,22 @@ const ThisRequestScreen = ({ route, navigation }) => {
     });
     // Actuall update part
     if (route.params.isNewReq) {
-      inserts.insertNewRequest(req, catID);
+      inserts.insertNewRequest(req, catID); // Inserts new reqTag as well, had to do it in callback bc needed the insert id or something
     } else {
       updates.updateRequest(route.params.req_id, req);
       updates.updateRequestTag(route.params.req_id, route.params.cat_id, catID);
     }
 
-    // Remove later???
-    navigation.navigate("Cat");
-
-    // Queries to Update any tags??
-    // Queries to Update categores??
     // Queries to Updadate request tags??
-
-    // if is new request
-    //  add category tag
-    // else
-    //  update category tag
 
     // On change tags,
     // if added
     //  add them to added tags array
     // else
-    //  add then to deleted tags array
+    //  add them to deleted tags array
+
+    // Remove later???
+    navigation.navigate("Cat");
   };
 
   let handleCheckBoxPress = (box) => {
@@ -204,7 +295,25 @@ const ThisRequestScreen = ({ route, navigation }) => {
               textColor="#7E8C96"
               data={categories}
               onChangeText={(text) => {
+                let oldCat = category;
+                let newCat = text;
                 setCategory(text);
+
+                let states = [...tagStates]; // can't change manually, must create deep copy
+                let changed = [...changedTags];
+
+                for (const tag in tags) {
+                  if (tags[tag].name == oldCat) {
+                    states[tag] = !states[tag];
+                    changed[tag] = !changed[tag];
+                  }
+                  if (tags[tag].name == newCat) {
+                    states[tag] = 1;
+                    changed[tag] = !changed[tag];
+                  }
+                }
+                setTagStates(states);
+                changeTags(changed);
               }}
             />
             <TouchableOpacity
@@ -243,14 +352,7 @@ const ThisRequestScreen = ({ route, navigation }) => {
                 />
               </View>
 
-              <Text
-                onPress={() => {
-                  console.log(dropdownCatNames);
-                }}
-                style={styles.boxheaders}
-              >
-                Priority
-              </Text>
+              <Text style={styles.boxheaders}>Priority</Text>
               <View
                 style={{
                   flexDirection: "row",
@@ -266,7 +368,63 @@ const ThisRequestScreen = ({ route, navigation }) => {
               </View>
               {/* these are not yet dynamic */}
               <Text style={styles.boxheaders}>Tags</Text>
-              <Text style={styles.subtitle}>Family</Text>
+              <View
+                style={[
+                  {
+                    flexDirection: "row",
+                    alignSelf: "flex-start",
+                    flexWrap: "wrap",
+                  },
+                ]}
+              >
+                {tagButtons()}
+              </View>
+
+          <Modal
+          isVisible={newTagPopup}
+          backdropOpacity={0.25}
+          animationInTiming={400}
+          animationOutTiming={800}
+          style={styles.modalContent}
+          onBackdropPress={() => {
+            toggleNewTagPopup(!newTagPopup);
+          }}
+        >
+          <View style={styles.popUpContainer}>
+            <Text style={styles.popUpHeader}>Create New Tag</Text>
+            <TextInput
+              maxLength={15} // max number of chars
+              multiline={true}
+              value={newTag}
+              onFocus={() => ("")}
+              onChange={(text) => setNewTag(text.nativeEvent.text)}
+              style={{
+                backgroundColor: "white",
+                color: "#7E8C96",
+                padding: 8,
+                textAlignVertical: "top",
+                fontWeight: "600",
+                alignSelf: "stretch",
+                textAlign: "center",
+                marginLeft: width * 0.1,
+                marginRight: width * 0.1,
+              }}
+            />
+            <TouchableOpacity
+              style={{ marginLeft: width * 0.6 }}
+              onPress={() => {
+                toggleNewTagPopup(!newTagPopup);
+                //let cat = new Category();
+                // cat.name = newCategory;
+                //  cat.tagID = -1; // filler value
+
+                //refreshPage();
+              }}
+            >
+              <Text style={styles.subtitle}>Save</Text>
+            </TouchableOpacity>
+            </View>
+            </Modal>
 
               <Text style={styles.boxheaders}>Frequency</Text>
               <Text style={styles.subtitle}>Daily</Text>
@@ -332,7 +490,17 @@ const ThisRequestScreen = ({ route, navigation }) => {
                 {makeCheckBox("Box3", checked[2])}
               </View>
               <Text style={styles.boxheaders}>Tags</Text>
-              <Text style={styles.subtitle}>Family</Text>
+              <View
+                style={[
+                  {
+                    flexDirection: "row",
+                    alignSelf: "flex-start",
+                    flexWrap: "wrap",
+                  },
+                ]}
+              >
+                {tagButtons()}
+              </View>
 
               <Text style={styles.boxheaders}>Frequency</Text>
               <Text style={styles.subtitle}>Daily</Text>
@@ -428,6 +596,70 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     textAlign: "center",
     marginTop: height * 0.01,
+  },
+
+  tagBubble: {
+    flexDirection: "row",
+    alignSelf: "flex-start",
+    borderRadius: 5,
+    borderWidth: 2,
+    borderColor: "#D6C396",
+    marginBottom: height * 0.01,
+    marginRight: width * 0.01,
+  },
+
+  tagBubbleText: {
+    color: "#D6C396",
+    fontSize: 15,
+    fontWeight: "700",
+    textAlign: "center",
+    padding: 2,
+  },
+
+  active: {
+    backgroundColor: "#D6C396",
+  },
+  inactive: {},
+  activeText: {
+    color: "#EFEFEF",
+  },
+  inactiveText: {
+    color: "#D6C396",
+  },
+  hidden: {
+    display: "none",
+  },
+
+
+  modalContent: {
+    justifyContent: "center",
+    alignItems: "center",
+    margin: 0,
+  },
+
+  popUpContainer: {
+    width: 327,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    padding: height * 0.02,
+    shadowOpacity: 0.27,
+    shadowRadius: 4.65,
+
+    elevation: 6,
+    borderRadius: 20,
+    backgroundColor: "#E8E7E4",
+    alignItems: "center",
+  },
+
+  popUpHeader: {
+    flex: 0,
+    fontSize: 16,
+    color: "#003A63",
+    fontWeight: "700",
+    padding: height * 0.01,
   },
 });
 

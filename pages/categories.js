@@ -23,7 +23,7 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 var { height, width } = Dimensions.get("window");
 
 const CategoriesScreen = ({ navigation }) => {
-  let [timePickerVisibility, setTimePickerVisibility] = useState(false);
+  let [timePickerVisible, setTimePickerVisibility] = useState(false);
   let [categories, setCategories] = useState([]);
   let [newCategory, setNewCategory] = useState("");
   let [createPopupVisible, toggleCreatePopupVisibility] = useState(false);
@@ -101,7 +101,7 @@ const CategoriesScreen = ({ navigation }) => {
   })();
   let timePicker = Platform.select({
     ios: () => {
-      if (timePickerVisibility) {
+      if (timePickerVisible) {
         return (
           <DateTimePicker
             value={selectedTime} // this value needs to be read from database
@@ -115,7 +115,7 @@ const CategoriesScreen = ({ navigation }) => {
       }
     },
     android: () => {
-      if (timePickerVisibility) {
+      if (timePickerVisible) {
         return (
           <DateTimePicker
             value={selectedTime}
@@ -132,10 +132,10 @@ const CategoriesScreen = ({ navigation }) => {
   })();
 
   const handleChangeTime = (event, selectedDate) => {
-    const currentDate = selectedDate || selectedTime;
+    const newDate = selectedDate || selectedTime;
     setTimePickerVisibility(Platform.OS === "ios"); // This is pretty creative, I like it :)
-    setSelectedTime(currentDate);
-    parseTime(currentDate, setDisplayTime);
+    setSelectedTime(newDate);
+    parseTime(newDate, setDisplayTime);
   };
 
   let parseTime = (date, callback) => {
