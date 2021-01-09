@@ -52,6 +52,7 @@ export function insertTag(tag) {
     );
   });
 }
+
 export function insertRequestTag(requestTag) {
   db.transaction((tx) => {
     tx.executeSql(
@@ -64,6 +65,7 @@ export function insertRequestTag(requestTag) {
     );
   });
 }
+
 export function insertReminder(reminder) {
   db.transaction((tx) => {
     tx.executeSql(
@@ -94,7 +96,7 @@ export function insertCategory(category) {
   });
 }
 
-export function insertNewRequest(request, catID) {
+export function insertNewRequest(request, callback) {
   db.transaction((tx) => {
     tx.executeSql(
       "INSERT INTO requests(subject, description, create_time," +
@@ -112,8 +114,7 @@ export function insertNewRequest(request, catID) {
         request.weight,
         request.priority,
       ],
-      (tx, result) =>
-        insertRequestTag({ requestID: result.insertId, tagID: catID }),
+      (tx, result) => callback(result.insertId),
       (tx, result) => {
         console.log("Inserting request failed", result);
       }

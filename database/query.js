@@ -67,12 +67,12 @@ export function getRequestsInCategory(categoryId, callback) {
       "SELECT DISTINCT requests.subject, requests.id FROM requests " +
         "INNER JOIN request_tags as RT ON RT.requestID = requests.id " +
         "INNER JOIN tags ON RT.tagID = tags.id " +
-        "WHERE tags.id = ?; " +
+        "WHERE tags.id = ? ORDER BY requests.subject; " +
         "EXCEPT " +
         "SELECT requests.subject, requests.id FROM requests " +
         "INNER JOIN request_tags as RT ON RT.requestID = requests.id " +
         "INNER JOIN tags ON RT.tagID = tags.id " +
-        "tags.name = 'expired';",
+        "tags.name = 'expired'; ",
       [categoryId],
       (tx, result) => {
         callback(result.rows._array);
@@ -149,6 +149,21 @@ export function getDailyRequests(callback) {
       },
       (tx, result) => {
         console.log("getDailyRequests query failed", result);
+      }
+    );
+  });
+}
+
+export function getNewReqId(callback) {
+  db.transaction((tx) => {
+    tx.executeSql(
+      "SELECT id FROM requests ORDER BY id DESC LIMIT 1;",
+      [],
+      (tx, result) => {
+        callback(result.rows._array[0].id);
+      },
+      (tx, result) => {
+        console.log("Get 'New Request' id query failed", result);
       }
     );
   });

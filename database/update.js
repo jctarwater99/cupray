@@ -185,3 +185,16 @@ export function rollbackNotificationWeight() {
     );
   });
 }
+
+export function deleteRequestTag(requestTag) {
+  db.transaction((tx) => {
+    tx.executeSql(
+      "DELETE FROM request_tags WHERE requestID = ? AND tagID = ?",
+      [requestTag.requestID, requestTag.tagID],
+      (tx, result) => console.log("Delete success", result), //() => void 0,
+      (tx, result) => {
+        console.log("Deleting tag failed", result);
+      }
+    );
+  });
+}

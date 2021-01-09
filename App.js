@@ -34,17 +34,11 @@ const App = () => {
         {<Stack.Screen name="Dash" component={Dashboard} />}
         {<Stack.Screen name="Cat" component={CategoriesScreen} />}
         {<Stack.Screen name="Requests" component={RequestsScreen} />}
-        {<Stack.Screen name="TempDash" component={TempDash} /> }
-        {<Stack.Screen name="Pray" component={ScheduledPrayers} /> }
-       {/*  {
+        {<Stack.Screen name="TempDash" component={TempDash} />}
+        {<Stack.Screen name="Pray" component={ScheduledPrayers} />}
+        {
           <Stack.Screen
-            name="RefactorRequest"
-            component={RefactorRequestScreen}
-          />
-        } */}
-         {
-          <Stack.Screen
-            name="ThisRequest"
+            name="IndividualRequest"
             component={ThisRequestScreen}
           />
         }

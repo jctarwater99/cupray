@@ -15,7 +15,7 @@ import { CheckBox } from "react-native-elements";
 import * as queries from "../database/query";
 import * as updates from "../database/update";
 import * as inserts from "../database/insert";
-import { Category } from "../database/objects";
+import { Category, Tag } from "../database/objects";
 import Modal from "react-native-modal";
 import { Dropdown } from "react-native-material-dropdown-v2";
 
@@ -80,7 +80,7 @@ const ThisRequestScreen = ({ route, navigation }) => {
         let newTagValues = [];
         let changeValues = [];
         for (const tag in tags) {
-          if (tags[tag].name == rTags[i].name) {
+          if (rTags.length > 0 && tags[tag].name == rTags[i].name) {
             if (i != rTags.length - 1) {
               i++;
             }
@@ -93,6 +93,14 @@ const ThisRequestScreen = ({ route, navigation }) => {
       });
     });
   }, []);
+
+  let refreshPage = () => {
+    setTimeout(() => {
+      queries.getTags((tags) => {
+        setTags(tags);
+      });
+    }, 200);
+  };
 
   let handleTagPress = (number) => {
     if (category == tags[number].name) {
@@ -140,24 +148,12 @@ const ThisRequestScreen = ({ route, navigation }) => {
       <TouchableOpacity
         key={index}
         onPress={() => toggleNewTagPopup(!newTagPopup)}
-        style={[
-          styles.tagBubble,
-          inEditMode
-          ? styles.inactive
-          : styles.hidden,
-        ]}
+        style={[styles.tagBubble, inEditMode ? styles.inactive : styles.hidden]}
       >
-        <Text
-          style={[
-            styles.tagBubbleText,
-            styles.inactiveText,
-          ]}
-        >
-          {name}
-        </Text>
+        <Text style={[styles.tagBubbleText, styles.inactiveText]}>{name}</Text>
       </TouchableOpacity>
     );
-  }
+  };
 
   let tagButtons = () => {
     let buttonList = [];
@@ -195,27 +191,35 @@ const ThisRequestScreen = ({ route, navigation }) => {
       return;
     }
 
+    // TODO: Double check that these 6 lines are unneeded, then delete
     let catID = -1;
     categories.forEach((element) => {
       if (element.value == category) {
         catID = element.id;
       }
     });
+
     // Actuall update part
-    if (route.params.isNewReq) {
-      inserts.insertNewRequest(req, catID); // Inserts new reqTag as well, had to do it in callback bc needed the insert id or something
-    } else {
-      updates.updateRequest(route.params.req_id, req);
-      updates.updateRequestTag(route.params.req_id, route.params.cat_id, catID);
+    updates.updateRequest(route.params.req_id, req);
+
+    for (const tag in changedTags) {
+      if (changedTags[tag] == 1 && tagStates[tag] == 1) {
+        inserts.insertRequestTag({
+          requestID: route.params.req_id,
+          tagID: tags[tag].id,
+        });
+      } else if (changedTags[tag] == 1) {
+        updates.deleteRequestTag({
+          requestID: route.params.req_id,
+          tagID: tags[tag].id,
+        });
+      }
     }
 
-    // Queries to Updadate request tags??
-
-    // On change tags,
-    // if added
-    //  add them to added tags array
-    // else
-    //  add them to deleted tags array
+    if (route.params.isNewReq) {
+      // Create New "New Request"
+      inserts.insertRequest({ subject: "Subject", description: "Description" });
+    }
 
     // Remove later???
     navigation.navigate("Cat");
@@ -380,51 +384,50 @@ const ThisRequestScreen = ({ route, navigation }) => {
                 {tagButtons()}
               </View>
 
-          <Modal
-          isVisible={newTagPopup}
-          backdropOpacity={0.25}
-          animationInTiming={400}
-          animationOutTiming={800}
-          style={styles.modalContent}
-          onBackdropPress={() => {
-            toggleNewTagPopup(!newTagPopup);
-          }}
-        >
-          <View style={styles.popUpContainer}>
-            <Text style={styles.popUpHeader}>Create New Tag</Text>
-            <TextInput
-              maxLength={15} // max number of chars
-              multiline={true}
-              value={newTag}
-              onFocus={() => ("")}
-              onChange={(text) => setNewTag(text.nativeEvent.text)}
-              style={{
-                backgroundColor: "white",
-                color: "#7E8C96",
-                padding: 8,
-                textAlignVertical: "top",
-                fontWeight: "600",
-                alignSelf: "stretch",
-                textAlign: "center",
-                marginLeft: width * 0.1,
-                marginRight: width * 0.1,
-              }}
-            />
-            <TouchableOpacity
-              style={{ marginLeft: width * 0.6 }}
-              onPress={() => {
-                toggleNewTagPopup(!newTagPopup);
-                //let cat = new Category();
-                // cat.name = newCategory;
-                //  cat.tagID = -1; // filler value
-
-                //refreshPage();
-              }}
-            >
-              <Text style={styles.subtitle}>Save</Text>
-            </TouchableOpacity>
-            </View>
-            </Modal>
+              <Modal
+                isVisible={newTagPopup}
+                backdropOpacity={0.25}
+                animationInTiming={400}
+                animationOutTiming={800}
+                style={styles.modalContent}
+                onBackdropPress={() => {
+                  toggleNewTagPopup(!newTagPopup);
+                }}
+              >
+                <View style={styles.popUpContainer}>
+                  <Text style={styles.popUpHeader}>Create New Tag</Text>
+                  <TextInput
+                    maxLength={15} // max number of chars
+                    multiline={true}
+                    value={newTag}
+                    onFocus={() => ""}
+                    onChange={(text) => setNewTag(text.nativeEvent.text)}
+                    style={{
+                      backgroundColor: "white",
+                      color: "#7E8C96",
+                      padding: 8,
+                      textAlignVertical: "top",
+                      fontWeight: "600",
+                      alignSelf: "stretch",
+                      textAlign: "center",
+                      marginLeft: width * 0.1,
+                      marginRight: width * 0.1,
+                    }}
+                  />
+                  <TouchableOpacity
+                    style={{ marginLeft: width * 0.6 }}
+                    onPress={() => {
+                      toggleNewTagPopup(!newTagPopup);
+                      let tag = new Tag();
+                      tag.name = newTag;
+                      inserts.insertTag(tag);
+                      refreshPage();
+                    }}
+                  >
+                    <Text style={styles.subtitle}>Save</Text>
+                  </TouchableOpacity>
+                </View>
+              </Modal>
 
               <Text style={styles.boxheaders}>Frequency</Text>
               <Text style={styles.subtitle}>Daily</Text>
@@ -629,7 +632,6 @@ const styles = StyleSheet.create({
   hidden: {
     display: "none",
   },
-
 
   modalContent: {
     justifyContent: "center",

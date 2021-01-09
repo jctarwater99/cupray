@@ -40,8 +40,8 @@ export function populateDBwithRequests() {
 
   // 1
   request = new Request();
-  request.subject = "Subject";
-  request.description = "Description";
+  request.subject = "Old Subject";
+  request.description = "Old Description";
   request.create_time = "";
   request.expire_time = "";
   request.remind_freq = 0;
@@ -228,6 +228,11 @@ export function populateDBwithRequests() {
     "I know that I am not always patient with others. I know that I should be because it is more " +
     "loving and because it is a fruit of the spirit. Please forgive me for when I am short with people and " +
     "help me to learn the character traits that you display towards us.";
+  addReq(sub, desc, 1);
+
+  sub = "Subject";
+  desc = "Description";
+  addReq(sub, desc, 1);
 
   requests.forEach((element) => {
     db_insert.insertRequest(element);

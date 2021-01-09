@@ -22,18 +22,20 @@ const RequestsScreen = ({ route, navigation }) => {
   let [requests, setRequests] = useState([]);
   let [deletePopupVisible, toggleDeletePopupVisibility] = useState(false);
   let [requestID, setRequestID] = useState(-1);
+  let [newReqId, setNewReqId] = useState(0);
 
   useEffect(() => {
     queries.getRequestsInCategory(route.params.cat_id, (results) =>
       setRequests(results)
     );
+    queries.getNewReqId(setNewReqId);
   }, []);
 
   let refreshPage = () => {
     setTimeout(() => {
       queries.getRequestsInCategory(route.params.cat_id, (results) =>
-      setRequests(results)
-    );
+        setRequests(results)
+      );
     }, 150);
   };
 
@@ -44,21 +46,21 @@ const RequestsScreen = ({ route, navigation }) => {
         style={styles.requestContainer}
         // Navigate @ Request, need isNew??
         onPress={() => {
-          navigation.navigate("ThisRequest", {
+          navigation.navigate("IndividualRequest", {
             cat_id: route.params.cat_id,
             cat_name: route.params.cat_name,
             req_id: request.id,
             isNewReq: false,
           });
         }}
-        onLongPress={()=>{
+        onLongPress={() => {
           setRequestID(request.id);
           toggleDeletePopupVisibility(!deletePopupVisible);
         }}
       >
         <View style={styles.circle} />
         <Text style={styles.requestTitles}>{request.subject}</Text>
-        <View style={{ flex: 1}}></View>
+        <View style={{ flex: 1 }}></View>
         <View>
           <Text style={styles.requestArrow}>{"➤"}</Text>
         </View>
@@ -82,10 +84,10 @@ const RequestsScreen = ({ route, navigation }) => {
           <View style={styles.addReq}>
             <TouchableOpacity
               onPress={() => {
-                navigation.navigate("ThisRequest", {
+                navigation.navigate("IndividualRequest", {
                   cat_id: 1,
                   cat_name: route.params.cat_name,
-                  req_id: 1,
+                  req_id: newReqId,
                   isNewReq: true,
                 });
               }}
@@ -102,67 +104,72 @@ const RequestsScreen = ({ route, navigation }) => {
       </View>
 
       <Modal
-          isVisible={deletePopupVisible}
-          backdropOpacity={0.25}
-          animationInTiming={400}
-          animationOutTiming={800}
-          onBackdropPress={() => {toggleDeletePopupVisibility(!deletePopupVisible)}}
-        >
-          <View style={styles.popUpContainer}>
-            <View>
-              
-            <Text style={[styles.popUpHeader,{marginBottom: height * 0.04}]}>Delete Request?</Text>
-            </View>
-            <View
-              style={{
-                flexDirection: "row",
-                position: "absolute",
-                bottom: height * 0.03,
+        isVisible={deletePopupVisible}
+        backdropOpacity={0.25}
+        animationInTiming={400}
+        animationOutTiming={800}
+        onBackdropPress={() => {
+          toggleDeletePopupVisibility(!deletePopupVisible);
+        }}
+      >
+        <View style={styles.popUpContainer}>
+          <View>
+            <Text style={[styles.popUpHeader, { marginBottom: height * 0.04 }]}>
+              Delete Request?
+            </Text>
+          </View>
+          <View
+            style={{
+              flexDirection: "row",
+              position: "absolute",
+              bottom: height * 0.03,
+            }}
+          >
+            <TouchableOpacity
+              style={{ width: width * 0.6 }}
+              onPress={() => {
+                // Provide warning
+                Alert.alert(
+                  "Warning",
+                  "Are you sure you want to delete this prayer request?",
+                  [
+                    {
+                      text: "Delete",
+                      onPress: () => {
+                        updates.deleteRequestTags(requestID);
+                        toggleDeletePopupVisibility(!deletePopupVisible);
+                        refreshPage();
+                      },
+                    },
+                    {
+                      text: "Cancel",
+                      style: "cancel",
+                      onPress: () => {
+                        toggleDeletePopupVisibility(!deletePopupVisible);
+                      },
+                    },
+                  ]
+                );
               }}
             >
-              <TouchableOpacity
-                style={{ width: width * 0.6 }}
-                onPress={() => {
-                  // Provide warning
-                  Alert.alert(
-                    "Warning", 
-                    "Are you sure you want to delete this prayer request?",
-                    [
-                      {       
-                        text: "Delete",
-                        onPress: () => { 
-                          updates.deleteRequestTags(requestID);
-                          toggleDeletePopupVisibility(!deletePopupVisible);
-                          refreshPage();
-                        }
-                       },
-                       {
-                         text: "Cancel",
-                         style: "cancel",
-                         onPress: ()=> { toggleDeletePopupVisibility(!deletePopupVisible)}
-                       }
-                    ] );                  
-                }}
-              >
-                <Text style={styles.plusSign}>Delete</Text>
-              </TouchableOpacity>
+              <Text style={styles.plusSign}>Delete</Text>
+            </TouchableOpacity>
 
-              <TouchableOpacity
-                // This is the save button for the edit page?
-                style={{ width: width * 0.58 }}
-                onPress={() => {
-                  /* updates.editCategory(selectedCatName, selectedCatID);
+            <TouchableOpacity
+              // This is the save button for the edit page?
+              style={{ width: width * 0.58 }}
+              onPress={() => {
+                /* updates.editCategory(selectedCatName, selectedCatID);
                   updates.editTag(selectedCatName, selectedCatID); */
-                  toggleDeletePopupVisibility(!deletePopupVisible);
-                  refreshPage();
-                }}
-              >
-                <Text style={styles.plusSign}>Cancel</Text>
-              </TouchableOpacity>
-            </View>
+                toggleDeletePopupVisibility(!deletePopupVisible);
+                refreshPage();
+              }}
+            >
+              <Text style={styles.plusSign}>Cancel</Text>
+            </TouchableOpacity>
           </View>
-        </Modal>
-        
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 };
