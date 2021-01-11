@@ -18,6 +18,8 @@ import * as inserts from "../database/insert";
 import { Category, Tag } from "../database/objects";
 import Modal from "react-native-modal";
 import { Dropdown } from "react-native-material-dropdown-v2";
+import DateTimePicker from "@react-native-community/datetimepicker";
+
 
 import { LogBox } from "react-native";
 
@@ -39,6 +41,9 @@ const ThisRequestScreen = ({ route, navigation }) => {
   let [requestTags, setRTags] = useState([]);
   let [tagStates, setTagStates] = useState([]);
   let [changedTags, changeTags] = useState([]);
+  let [expireTime, setExpireTime] = useState("");
+  let [selectedDate, setSelectedDate] = useState("");
+  let [displayDate, setDisplayDate] = useState("");
 
   let [inEditMode, setMode] = useState(route.params.isNewReq);
   let [checked, setBoxes] = useState([true, true, false]);
@@ -46,6 +51,7 @@ const ThisRequestScreen = ({ route, navigation }) => {
   let [description, setDescription] = useState("");
   let [category, setCategory] = useState(route.params.cat_name);
   let [newTagPopup, toggleNewTagPopup] = useState(false);
+  let [datePickerVisible, setDatePickerVisibility] = useState(false);
   let [newTag, setNewTag] = useState("");
 
   useEffect(() => {
@@ -54,6 +60,13 @@ const ThisRequestScreen = ({ route, navigation }) => {
       setRequest(results);
       setDescription(results.description);
       setSubject(results.subject);
+
+      let date = new Date();
+      if(!route.params.isNewReq){
+        date = new Date(results.expire_time);
+      }
+      parseDate(date, setDisplayDate);
+      setSelectedDate(date);
 
       let state = [true, true, false];
       if (results.priority == 2) {
@@ -92,6 +105,9 @@ const ThisRequestScreen = ({ route, navigation }) => {
         changeTags(changeValues);
       });
     });
+    if (Platform.OS == "ios") {
+      setDatePickerVisibility(true);
+    }
   }, []);
 
   let refreshPage = () => {
@@ -172,7 +188,7 @@ const ThisRequestScreen = ({ route, navigation }) => {
     req.subject = subject;
     req.description = description;
 
-    req.expire_time = request.expire_time;
+    req.expire_time = String(selectedDate);
     req.remind_freq = request.remind_freq;
     req.remind_days = request.remind_days;
     req.remind_time = request.remind_time;
@@ -257,6 +273,78 @@ const ThisRequestScreen = ({ route, navigation }) => {
         uncheckedColor={"#D6C396"}
       ></CheckBox>
     );
+  };
+
+  let datePickerButton = Platform.select({
+    ios: () => {
+      return (
+        <TouchableOpacity
+          onPress={() => {
+            setDatePickerVisibility(true);
+          }}
+          style={{ width: 250 }}
+        ></TouchableOpacity>
+      );
+    },
+    android: () => {
+      return (
+        <TouchableOpacity
+          onPress={() => {
+            setDatePickerVisibility(true);
+          }}
+          style={[styles.androidTimeButton, { marginBottom: height * 0.06 }]}
+        >
+          <Text style={styles.androidTimeHeader}>{displayDate}</Text>
+        </TouchableOpacity>
+      );
+    },
+  })();
+  let datePicker = Platform.select({
+    ios: () => {
+      if (datePickerVisible) {
+        return (
+          <DateTimePicker
+            value={selectedDate} // this value needs to be read from database
+            mode={"date"}
+            display="default"
+            onChange={(event, date) => {
+              handleChangeDate(event, date);
+            }}
+          />
+        );
+      }
+    },
+    android: () => {
+      if (datePickerVisible) {
+        return (
+          <DateTimePicker
+            value={selectedDate}
+            mode={"date"}
+            is24Hour={false}
+            display="default"
+            onChange={(event, date) => {
+              handleChangeDate(event, date);
+            }}
+          />
+        );
+      }
+    },
+  })();
+
+  const handleChangeDate = (event, selectedDate) => {
+    const newDate = selectedDate || selectedTime;
+    setDatePickerVisibility(Platform.OS === "ios"); // This is pretty creative, I like it :)
+    setSelectedDate(newDate);
+    parseDate(newDate, setDisplayDate);
+  };
+
+  let parseDate = (date, callback) => {
+    let day = String(date).split(" ")[2];
+    let month = date.getMonth() + 1; // Months are 0 indexed
+    let year = date.getFullYear(); // 2021 returns 121 instead if we call getYear??
+
+    let parsedDate = month.toString() + "/" + day.toString() + "/" + year.toString();
+    callback(parsedDate);
   };
 
   if (inEditMode) {
@@ -414,8 +502,16 @@ const ThisRequestScreen = ({ route, navigation }) => {
                       marginRight: width * 0.1,
                     }}
                   />
+                  <View style = {[{flexDirection: "row"}]}>
                   <TouchableOpacity
-                    style={{ marginLeft: width * 0.6 }}
+                onPress={() => {
+                  toggleNewTagPopup(!newTagPopup);
+                      } }
+                    >
+                <Text style={styles.popUpHeader}>Cancel</Text>
+              </TouchableOpacity>
+                  <TouchableOpacity
+                    style={{ marginLeft: width * 0.45 }}
                     onPress={() => {
                       toggleNewTagPopup(!newTagPopup);
                       let tag = new Tag();
@@ -424,8 +520,9 @@ const ThisRequestScreen = ({ route, navigation }) => {
                       refreshPage();
                     }}
                   >
-                    <Text style={styles.subtitle}>Save</Text>
+                    <Text style={styles.popUpHeader}>Save</Text>
                   </TouchableOpacity>
+                  </View>
                 </View>
               </Modal>
 
@@ -433,7 +530,12 @@ const ThisRequestScreen = ({ route, navigation }) => {
               <Text style={styles.subtitle}>Daily</Text>
 
               <Text style={styles.boxheaders}>Reminder Expiration</Text>
-              <Text style={styles.subtitle}>11/24/2020</Text>
+              
+              <View>
+              {datePickerButton}
+              {datePicker}
+            </View>
+
             </View>
           </ScrollView>
         </View>
@@ -509,7 +611,7 @@ const ThisRequestScreen = ({ route, navigation }) => {
               <Text style={styles.subtitle}>Daily</Text>
 
               <Text style={styles.boxheaders}>Reminder Expiration</Text>
-              <Text style={styles.subtitle}>11/24/2020</Text>
+              <Text style={styles.subtitle}>{displayDate}</Text>
             </View>
           </ScrollView>
         </View>
@@ -662,6 +764,20 @@ const styles = StyleSheet.create({
     color: "#003A63",
     fontWeight: "700",
     padding: height * 0.01,
+  },
+
+  androidTimeHeader: {
+    flex: 0,
+    fontSize: 16,
+    color: "#E8E7E4",
+    fontWeight: "700",
+    padding: height * 0.008,
+  },
+
+  androidTimeButton: {
+    borderRadius: 6,
+    backgroundColor: "#D6C396",
+    padding: 3,
   },
 });
 

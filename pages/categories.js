@@ -142,7 +142,6 @@ const CategoriesScreen = ({ navigation }) => {
     let parsedTime = "";
     let hours = date.getHours();
     let minutes = date.getMinutes();
-    console.log(hours);
     let ampm = " PM";
     let colon = ":";
     if (hours > 12) {

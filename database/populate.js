@@ -25,11 +25,11 @@ export function populateDBwithRequests() {
     request = new Request();
     request.subject = sub;
     request.description = desc;
-    request.create_time = "2021-1-12T10:43:17+0000";
-    request.expire_time = "2021-2-15T10:43:17+0000";
+    request.create_time = "Mon Jan 11 2021 10:12:10 GMT-0600 (CST)";
+    request.expire_time = "Mon Feb 15 2021 10:12:10 GMT-0600 (CST)";
     request.remind_freq = 1;
     request.remind_days = "";
-    request.remind_time = "15:15:00";
+    request.remind_time = "15:15";
     request.previous_weight = 1;
     request.weight = 3;
     request.priority = priority;
