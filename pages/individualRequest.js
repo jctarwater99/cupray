@@ -20,7 +20,6 @@ import Modal from "react-native-modal";
 import { Dropdown } from "react-native-material-dropdown-v2";
 import DateTimePicker from "@react-native-community/datetimepicker";
 
-
 import { LogBox } from "react-native";
 
 // Ignore log notification by message
@@ -62,7 +61,7 @@ const ThisRequestScreen = ({ route, navigation }) => {
       setSubject(results.subject);
 
       let date = new Date();
-      if(!route.params.isNewReq){
+      if (!route.params.isNewReq) {
         date = new Date(results.expire_time);
       }
       parseDate(date, setDisplayDate);
@@ -100,6 +99,14 @@ const ThisRequestScreen = ({ route, navigation }) => {
             newTagValues.push(1);
           } else newTagValues.push(0);
           changeValues.push(0);
+        }
+        if (route.params.isNewReq && route.params.cat_name != "Category") {
+          for (const tag in tags) {
+            if (tags[tag].name == route.params.cat_name) {
+              newTagValues[tag] = 1;
+              changeValues[tag] = 1;
+            }
+          }
         }
         setTagStates(newTagValues);
         changeTags(changeValues);
@@ -343,7 +350,8 @@ const ThisRequestScreen = ({ route, navigation }) => {
     let month = date.getMonth() + 1; // Months are 0 indexed
     let year = date.getFullYear(); // 2021 returns 121 instead if we call getYear??
 
-    let parsedDate = month.toString() + "/" + day.toString() + "/" + year.toString();
+    let parsedDate =
+      month.toString() + "/" + day.toString() + "/" + year.toString();
     callback(parsedDate);
   };
 
@@ -502,26 +510,26 @@ const ThisRequestScreen = ({ route, navigation }) => {
                       marginRight: width * 0.1,
                     }}
                   />
-                  <View style = {[{flexDirection: "row"}]}>
-                  <TouchableOpacity
-                onPress={() => {
-                  toggleNewTagPopup(!newTagPopup);
-                      } }
+                  <View style={[{ flexDirection: "row" }]}>
+                    <TouchableOpacity
+                      onPress={() => {
+                        toggleNewTagPopup(!newTagPopup);
+                      }}
                     >
-                <Text style={styles.popUpHeader}>Cancel</Text>
-              </TouchableOpacity>
-                  <TouchableOpacity
-                    style={{ marginLeft: width * 0.45 }}
-                    onPress={() => {
-                      toggleNewTagPopup(!newTagPopup);
-                      let tag = new Tag();
-                      tag.name = newTag;
-                      inserts.insertTag(tag);
-                      refreshPage();
-                    }}
-                  >
-                    <Text style={styles.popUpHeader}>Save</Text>
-                  </TouchableOpacity>
+                      <Text style={styles.popUpHeader}>Cancel</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={{ marginLeft: width * 0.45 }}
+                      onPress={() => {
+                        toggleNewTagPopup(!newTagPopup);
+                        let tag = new Tag();
+                        tag.name = newTag;
+                        inserts.insertTag(tag);
+                        refreshPage();
+                      }}
+                    >
+                      <Text style={styles.popUpHeader}>Save</Text>
+                    </TouchableOpacity>
                   </View>
                 </View>
               </Modal>
@@ -530,12 +538,11 @@ const ThisRequestScreen = ({ route, navigation }) => {
               <Text style={styles.subtitle}>Daily</Text>
 
               <Text style={styles.boxheaders}>Reminder Expiration</Text>
-              
-              <View>
-              {datePickerButton}
-              {datePicker}
-            </View>
 
+              <View>
+                {datePickerButton}
+                {datePicker}
+              </View>
             </View>
           </ScrollView>
         </View>
