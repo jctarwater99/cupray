@@ -261,24 +261,20 @@ const ThisRequestScreen = ({ route, navigation }) => {
     setBoxes(newState);
   };
 
-  let makeCheckBox = (cBoxTitle, stateVar) => {
+  let makeCheckBox = (cBoxTitle, index) => {
     return (
-      <CheckBox
+      <TouchableOpacity
         id={cBoxTitle}
-        style={styles.checkBox}
-        checkedIcon="circle"
-        uncheckedIcon="circle-o"
-        margin={"50%"}
-        size={40}
+        style={[
+          styles.checkBox,
+          checked[index] ? styles.active : styles.inactiveCheckBox,
+        ]}
         onPress={() => {
           if (inEditMode) {
             handleCheckBoxPress(cBoxTitle);
           }
         }}
-        checked={stateVar}
-        checkedColor={"#D6C396"}
-        uncheckedColor={"#D6C396"}
-      ></CheckBox>
+      ></TouchableOpacity>
     );
   };
 
@@ -462,9 +458,9 @@ const ThisRequestScreen = ({ route, navigation }) => {
                   //justifyContent: "flex-end",
                 }}
               >
-                {makeCheckBox("Box1", checked[0])}
-                {makeCheckBox("Box2", checked[1])}
-                {makeCheckBox("Box3", checked[2])}
+                {makeCheckBox("Box1", 0)}
+                {makeCheckBox("Box2", 1)}
+                {makeCheckBox("Box3", 2)}
               </View>
               {/* these are not yet dynamic */}
               <Text style={styles.boxheaders}>Tags</Text>
@@ -597,9 +593,9 @@ const ThisRequestScreen = ({ route, navigation }) => {
                   //justifyContent: "flex-end",
                 }}
               >
-                {makeCheckBox("Box1", checked[0])}
-                {makeCheckBox("Box2", checked[1])}
-                {makeCheckBox("Box3", checked[2])}
+                {makeCheckBox("Box1", 0)}
+                {makeCheckBox("Box2", 1)}
+                {makeCheckBox("Box3", 2)}
               </View>
               <Text style={styles.boxheaders}>Tags</Text>
               <View
@@ -629,7 +625,12 @@ const ThisRequestScreen = ({ route, navigation }) => {
 
 const styles = StyleSheet.create({
   checkBox: {
-    backgroundColor: "#D6C396",
+    margin: 3,
+    height: 35,
+    width: 35,
+    borderRadius: 35,
+    alignItems: "center",
+    justifyContent: "center",
   },
 
   // Overall container for screen
@@ -641,7 +642,8 @@ const styles = StyleSheet.create({
   },
 
   requestContainer: {
-    width: 327,
+    flex: 1,
+    width: width * 0.9,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -649,7 +651,7 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.27,
     shadowRadius: 3.65,
-    overflow: "visible",
+    overflow: "hidden",
 
     elevation: 6,
     borderRadius: 20,
@@ -731,6 +733,9 @@ const styles = StyleSheet.create({
   active: {
     backgroundColor: "#D6C396",
   },
+  inactiveCheckBox: {
+    backgroundColor: "#D3D3D3",
+  },
   inactive: {},
   activeText: {
     color: "#EFEFEF",
@@ -782,6 +787,7 @@ const styles = StyleSheet.create({
   },
 
   androidTimeButton: {
+    alignSelf: "flex-start",
     borderRadius: 6,
     backgroundColor: "#D6C396",
     padding: 3,
