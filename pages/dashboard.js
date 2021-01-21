@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Image, TouchableOpacity, Dimensions, FlatList } from "react-native";
 import { StyleSheet, Button, Text, View } from "react-native";
 import * as queries from "../database/query";
@@ -6,6 +6,14 @@ import * as queries from "../database/query";
 var { height, width } = Dimensions.get("window");
 
 const Dashboard = ({ navigation }) => {
+  let [newReqId, setNewReqId] = useState(0);
+
+  useEffect(() => {
+    queries.getNewReqId((result) => {
+      setNewReqId(result);
+    });
+  }, []);
+
   return (
     <View style={styles.dashboardContainer}>
       <Text style={styles.title}>
@@ -37,7 +45,10 @@ const Dashboard = ({ navigation }) => {
         </View>
 
         <View>
-          <TouchableOpacity style={styles.icon} onPress={() => navigation.navigate("Pray")}>
+          <TouchableOpacity
+            style={styles.icon}
+            onPress={() => navigation.navigate("Pray")}
+          >
             <Image
               style={styles.dashImage}
               source={require("../assets/pray_blue.png")}
@@ -61,10 +72,10 @@ const Dashboard = ({ navigation }) => {
           <TouchableOpacity
             style={styles.icon}
             onPress={() => {
-              navigation.navigate("ThisRequest", {
+              navigation.navigate("IndividualRequest", {
                 cat_id: 1,
                 cat_name: "Category",
-                req_id: 1,
+                req_id: newReqId,
                 isNewReq: true,
               });
             }}

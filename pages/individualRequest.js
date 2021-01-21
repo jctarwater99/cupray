@@ -15,9 +15,10 @@ import { CheckBox } from "react-native-elements";
 import * as queries from "../database/query";
 import * as updates from "../database/update";
 import * as inserts from "../database/insert";
-import { Category } from "../database/objects";
+import { Category, Tag } from "../database/objects";
 import Modal from "react-native-modal";
 import { Dropdown } from "react-native-material-dropdown-v2";
+import DateTimePicker from "@react-native-community/datetimepicker";
 
 import { LogBox } from "react-native";
 
@@ -39,6 +40,9 @@ const ThisRequestScreen = ({ route, navigation }) => {
   let [requestTags, setRTags] = useState([]);
   let [tagStates, setTagStates] = useState([]);
   let [changedTags, changeTags] = useState([]);
+  let [expireTime, setExpireTime] = useState("");
+  let [selectedDate, setSelectedDate] = useState("");
+  let [displayDate, setDisplayDate] = useState("");
 
   let [inEditMode, setMode] = useState(route.params.isNewReq);
   let [checked, setBoxes] = useState([true, true, false]);
@@ -46,6 +50,7 @@ const ThisRequestScreen = ({ route, navigation }) => {
   let [description, setDescription] = useState("");
   let [category, setCategory] = useState(route.params.cat_name);
   let [newTagPopup, toggleNewTagPopup] = useState(false);
+  let [datePickerVisible, setDatePickerVisibility] = useState(false);
   let [newTag, setNewTag] = useState("");
 
   useEffect(() => {
@@ -54,6 +59,13 @@ const ThisRequestScreen = ({ route, navigation }) => {
       setRequest(results);
       setDescription(results.description);
       setSubject(results.subject);
+
+      let date = new Date();
+      if (!route.params.isNewReq) {
+        date = new Date(results.expire_time);
+      }
+      parseDate(date, setDisplayDate);
+      setSelectedDate(date);
 
       let state = [true, true, false];
       if (results.priority == 2) {
@@ -80,7 +92,7 @@ const ThisRequestScreen = ({ route, navigation }) => {
         let newTagValues = [];
         let changeValues = [];
         for (const tag in tags) {
-          if (tags[tag].name == rTags[i].name) {
+          if (rTags.length > 0 && tags[tag].name == rTags[i].name) {
             if (i != rTags.length - 1) {
               i++;
             }
@@ -88,11 +100,30 @@ const ThisRequestScreen = ({ route, navigation }) => {
           } else newTagValues.push(0);
           changeValues.push(0);
         }
+        if (route.params.isNewReq && route.params.cat_name != "Category") {
+          for (const tag in tags) {
+            if (tags[tag].name == route.params.cat_name) {
+              newTagValues[tag] = 1;
+              changeValues[tag] = 1;
+            }
+          }
+        }
         setTagStates(newTagValues);
         changeTags(changeValues);
       });
     });
+    if (Platform.OS == "ios") {
+      setDatePickerVisibility(true);
+    }
   }, []);
+
+  let refreshPage = () => {
+    setTimeout(() => {
+      queries.getTags((tags) => {
+        setTags(tags);
+      });
+    }, 200);
+  };
 
   let handleTagPress = (number) => {
     if (category == tags[number].name) {
@@ -140,24 +171,12 @@ const ThisRequestScreen = ({ route, navigation }) => {
       <TouchableOpacity
         key={index}
         onPress={() => toggleNewTagPopup(!newTagPopup)}
-        style={[
-          styles.tagBubble,
-          inEditMode
-          ? styles.inactive
-          : styles.hidden,
-        ]}
+        style={[styles.tagBubble, inEditMode ? styles.inactive : styles.hidden]}
       >
-        <Text
-          style={[
-            styles.tagBubbleText,
-            styles.inactiveText,
-          ]}
-        >
-          {name}
-        </Text>
+        <Text style={[styles.tagBubbleText, styles.inactiveText]}>{name}</Text>
       </TouchableOpacity>
     );
-  }
+  };
 
   let tagButtons = () => {
     let buttonList = [];
@@ -176,7 +195,7 @@ const ThisRequestScreen = ({ route, navigation }) => {
     req.subject = subject;
     req.description = description;
 
-    req.expire_time = request.expire_time;
+    req.expire_time = String(selectedDate);
     req.remind_freq = request.remind_freq;
     req.remind_days = request.remind_days;
     req.remind_time = request.remind_time;
@@ -195,27 +214,35 @@ const ThisRequestScreen = ({ route, navigation }) => {
       return;
     }
 
+    // TODO: Double check that these 6 lines are unneeded, then delete
     let catID = -1;
     categories.forEach((element) => {
       if (element.value == category) {
         catID = element.id;
       }
     });
+
     // Actuall update part
-    if (route.params.isNewReq) {
-      inserts.insertNewRequest(req, catID); // Inserts new reqTag as well, had to do it in callback bc needed the insert id or something
-    } else {
-      updates.updateRequest(route.params.req_id, req);
-      updates.updateRequestTag(route.params.req_id, route.params.cat_id, catID);
+    updates.updateRequest(route.params.req_id, req);
+
+    for (const tag in changedTags) {
+      if (changedTags[tag] == 1 && tagStates[tag] == 1) {
+        inserts.insertRequestTag({
+          requestID: route.params.req_id,
+          tagID: tags[tag].id,
+        });
+      } else if (changedTags[tag] == 1) {
+        updates.deleteRequestTag({
+          requestID: route.params.req_id,
+          tagID: tags[tag].id,
+        });
+      }
     }
 
-    // Queries to Updadate request tags??
-
-    // On change tags,
-    // if added
-    //  add them to added tags array
-    // else
-    //  add them to deleted tags array
+    if (route.params.isNewReq) {
+      // Create New "New Request"
+      inserts.insertRequest({ subject: "Subject", description: "Description" });
+    }
 
     // Remove later???
     navigation.navigate("Cat");
@@ -234,25 +261,94 @@ const ThisRequestScreen = ({ route, navigation }) => {
     setBoxes(newState);
   };
 
-  let makeCheckBox = (cBoxTitle, stateVar) => {
+  let makeCheckBox = (cBoxTitle, index) => {
     return (
-      <CheckBox
+      <TouchableOpacity
         id={cBoxTitle}
-        style={styles.checkBox}
-        checkedIcon="circle"
-        uncheckedIcon="circle-o"
-        margin={"50%"}
-        size={40}
+        style={[
+          styles.checkBox,
+          checked[index] ? styles.active : styles.inactiveCheckBox,
+        ]}
         onPress={() => {
           if (inEditMode) {
             handleCheckBoxPress(cBoxTitle);
           }
         }}
-        checked={stateVar}
-        checkedColor={"#D6C396"}
-        uncheckedColor={"#D6C396"}
-      ></CheckBox>
+      ></TouchableOpacity>
     );
+  };
+
+  let datePickerButton = Platform.select({
+    ios: () => {
+      return (
+        <TouchableOpacity
+          onPress={() => {
+            setDatePickerVisibility(true);
+          }}
+          style={{ width: 250 }}
+        ></TouchableOpacity>
+      );
+    },
+    android: () => {
+      return (
+        <TouchableOpacity
+          onPress={() => {
+            setDatePickerVisibility(true);
+          }}
+          style={[styles.androidTimeButton, { marginBottom: height * 0.06 }]}
+        >
+          <Text style={styles.androidTimeHeader}>{displayDate}</Text>
+        </TouchableOpacity>
+      );
+    },
+  })();
+  let datePicker = Platform.select({
+    ios: () => {
+      if (datePickerVisible) {
+        return (
+          <DateTimePicker
+            value={selectedDate} // this value needs to be read from database
+            mode={"date"}
+            display="default"
+            onChange={(event, date) => {
+              handleChangeDate(event, date);
+            }}
+          />
+        );
+      }
+    },
+    android: () => {
+      if (datePickerVisible) {
+        return (
+          <DateTimePicker
+            value={selectedDate}
+            mode={"date"}
+            is24Hour={false}
+            display="default"
+            onChange={(event, date) => {
+              handleChangeDate(event, date);
+            }}
+          />
+        );
+      }
+    },
+  })();
+
+  const handleChangeDate = (event, selectedDate) => {
+    const newDate = selectedDate || selectedTime;
+    setDatePickerVisibility(Platform.OS === "ios"); // This is pretty creative, I like it :)
+    setSelectedDate(newDate);
+    parseDate(newDate, setDisplayDate);
+  };
+
+  let parseDate = (date, callback) => {
+    let day = String(date).split(" ")[2];
+    let month = date.getMonth() + 1; // Months are 0 indexed
+    let year = date.getFullYear(); // 2021 returns 121 instead if we call getYear??
+
+    let parsedDate =
+      month.toString() + "/" + day.toString() + "/" + year.toString();
+    callback(parsedDate);
   };
 
   if (inEditMode) {
@@ -362,9 +458,9 @@ const ThisRequestScreen = ({ route, navigation }) => {
                   //justifyContent: "flex-end",
                 }}
               >
-                {makeCheckBox("Box1", checked[0])}
-                {makeCheckBox("Box2", checked[1])}
-                {makeCheckBox("Box3", checked[2])}
+                {makeCheckBox("Box1", 0)}
+                {makeCheckBox("Box2", 1)}
+                {makeCheckBox("Box3", 2)}
               </View>
               {/* these are not yet dynamic */}
               <Text style={styles.boxheaders}>Tags</Text>
@@ -380,57 +476,69 @@ const ThisRequestScreen = ({ route, navigation }) => {
                 {tagButtons()}
               </View>
 
-          <Modal
-          isVisible={newTagPopup}
-          backdropOpacity={0.25}
-          animationInTiming={400}
-          animationOutTiming={800}
-          style={styles.modalContent}
-          onBackdropPress={() => {
-            toggleNewTagPopup(!newTagPopup);
-          }}
-        >
-          <View style={styles.popUpContainer}>
-            <Text style={styles.popUpHeader}>Create New Tag</Text>
-            <TextInput
-              maxLength={15} // max number of chars
-              multiline={true}
-              value={newTag}
-              onFocus={() => ("")}
-              onChange={(text) => setNewTag(text.nativeEvent.text)}
-              style={{
-                backgroundColor: "white",
-                color: "#7E8C96",
-                padding: 8,
-                textAlignVertical: "top",
-                fontWeight: "600",
-                alignSelf: "stretch",
-                textAlign: "center",
-                marginLeft: width * 0.1,
-                marginRight: width * 0.1,
-              }}
-            />
-            <TouchableOpacity
-              style={{ marginLeft: width * 0.6 }}
-              onPress={() => {
-                toggleNewTagPopup(!newTagPopup);
-                //let cat = new Category();
-                // cat.name = newCategory;
-                //  cat.tagID = -1; // filler value
-
-                //refreshPage();
-              }}
-            >
-              <Text style={styles.subtitle}>Save</Text>
-            </TouchableOpacity>
-            </View>
-            </Modal>
+              <Modal
+                isVisible={newTagPopup}
+                backdropOpacity={0.25}
+                animationInTiming={400}
+                animationOutTiming={800}
+                style={styles.modalContent}
+                onBackdropPress={() => {
+                  toggleNewTagPopup(!newTagPopup);
+                }}
+              >
+                <View style={styles.popUpContainer}>
+                  <Text style={styles.popUpHeader}>Create New Tag</Text>
+                  <TextInput
+                    maxLength={15} // max number of chars
+                    multiline={true}
+                    value={newTag}
+                    onFocus={() => ""}
+                    onChange={(text) => setNewTag(text.nativeEvent.text)}
+                    style={{
+                      backgroundColor: "white",
+                      color: "#7E8C96",
+                      padding: 8,
+                      textAlignVertical: "top",
+                      fontWeight: "600",
+                      alignSelf: "stretch",
+                      textAlign: "center",
+                      marginLeft: width * 0.1,
+                      marginRight: width * 0.1,
+                    }}
+                  />
+                  <View style={[{ flexDirection: "row" }]}>
+                    <TouchableOpacity
+                      onPress={() => {
+                        toggleNewTagPopup(!newTagPopup);
+                      }}
+                    >
+                      <Text style={styles.popUpHeader}>Cancel</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={{ marginLeft: width * 0.45 }}
+                      onPress={() => {
+                        toggleNewTagPopup(!newTagPopup);
+                        let tag = new Tag();
+                        tag.name = newTag;
+                        inserts.insertTag(tag);
+                        refreshPage();
+                      }}
+                    >
+                      <Text style={styles.popUpHeader}>Save</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </Modal>
 
               <Text style={styles.boxheaders}>Frequency</Text>
               <Text style={styles.subtitle}>Daily</Text>
 
               <Text style={styles.boxheaders}>Reminder Expiration</Text>
-              <Text style={styles.subtitle}>11/24/2020</Text>
+
+              <View>
+                {datePickerButton}
+                {datePicker}
+              </View>
             </View>
           </ScrollView>
         </View>
@@ -485,9 +593,9 @@ const ThisRequestScreen = ({ route, navigation }) => {
                   //justifyContent: "flex-end",
                 }}
               >
-                {makeCheckBox("Box1", checked[0])}
-                {makeCheckBox("Box2", checked[1])}
-                {makeCheckBox("Box3", checked[2])}
+                {makeCheckBox("Box1", 0)}
+                {makeCheckBox("Box2", 1)}
+                {makeCheckBox("Box3", 2)}
               </View>
               <Text style={styles.boxheaders}>Tags</Text>
               <View
@@ -506,7 +614,7 @@ const ThisRequestScreen = ({ route, navigation }) => {
               <Text style={styles.subtitle}>Daily</Text>
 
               <Text style={styles.boxheaders}>Reminder Expiration</Text>
-              <Text style={styles.subtitle}>11/24/2020</Text>
+              <Text style={styles.subtitle}>{displayDate}</Text>
             </View>
           </ScrollView>
         </View>
@@ -517,7 +625,12 @@ const ThisRequestScreen = ({ route, navigation }) => {
 
 const styles = StyleSheet.create({
   checkBox: {
-    backgroundColor: "#D6C396",
+    margin: 3,
+    height: 35,
+    width: 35,
+    borderRadius: 35,
+    alignItems: "center",
+    justifyContent: "center",
   },
 
   // Overall container for screen
@@ -529,7 +642,8 @@ const styles = StyleSheet.create({
   },
 
   requestContainer: {
-    width: 327,
+    flex: 1,
+    width: width * 0.9,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -537,7 +651,7 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.27,
     shadowRadius: 3.65,
-    overflow: "visible",
+    overflow: "hidden",
 
     elevation: 6,
     borderRadius: 20,
@@ -619,6 +733,9 @@ const styles = StyleSheet.create({
   active: {
     backgroundColor: "#D6C396",
   },
+  inactiveCheckBox: {
+    backgroundColor: "#D3D3D3",
+  },
   inactive: {},
   activeText: {
     color: "#EFEFEF",
@@ -629,7 +746,6 @@ const styles = StyleSheet.create({
   hidden: {
     display: "none",
   },
-
 
   modalContent: {
     justifyContent: "center",
@@ -660,6 +776,21 @@ const styles = StyleSheet.create({
     color: "#003A63",
     fontWeight: "700",
     padding: height * 0.01,
+  },
+
+  androidTimeHeader: {
+    flex: 0,
+    fontSize: 16,
+    color: "#E8E7E4",
+    fontWeight: "700",
+    padding: height * 0.008,
+  },
+
+  androidTimeButton: {
+    alignSelf: "flex-start",
+    borderRadius: 6,
+    backgroundColor: "#D6C396",
+    padding: 3,
   },
 });
 

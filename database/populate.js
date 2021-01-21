@@ -25,11 +25,11 @@ export function populateDBwithRequests() {
     request = new Request();
     request.subject = sub;
     request.description = desc;
-    request.create_time = "2021-1-12T10:43:17+0000";
-    request.expire_time = "2021-2-15T10:43:17+0000";
+    request.create_time = "Mon Jan 11 2021 10:12:10 GMT-0600 (CST)";
+    request.expire_time = "Mon Feb 15 2021 10:12:10 GMT-0600 (CST)";
     request.remind_freq = 1;
     request.remind_days = "";
-    request.remind_time = "15:15:00";
+    request.remind_time = "15:15";
     request.previous_weight = 1;
     request.weight = priority;
     request.priority = priority;
@@ -40,8 +40,8 @@ export function populateDBwithRequests() {
 
   // 1
   request = new Request();
-  request.subject = "Subject";
-  request.description = "Description";
+  request.subject = "Old Subject";
+  request.description = "Old Description";
   request.create_time = "";
   request.expire_time = "";
   request.remind_freq = 0;
@@ -228,6 +228,11 @@ export function populateDBwithRequests() {
     "I know that I am not always patient with others. I know that I should be because it is more " +
     "loving and because it is a fruit of the spirit. Please forgive me for when I am short with people and " +
     "help me to learn the character traits that you display towards us.";
+  addReq(sub, desc, 1);
+
+  sub = "Subject";
+  desc = "Description";
+  addReq(sub, desc, 1);
 
   requests.forEach((element) => {
     db_insert.insertRequest(element);
