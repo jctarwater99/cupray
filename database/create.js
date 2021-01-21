@@ -85,7 +85,7 @@ export function createDatabase() {
     // Reminders
     tx.executeSql(
       "CREATE TABLE IF NOT EXISTS reminders ( " +
-        "reminderID		INTEGER PRIMARY KEY," +
+        "reminderID		TEXT PRIMARY KEY," +
         "requestID		INT," +
         "FOREIGN KEY (requestID) REFERENCES requests(id));",
       null,

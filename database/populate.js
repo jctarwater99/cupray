@@ -31,7 +31,7 @@ export function populateDBwithRequests() {
     request.remind_days = "";
     request.remind_time = "15:15:00";
     request.previous_weight = 1;
-    request.weight = 3;
+    request.weight = priority;
     request.priority = priority;
     requests.push(request);
   }
@@ -147,14 +147,14 @@ export function populateDBwithRequests() {
     "During this covid season, it has been harder for us to meet and have personal fellowship " +
     "as a church. I pray that you would give people the desire and the means to continue to meet " +
     "and fellowship, and have the close accountability that we should have as a church";
-  addReq(sub, desc, 1);
+  addReq(sub, desc, 2);
 
   // 16
   sub = "Leadership";
   desc =
     "Thank you for the strong, biblical leaders in my church. Continue to guide them and " +
     "help them to make good decisions that are in the best interest of the church.";
-  addReq(sub, desc, 1);
+  addReq(sub, desc, 3);
 
   // 17
   sub = "Tri-M";
