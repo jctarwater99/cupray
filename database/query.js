@@ -61,18 +61,20 @@ export function getTags(callback) {
   });
 }
 
+// I hate this query, given me so much trouble
 export function getRequestsInCategory(categoryId, callback) {
   db.transaction((tx) => {
     tx.executeSql(
       "SELECT DISTINCT requests.subject, requests.id FROM requests " +
         "INNER JOIN request_tags as RT ON RT.requestID = requests.id " +
         "INNER JOIN tags ON RT.tagID = tags.id " +
-        "WHERE tags.id = ? ORDER BY requests.subject; " +
+        "WHERE tags.id = ? " +
         "EXCEPT " +
         "SELECT requests.subject, requests.id FROM requests " +
         "INNER JOIN request_tags as RT ON RT.requestID = requests.id " +
         "INNER JOIN tags ON RT.tagID = tags.id " +
-        "tags.name = 'expired'; ",
+        "WHERE tags.id = 1 " +
+        "ORDER BY requests.subject",
       [categoryId],
       (tx, result) => {
         callback(result.rows._array);

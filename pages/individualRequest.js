@@ -75,14 +75,7 @@ const ThisRequestScreen = ({ route, navigation }) => {
       }
       setBoxes(state);
     });
-    // Loads categories
-    queries.getCategories((results) => {
-      let dropDownData = [];
-      results.forEach((element) => {
-        dropDownData.push({ value: element.name, id: element.tagID });
-      });
-      setCategories(dropDownData);
-    });
+
     queries.getTagsForRequest(route.params.req_id, (rTags) => {
       setRTags(rTags);
       queries.getTags((tags) => {
@@ -115,6 +108,15 @@ const ThisRequestScreen = ({ route, navigation }) => {
     if (Platform.OS == "ios") {
       setDatePickerVisibility(true);
     }
+
+    // Loads categories
+    queries.getCategories((results) => {
+      let dropDownData = [];
+      results.forEach((element) => {
+        dropDownData.push({ value: element.name, id: element.tagID });
+      });
+      setCategories(dropDownData);
+    });
   }, []);
 
   let refreshPage = () => {
@@ -242,10 +244,8 @@ const ThisRequestScreen = ({ route, navigation }) => {
     if (route.params.isNewReq) {
       // Create New "New Request"
       inserts.insertRequest({ subject: "Subject", description: "Description" });
+      navigation.navigate("Cat");
     }
-
-    // Remove later???
-    navigation.navigate("Cat");
   };
 
   let handleCheckBoxPress = (box) => {

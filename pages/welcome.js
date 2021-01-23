@@ -32,7 +32,11 @@ const WelcomeScreen = ({ navigation }) => {
         <Text
           style={styles.thePrayer}
           onPress={() => {
-            navigation.navigate("TempDash");
+            dropForTesting();
+            createDatabase();
+            requestPermissionsAsync();
+            populateDB();
+            //navigation.navigate("TempDash");
           }}
         >
           The prayer journal app for your 1000 days
@@ -41,27 +45,6 @@ const WelcomeScreen = ({ navigation }) => {
           <TouchableOpacity
             style={styles.bbutton}
             onPress={() => {
-              dropForTesting();
-              createDatabase();
-              requestPermissionsAsync();
-              populateDB();
-              Notifications.setNotificationHandler({
-                handleNotification: async (notif) => ({
-                  shouldShowAlert: true,
-                  shouldPlaySound: false,
-                  shouldSetBadge: false,
-                }),
-              });
-
-              Notifications.scheduleNotificationAsync({
-                content: {
-                  title: "CUPray",
-                  body: "Take a minute to pray for your friends in quarantine.",
-                },
-                trigger: {
-                  seconds: 1,
-                },
-              });
               navigation.navigate("Dash");
             }}
           >

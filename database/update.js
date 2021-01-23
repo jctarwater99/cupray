@@ -92,6 +92,66 @@ export function editTag(newTagName, tagID) {
   });
 }
 
+export function deleteRequest(reqID) {
+  db.transaction((tx) => {
+    tx.executeSql(
+      "DELETE FROM requests WHERE requests.id = ?",
+      [reqID],
+      () => void 0,
+      (tx, result) => {
+        console.log("Deleting request failed", result);
+      }
+    );
+  });
+}
+
+export function rollbackNotificationWeight() {
+  db.transaction((tx) => {
+    tx.executeSql(
+      "UPDATE requests SET weight = previous_weight ",
+      [],
+      () => void 0,
+      (tx, result) => {
+        console.log("Failed ", result);
+      }
+    );
+  });
+}
+
+export function deleteRequestTag(requestTag) {
+  db.transaction((tx) => {
+    tx.executeSql(
+      "DELETE FROM request_tags WHERE requestID = ? AND tagID = ?",
+      [requestTag.requestID, requestTag.tagID],
+      () => void 0,
+      (tx, result) => {
+        console.log("Deleting tag failed", result);
+      }
+    );
+  });
+}
+
+export function editFlag(flagName, newFlagValue) {
+  db.transaction((tx) => {
+    tx.executeSql(
+      "UPDATE flags SET value = ? WHERE name = ?",
+      [newFlagValue, flagName],
+      () => void 0,
+      (tx, result) => {
+        console.log("Updating flag failed", result);
+      }
+    );
+  });
+}
+
+//
+//
+//
+//
+//
+//
+//
+
 export function deleteRequestTagsInCategory(catID) {
   db.transaction((tx) => {
     // delete request_tags in this list
@@ -111,7 +171,7 @@ export function deleteRequestTagsInCategory(catID) {
         deleteRequestsInCategory();
       },
       (tx, result) => {
-        console.log("Deleting category failed", result);
+        console.log("Deleting request tags in category failed", result);
       }
     );
   });
@@ -134,7 +194,7 @@ export function deleteRequestsInCategory() {
       [],
       () => void 0,
       (tx, result) => {
-        console.log("Deleting category failed", result);
+        console.log("Deleting requets in category failed", result);
       }
     );
   });
@@ -158,42 +218,27 @@ export function deleteRequestTags(reqID) {
   });
 }
 
-export function deleteRequest(reqID) {
+export function archiveRequestsInCategory() {
   db.transaction((tx) => {
-    tx.executeSql(
-      "DELETE FROM requests WHERE requests.id = ?",
-      [reqID],
-      () => void 0,
-      (tx, result) => {
-        console.log("Deleting request failed", result);
-      }
-    );
-  });
-}
+    // delete requests in this list
+    // select all requests except these
+    // select all distinct requests that are associated with tags
+    // also don't get the first request
 
-export function rollbackNotificationWeight() {
-  db.transaction((tx) => {
     tx.executeSql(
-      "UPDATE requests SET weight = previous_weight ",
+      "INSERT INTO request_tags(requestID, tagId) " + //VALUES (?, 1)
+        //"DELETE FROM requests WHERE requests.id IN ( " +
+        "SELECT id, 1 as tagId FROM ( " +
+        "SELECT requests.id FROM requests EXCEPT " +
+        "SELECT DISTINCT requests.id FROM requests " +
+        "INNER JOIN request_tags as RT ON RT.requestID = requests.id " +
+        "EXCEPT SELECT requests.id FROM requests WHERE requests.id = 1 )", // Frick
       [],
       (tx, result) => {
-        console.log("Success ", result);
-      },
+        console.log("Archive Success", result);
+      }, // () => void 0,
       (tx, result) => {
-        console.log("Failed ", result);
-      }
-    );
-  });
-}
-
-export function deleteRequestTag(requestTag) {
-  db.transaction((tx) => {
-    tx.executeSql(
-      "DELETE FROM request_tags WHERE requestID = ? AND tagID = ?",
-      [requestTag.requestID, requestTag.tagID],
-      (tx, result) => console.log("Delete success", result), //() => void 0,
-      (tx, result) => {
-        console.log("Deleting tag failed", result);
+        console.log("Archiving requests in category failed", result);
       }
     );
   });

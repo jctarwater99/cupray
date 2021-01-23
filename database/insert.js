@@ -15,6 +15,19 @@ import {
 
 const db = SQLite.openDatabase("db.cupray");
 
+export function insertFlag(name, value) {
+  db.transaction((tx) => {
+    tx.executeSql(
+      "INSERT INTO flags(name, value) VALUES(?, ?);",
+      [name, value],
+      () => void 0,
+      (tx, result) => {
+        console.log("Inserting flag failed", result);
+      }
+    );
+  });
+}
+
 export function insertRequest(request) {
   db.transaction((tx) => {
     tx.executeSql(

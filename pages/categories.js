@@ -369,11 +369,11 @@ const CategoriesScreen = ({ navigation }) => {
                       {
                         text: "Delete",
                         onPress: () => {
-                          updates.deleteRequestTagsInCategory(
+                          updates.archiveRequestsInCategory(
                             selectedCategory.tagID
                           );
-                          updates.deleteCategory(selectedCategory.tagID);
-                          updates.deleteTag(selectedCategory.tagID);
+                          //updates.deleteCategory(selectedCategory.tagID);
+                          //updates.deleteTag(selectedCategory.tagID);
                           toggleEditPopupVisibility(!editPopupVisible);
                           refreshPage();
                         },
