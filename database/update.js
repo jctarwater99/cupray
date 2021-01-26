@@ -200,7 +200,7 @@ export function deleteRequestsInCategory() {
   });
 }
 
-export function deleteRequestTags(reqID) {
+export function deleteRequestTagsOfReq(reqID) {
   db.transaction((tx) => {
     tx.executeSql(
       "DELETE FROM request_tags WHERE request_tags.id IN ( " +
@@ -217,26 +217,61 @@ export function deleteRequestTags(reqID) {
     );
   });
 }
-
-export function archiveRequestsInCategory() {
+export function deleteRequestTagsOfTag(tagID) {
   db.transaction((tx) => {
-    // delete requests in this list
-    // select all requests except these
-    // select all distinct requests that are associated with tags
-    // also don't get the first request
-
     tx.executeSql(
-      "INSERT INTO request_tags(requestID, tagId) " + //VALUES (?, 1)
-        //"DELETE FROM requests WHERE requests.id IN ( " +
-        "SELECT id, 1 as tagId FROM ( " +
-        "SELECT requests.id FROM requests EXCEPT " +
-        "SELECT DISTINCT requests.id FROM requests " +
-        "INNER JOIN request_tags as RT ON RT.requestID = requests.id " +
-        "EXCEPT SELECT requests.id FROM requests WHERE requests.id = 1 )", // Frick
-      [],
+      "DELETE FROM request_tags WHERE request_tags.tagID = ?",
+      [tagID],
+      () => void 0,
       (tx, result) => {
-        console.log("Archive Success", result);
-      }, // () => void 0,
+        console.log("Deleting request tags failed", result);
+      }
+    );
+  });
+}
+
+export function archiveRequestsInCategory(catID) {
+  //
+  // Ok, so in theory, this should work, right?
+  //
+  // Insert into request tags (requests, expiredTagId)
+  //    Every requests in catID
+  //    except requests that have tags that are cats that != catId
+  //    Union? requests that already have expired tags
+  //
+
+  db.transaction((tx) => {
+    tx.executeSql(
+      "INSERT INTO request_tags(requestID, tagId) " +
+        "SELECT DISTINCT id, 1 as tagId FROM ( " +
+        "SELECT requests.id FROM requests " +
+        "INNER JOIN request_tags as RT ON RT.requestID = requests.id " +
+        "INNER JOIN tags ON RT.tagID = tags.id " +
+        "WHERE tags.id = ? " +
+        "EXCEPT SELECT * FROM (" +
+        "SELECT requests.id FROM requests " +
+        "INNER JOIN request_tags as RT ON RT.requestID = requests.id " +
+        "INNER JOIN categories ON RT.tagID = categories.tagID " +
+        "WHERE RT.tagID != ? " +
+        "UNION " +
+        "SELECT requests.id FROM requests " +
+        "INNER JOIN request_tags as RT ON RT.requestID = requests.id " +
+        "WHERE RT.tagID = 1))",
+      [catID, catID],
+      () => void 0,
+      (tx, result) => {
+        console.log("Archiving requests in category failed", result);
+      }
+    );
+  });
+}
+
+export function archiveRequest(reqID) {
+  db.transaction((tx) => {
+    tx.executeSql(
+      "INSERT INTO request_tags(requestID, tagId) VALUES(?, 1)",
+      [reqID],
+      () => void 0,
       (tx, result) => {
         console.log("Archiving requests in category failed", result);
       }

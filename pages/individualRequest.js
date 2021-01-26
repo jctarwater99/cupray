@@ -128,7 +128,7 @@ const ThisRequestScreen = ({ route, navigation }) => {
   };
 
   let handleTagPress = (number) => {
-    if (category == tags[number].name) {
+    if (category == tags[number].name || tags[number].name == "Archived") {
       return;
     }
 

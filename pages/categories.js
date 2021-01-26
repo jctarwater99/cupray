@@ -364,7 +364,7 @@ const CategoriesScreen = ({ navigation }) => {
                   // Provide warning
                   Alert.alert(
                     "Warning",
-                    "Deleting this Category will delete all the requests associated with it as well. Are you sure?",
+                    "Deleting this Category will archive all the requests associated with it as well. Are you sure?",
                     [
                       {
                         text: "Delete",
@@ -372,8 +372,11 @@ const CategoriesScreen = ({ navigation }) => {
                           updates.archiveRequestsInCategory(
                             selectedCategory.tagID
                           );
-                          //updates.deleteCategory(selectedCategory.tagID);
-                          //updates.deleteTag(selectedCategory.tagID);
+                          updates.deleteCategory(selectedCategory.tagID);
+                          updates.deleteTag(selectedCategory.tagID);
+                          updates.deleteRequestTagsOfTag(
+                            selectedCategory.tagID
+                          );
                           toggleEditPopupVisibility(!editPopupVisible);
                           refreshPage();
                         },

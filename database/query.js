@@ -89,14 +89,14 @@ export function getRequestsInCategory(categoryId, callback) {
 // Currently probably results in duplicates
 // Need to do select * from requests except
 // select start from requests, tags, RTs were
-// RTs.tag = expired
+// RTs.tag = Archived
 // Yep, that should fix it.
 export function getAllActiveRequests(callback) {
   db.transaction((tx) => {
     tx.executeSql(
       "SELECT * from requests, tags, request_tags as rt " +
         "WHERE rt.requestID = request.id AND rt.tagID = tags.id " +
-        "EXCEPT WHERE tags.name = 'expired';",
+        "EXCEPT WHERE tags.name = 'Archived';",
       [],
       (tx, result) => {
         callback(result.rows._array);
