@@ -16,10 +16,18 @@ const Dashboard = ({ navigation }) => {
 
   return (
     <View style={styles.dashboardContainer}>
+      <View style={{flex: .3, flexDirection: "row"}}>
+      <TouchableOpacity
+      onPress={() => navigation.openDrawer()}>
+        <Image
+        style={{marginRight: width * 0.04, marginTop: height * 0.015, width: 30, height: 30}}
+        source={require("../assets/hamburger.png")}>
+        </Image>
+        </TouchableOpacity>
       <Text style={styles.title}>
         Home<Text style={styles.titleAccent}>.</Text>
       </Text>
-
+      </View>
       <View style={styles.verseContainer}>
         <Text style={styles.verseOf}>Pray Without Ceasing</Text>
         <View style={styles.lineStyle} />
@@ -104,16 +112,16 @@ const styles = StyleSheet.create({
     backgroundColor: "#EFEFEF",
     alignItems: "center",
     justifyContent: "center",
-    marginTop: height * 0.08,
+    marginTop: height * 0.06,
   },
 
   title: {
-    flex: 0.3,
+    flex: 0.8,
     color: "#003A63",
     fontSize: 46,
     fontWeight: "700",
     marginBottom: height * 0.01,
-    marginRight: width * 0.5,
+    marginRight: width * 0.1,
   },
 
   titleAccent: {

@@ -25,7 +25,7 @@ export default function StackNavigator() {
   return (
       <Stack.Navigator
         initialRouteName="Welcome"
-        screenOptions={{ headerShown: true }}
+        screenOptions={{ headerShown: false }}
       >
         {<Stack.Screen name="Welcome" component={WelcomeScreen} />}
         {<Stack.Screen name="Dash" component={Dashboard} />}

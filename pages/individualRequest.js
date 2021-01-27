@@ -54,6 +54,8 @@ const ThisRequestScreen = ({ route, navigation }) => {
   let [newTag, setNewTag] = useState("");
 
   useEffect(() => {
+    let date = new Date();
+    setSelectedDate(date);
     // Loads request
     queries.getRequest(route.params.req_id, (results) => {
       setRequest(results);
