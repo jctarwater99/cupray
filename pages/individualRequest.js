@@ -550,8 +550,19 @@ const ThisRequestScreen = ({ route, navigation }) => {
     return (
       <SafeAreaView style={{ flex: 1 }}>
         <View style={styles.container}>
+        <View style={{
+              flexDirection: "row"
+            }}>
+      <TouchableOpacity
+      style ={{ justifyContent: 'flex-start' }}
+      onPress={() => navigation.openDrawer()}>
+        <Image
+        style={{marginRight: width * 0.05, marginTop: height * 0.023, width: 30, height: 30}}
+        source={require("../assets/hamburger.png")}>
+        </Image>
+        </TouchableOpacity>
           <Text style={styles.title}>{subject}</Text>
-
+          </View>
           <View
             style={{
               flexDirection: "row",
@@ -568,7 +579,8 @@ const ThisRequestScreen = ({ route, navigation }) => {
               <Text style={styles.editButtonText}>EDIT</Text>
             </TouchableOpacity>
           </View>
-          <ScrollView style={styles.requestContainer}>
+          <ScrollView 
+          style={styles.requestContainer}>
             <View>
               <View>
                 <Text style={styles.boxheaders}>Description</Text>
@@ -640,12 +652,11 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#EFEFEF",
     alignItems: "center",
-    marginTop: height * 0.02,
+    marginTop: height * 0.002,
   },
 
   requestContainer: {
-    flex: 1,
-    width: width * 0.9,
+    width: 327,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -653,7 +664,7 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.27,
     shadowRadius: 3.65,
-    overflow: "hidden",
+    overflow: 'scroll',
 
     elevation: 6,
     borderRadius: 20,
