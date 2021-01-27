@@ -115,7 +115,7 @@ const RequestsScreen = ({ route, navigation }) => {
         <View style={styles.popUpContainer}>
           <View>
             <Text style={[styles.popUpHeader, { marginBottom: height * 0.04 }]}>
-              Delete Request?
+              Archive Request?
             </Text>
           </View>
           <View
@@ -131,12 +131,12 @@ const RequestsScreen = ({ route, navigation }) => {
                 // Provide warning
                 Alert.alert(
                   "Warning",
-                  "Are you sure you want to delete this prayer request?",
+                  "Are you sure you want to prematurely archive this prayer request? It will auto archive when it expires. ",
                   [
                     {
-                      text: "Delete",
+                      text: "Archive",
                       onPress: () => {
-                        updates.deleteRequestTags(requestID);
+                        updates.archiveRequest(requestID);
                         toggleDeletePopupVisibility(!deletePopupVisible);
                         refreshPage();
                       },
@@ -152,7 +152,7 @@ const RequestsScreen = ({ route, navigation }) => {
                 );
               }}
             >
-              <Text style={styles.plusSign}>Delete</Text>
+              <Text style={styles.plusSign}>Archive</Text>
             </TouchableOpacity>
 
             <TouchableOpacity

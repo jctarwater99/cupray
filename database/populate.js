@@ -256,7 +256,7 @@ export function populateDBwithTags() {
   }
 
   var tags = new Array();
-  tags.push(createTag("Expired")); // 1
+  tags.push(createTag("Archived")); // 1
   tags.push(createTag("Bob")); // 2
   tags.push(createTag("Authority")); // 3
   tags.push(createTag("Sister")); // 4
@@ -334,10 +334,11 @@ export function populateDBwithRequestTags() {
   RTs.push(createRT(8, 2)); // Bob's career,        Bob
   RTs.push(createRT(3, 5)); // Depressed friend,    friends
   RTs.push(createRT(8, 5)); // Bob's career,        friends
+  RTs.push(createRT(8, 9)); // Bob's career,        family
   RTs.push(createRT(5, 7)); // Division in church   church
   RTs.push(createRT(4, 4)); // Sisters rela-ship    sister
   RTs.push(createRT(4, 9)); // Sisters rela-ship    Family
-  RTs.push(createRT(9, 1)); // Proposal,            expired
+  RTs.push(createRT(9, 1)); // Proposal,            Archived
   RTs.push(createRT(9, 2)); // Proposal,            Bob
   RTs.push(createRT(9, 5)); // Proposal,            friends
   RTs.push(createRT(2, 10)); // SD                   myself
