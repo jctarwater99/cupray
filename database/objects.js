@@ -28,6 +28,7 @@ export class DailyRequest {
 export class Reminder {
   requestID = 0;
   reminderID = 0;
+  furthestDate = "";
 }
 export class Category {
   name = ""; // Max 10?

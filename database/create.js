@@ -87,6 +87,7 @@ export function createDatabase() {
       "CREATE TABLE IF NOT EXISTS reminders ( " +
         "reminderID		TEXT PRIMARY KEY," +
         "requestID		INT," +
+        "furthestDate		TEXT," +
         "FOREIGN KEY (requestID) REFERENCES requests(id));",
       null,
       () => void 0,

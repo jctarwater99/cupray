@@ -4,7 +4,6 @@ import { Image, TouchableOpacity, Dimensions, FlatList } from "react-native";
 import { StyleSheet, Button, Text, View } from "react-native";
 import { populateDB } from "../database/populate";
 import { createDatabase, dropForTesting } from "../database/create";
-import * as queries from "../database/query";
 import * as Notifications from 'expo-notifications';
 import { scheduleNotifs } from '../schedule/scheduler';
 
@@ -40,6 +39,7 @@ const WelcomeScreen = ({ navigation }) => {
         <Text
           style={styles.thePrayer}
           onPress={() => {
+            Notifications.cancelAllScheduledNotificationsAsync();
             scheduleNotifs();
             navigation.navigate("TempDash");
           }}

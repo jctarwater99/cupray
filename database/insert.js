@@ -66,18 +66,6 @@ export function insertRequestTag(requestTag) {
   });
 }
 
-export function insertReminder(reminder) {
-  db.transaction((tx) => {
-    tx.executeSql(
-      "INSERT INTO reminders(reminderID, requestID) VALUES(?, ?);",
-      [reminder.reminderID, reminder.requestID],
-      () => void 0,
-      (tx, result) => {
-        console.log("Inserting reminder failed", result);
-      }
-    );
-  });
-}
 export function insertCategory(category) {
   db.transaction((tx) => {
     tx.executeSql(
