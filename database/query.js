@@ -170,3 +170,31 @@ export function getNewReqId(callback) {
     );
   });
 }
+
+export function getCategoriesWithActiveCount(callback) {
+  db.transaction((tx) => {
+    tx.executeSql(
+      "SELECT tagID, name, remind_days, remind_time, count(requests) as active_count FROM (" +
+        "SELECT DISTINCT requests.id as requests, categories.name, categories.tagID, " +
+        "categories.name, categories.remind_days, categories.remind_time FROM requests " +
+        "INNER JOIN request_tags as RT ON requests.id = RT.requestID " +
+        "INNER JOIN categories ON categories.tagID = RT.tagID " +
+        "WHERE requests.id IN (" +
+        "SELECT requests.id FROM requests " +
+        "INNER JOIN request_tags as RT ON requests.id = RT.requestID " +
+        "EXCEPT " +
+        "SELECT requests.id FROM requests " +
+        "INNER JOIN request_tags as RT ON requests.id = RT.requestID " +
+        "WHERE RT.tagID = 1)) " +
+        "GROUP BY name ",
+      [],
+      (tx, result) => {
+        console.log(result.rows._array);
+        //callback(result.rows._array);
+      },
+      (tx, result) => {
+        console.log("Get categories with active count failed", result);
+      }
+    );
+  });
+}

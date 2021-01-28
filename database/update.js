@@ -70,9 +70,7 @@ export function editCategory(cat) {
     tx.executeSql(
       "UPDATE categories SET name = ?, remind_days = ?, remind_time = ? WHERE tagID = ?",
       [cat.name, cat.remind_days, cat.remind_time, cat.tagID],
-      (tx, result) => {
-        console.log("Why tho:", result);
-      },
+      () => void 0,
       (tx, result) => {
         console.log("Updating category failed", result);
       }
@@ -246,8 +244,7 @@ export function archiveRequestsInCategory(catID) {
         "SELECT DISTINCT id, 1 as tagId FROM ( " +
         "SELECT requests.id FROM requests " +
         "INNER JOIN request_tags as RT ON RT.requestID = requests.id " +
-        "INNER JOIN tags ON RT.tagID = tags.id " +
-        "WHERE tags.id = ? " +
+        "WHERE RT.tagID = ?" +
         "EXCEPT SELECT * FROM (" +
         "SELECT requests.id FROM requests " +
         "INNER JOIN request_tags as RT ON RT.requestID = requests.id " +
@@ -274,6 +271,28 @@ export function archiveRequest(reqID) {
       () => void 0,
       (tx, result) => {
         console.log("Archiving requests in category failed", result);
+      }
+    );
+  });
+}
+
+export function archive(currTime) {
+  db.transaction((tx) => {
+    tx.executeSql(
+      "INSERT INTO request_tags(requestID, tagId) " +
+        "SELECT DISTINCT id, 1 as tagId FROM ( " +
+        "SELECT requests.id FROM requests " +
+        //"INNER JOIN request_tags as RT ON RT.requestID = requests.id " +
+        //"INNER JOIN tags ON RT.tagID = tags.id " +
+        "WHERE requests.expire_time < ? " +
+        "EXCEPT" +
+        "SELECT requests.id FROM requests " +
+        "INNER JOIN request_tags as RT ON RT.requestID = requests.id " +
+        "WHERE RT.tagID = 1)",
+      [currTime],
+      (tx, result) => console.log("Archive Success", result), //() => void 0,
+      (tx, result) => {
+        console.log("Archiving requests failed", result);
       }
     );
   });

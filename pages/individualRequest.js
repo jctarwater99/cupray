@@ -54,8 +54,11 @@ const ThisRequestScreen = ({ route, navigation }) => {
   let [newTag, setNewTag] = useState("");
 
   useEffect(() => {
+    // On IOS, can't calculate the date fast if we wait till the query returns and it breaks stuff
+    // So we do it here
     let date = new Date();
     setSelectedDate(date);
+
     // Loads request
     queries.getRequest(route.params.req_id, (results) => {
       setRequest(results);
@@ -246,6 +249,7 @@ const ThisRequestScreen = ({ route, navigation }) => {
     if (route.params.isNewReq) {
       // Create New "New Request"
       inserts.insertRequest({ subject: "Subject", description: "Description" });
+      //updates.updateActiveReqCount(route.params.cat_id);
       navigation.navigate("Cat");
     }
   };

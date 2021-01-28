@@ -37,8 +37,8 @@ export function createDatabase() {
         "id INTEGER PRIMARY KEY," +
         "subject	TEXT, " +
         "description	TEXT," +
-        "create_time	TEXT," +
-        "expire_time	TEXT," +
+        "create_time	INT," +
+        "expire_time	INT," +
         "remind_freq	INT," +
         "remind_days  TEXT," +
         "remind_time	TEXT," +
@@ -85,7 +85,7 @@ export function createDatabase() {
         "tagID INTEGER PRIMARY KEY, " +
         "name TEXT, " +
         "remind_days TEXT," +
-        "remind_time TEXT, " +
+        "remind_time INT, " +
         "FOREIGN KEY (tagID) REFERENCES tags(id));",
       null,
       () => void 0,
