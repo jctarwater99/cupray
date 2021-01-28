@@ -297,16 +297,3 @@ export function archive(currTime) {
     );
   });
 }
-
-export function updateActiveReqCount(catID, newCount) {
-  db.transaction((tx) => {
-    tx.executeSql(
-      "UPDATE categories SET active_requests = ? WHERE id = ?",
-      [newCount, catID],
-      () => void 0,
-      (tx, result) => {
-        console.log("Updating Active Request Count failed", result);
-      }
-    );
-  });
-}
