@@ -32,8 +32,8 @@ export function populateDBwithRequests() {
     request = new Request();
     request.subject = sub;
     request.description = desc;
-    request.create_time = "Mon Jan 11 2021 10:12:10 GMT-0600 (CST)";
-    request.expire_time = "Mon Feb 15 2021 10:12:10 GMT-0600 (CST)";
+    request.create_time = 1610727130000;
+    request.expire_time = 1613405530000;
     request.remind_freq = 1;
     request.remind_days = "";
     request.remind_time = "15:15";
@@ -261,7 +261,6 @@ export function populateDBwithTags() {
   tags.push(createTag("Authority")); // 3
   tags.push(createTag("Sister")); // 4
   tags.push(createTag("Friends")); // 5
-  tags.push(createTag("Archived")); // 6
   tags.push(createTag("Church")); // 7
   tags.push(createTag("Missions")); // 8
   tags.push(createTag("Family")); // 9
@@ -285,36 +284,11 @@ export function populateDBwithCategories() {
   }
 
   var cats = new Array();
-  cats.push(
-    createCat(
-      "Friends",
-      5,
-      "0101010",
-      "Wed Dec 16 2020 13:00:00 GMT-0500 (EST)"
-    )
-  );
-  cats.push(
-    createCat("Church", 7, "0010001", "Wed Dec 16 2020 14:00:00 GMT-0500 (EST)")
-  );
-  cats.push(
-    createCat(
-      "Missions",
-      8,
-      "1000000",
-      "Wed Dec 16 2020 15:00:00 GMT-0500 (EST)"
-    )
-  );
-  cats.push(
-    createCat("Family", 9, "0010101", "Wed Dec 16 2020 18:00:00 GMT-0500 (EST)")
-  );
-  cats.push(
-    createCat(
-      "Myself",
-      10,
-      "0101011",
-      "Wed Dec 16 2020 20:00:00 GMT-0500 (EST)"
-    )
-  );
+  cats.push(createCat("Friends", 5, "0101010", 1608141600000));
+  cats.push(createCat("Church", 6, "0010001", 1608145200000));
+  cats.push(createCat("Missions", 7, "1000000", 1608148800000));
+  cats.push(createCat("Family", 8, "0010101", 1608159600000));
+  cats.push(createCat("Myself", 9, "0101011", 1608166800000));
 
   cats.forEach((element) => {
     db_insert.insertCategory(element);
@@ -334,32 +308,32 @@ export function populateDBwithRequestTags() {
   RTs.push(createRT(8, 2)); // Bob's career,        Bob
   RTs.push(createRT(3, 5)); // Depressed friend,    friends
   RTs.push(createRT(8, 5)); // Bob's career,        friends
-  RTs.push(createRT(8, 9)); // Bob's career,        family
-  RTs.push(createRT(5, 7)); // Division in church   church
+  RTs.push(createRT(8, 8)); // Bob's career,        family
+  RTs.push(createRT(5, 6)); // Division in church   church
   RTs.push(createRT(4, 4)); // Sisters rela-ship    sister
-  RTs.push(createRT(4, 9)); // Sisters rela-ship    Family
+  RTs.push(createRT(4, 8)); // Sisters rela-ship    Family
   RTs.push(createRT(9, 1)); // Proposal,            Archived
   RTs.push(createRT(9, 2)); // Proposal,            Bob
   RTs.push(createRT(9, 5)); // Proposal,            friends
-  RTs.push(createRT(2, 10)); // SD                   myself
-  RTs.push(createRT(10, 10)); // Contentment          myself
-  RTs.push(createRT(11, 10)); // Consistency in word  myself
+  RTs.push(createRT(2, 9)); // SD                   myself
+  RTs.push(createRT(10, 9)); // Contentment          myself
+  RTs.push(createRT(11, 9)); // Consistency in word  myself
 
   RTs.push(createRT(12, 5)); // 13
   RTs.push(createRT(13, 5));
   RTs.push(createRT(14, 5));
-  RTs.push(createRT(15, 7));
-  RTs.push(createRT(16, 7));
-  RTs.push(createRT(17, 8)); // 18
-  RTs.push(createRT(18, 8)); // 19
-  RTs.push(createRT(19, 8)); // 20
-  RTs.push(createRT(20, 9));
-  RTs.push(createRT(21, 9));
-  RTs.push(createRT(22, 9));
-  RTs.push(createRT(23, 10));
-  RTs.push(createRT(24, 10));
-  RTs.push(createRT(25, 10));
-  RTs.push(createRT(26, 10));
+  RTs.push(createRT(15, 6));
+  RTs.push(createRT(16, 6));
+  RTs.push(createRT(17, 7)); // 18
+  RTs.push(createRT(18, 7)); // 19
+  RTs.push(createRT(19, 7)); // 20
+  RTs.push(createRT(20, 8));
+  RTs.push(createRT(21, 8));
+  RTs.push(createRT(22, 8));
+  RTs.push(createRT(23, 9));
+  RTs.push(createRT(24, 9));
+  RTs.push(createRT(25, 9));
+  RTs.push(createRT(26, 9));
 
   RTs.forEach((element) => {
     db_insert.insertRequestTag(element);

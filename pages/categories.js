@@ -171,9 +171,10 @@ const CategoriesScreen = ({ navigation }) => {
           })
         }
         onLongPress={() => {
+          let date = new Date(category.remind_time);
           setSelectedCategory(category);
           setSelectedCatName(category.name);
-          setSelectedTime(new Date(category.remind_time));
+          setSelectedTime(date);
           let newDays = [0, 0, 0, 0, 0, 0, 0];
           let i = 0;
           for (const day of category.remind_days) {
@@ -182,7 +183,7 @@ const CategoriesScreen = ({ navigation }) => {
           }
           setDays(newDays);
 
-          parseTime(new Date(category.remind_time), setDisplayTime);
+          parseTime(date, setDisplayTime);
 
           toggleEditPopupVisibility(!editPopupVisible);
         }}
@@ -399,7 +400,7 @@ const CategoriesScreen = ({ navigation }) => {
                 // This is the save button for the edit page?
                 style={{ width: width * 0.58 }}
                 onPress={() => {
-                  cat = new Category();
+                  let cat = new Category();
 
                   cat.name = selectedCatName;
                   cat.tagID = selectedCategory.tagID;
@@ -411,7 +412,6 @@ const CategoriesScreen = ({ navigation }) => {
                   cat.remind_days = daysString;
 
                   cat.remind_time = selectedTime.toString();
-
                   updates.editCategory(cat);
                   updates.editTag(selectedCatName, selectedCategory.tagID);
                   toggleEditPopupVisibility(!editPopupVisible);
