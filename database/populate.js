@@ -28,12 +28,18 @@ export function populateDBwithFlags() {
 }
 
 export function populateDBwithRequests() {
+  // Date this was made
+  let curr = 1611866029666;
+  let baseC = 1610727130000;
+  let baseE = 1613405530000;
+  let offset = new Date().getTime() - curr;
+
   function addReq(sub, desc, priority) {
     request = new Request();
     request.subject = sub;
     request.description = desc;
-    request.create_time = 1610727130000;
-    request.expire_time = 1613405530000;
+    request.create_time = baseC + offset;
+    request.expire_time = baseE + offset;
     request.remind_freq = 1;
     request.remind_days = "";
     request.remind_time = "15:15";

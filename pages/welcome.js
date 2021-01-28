@@ -5,7 +5,9 @@ import { StyleSheet, Button, Text, View } from "react-native";
 import { populateDB } from "../database/populate";
 import { createDatabase, dropForTesting } from "../database/create";
 import * as queries from "../database/query";
+import * as updates from "../database/update";
 import * as Notifications from "expo-notifications";
+import { updateRequest } from "../database/update";
 
 var { height, width } = Dimensions.get("window");
 
@@ -45,6 +47,7 @@ const WelcomeScreen = ({ navigation }) => {
           <TouchableOpacity
             style={styles.bbutton}
             onPress={() => {
+              updates.archive(new Date().getTime());
               navigation.navigate("Dash");
             }}
           >

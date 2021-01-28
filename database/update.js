@@ -282,15 +282,13 @@ export function archive(currTime) {
       "INSERT INTO request_tags(requestID, tagId) " +
         "SELECT DISTINCT id, 1 as tagId FROM ( " +
         "SELECT requests.id FROM requests " +
-        //"INNER JOIN request_tags as RT ON RT.requestID = requests.id " +
-        //"INNER JOIN tags ON RT.tagID = tags.id " +
         "WHERE requests.expire_time < ? " +
-        "EXCEPT" +
+        "EXCEPT " +
         "SELECT requests.id FROM requests " +
         "INNER JOIN request_tags as RT ON RT.requestID = requests.id " +
         "WHERE RT.tagID = 1)",
       [currTime],
-      (tx, result) => console.log("Archive Success", result), //() => void 0,
+      () => void 0,
       (tx, result) => {
         console.log("Archiving requests failed", result);
       }
