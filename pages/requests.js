@@ -71,10 +71,18 @@ const RequestsScreen = ({ route, navigation }) => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.container}>
+      <View style={{flexDirection: "row"}}>
+      <TouchableOpacity
+      onPress={() => navigation.openDrawer()}>
+        <Image
+        style={{marginRight: width * 0.05, marginTop: height * 0.015, width: 30, height: 30}}
+        source={require("../assets/hamburger.png")}>
+        </Image>
+        </TouchableOpacity>
         <Text style={styles.title}>
           Requests<Text style={styles.titleAccent}>.</Text>
         </Text>
-
+          </View>
         <View>
           <FlatList
             data={requests}
@@ -180,7 +188,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#EFEFEF",
     alignItems: "center",
-    marginTop: height * 0.025,
+    marginTop: height * 0.005,
   },
 
   requestContainer: {
@@ -231,8 +239,7 @@ const styles = StyleSheet.create({
     color: "#003A63",
     fontSize: 46,
     fontWeight: "700",
-    marginBottom: height * 0.005,
-    marginLeft: width * -0.3,
+    marginRight: width * 0.15,
   },
 
   titleAccent: {

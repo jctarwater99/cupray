@@ -20,7 +20,7 @@ const Dashboard = ({ navigation }) => {
       <TouchableOpacity
       onPress={() => navigation.openDrawer()}>
         <Image
-        style={{marginRight: width * 0.04, marginTop: height * 0.015, width: 30, height: 30}}
+        style={{marginRight: width * 0.05, marginTop: height * 0.015, width: 30, height: 30}}
         source={require("../assets/hamburger.png")}>
         </Image>
         </TouchableOpacity>
