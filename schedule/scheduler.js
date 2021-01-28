@@ -1,6 +1,7 @@
 import * as queries from "../database/passThroughQuery";
 import * as Notifications from 'expo-notifications';
 import { Reminder } from "../database/objects";
+import { getCategories } from "../database/query";
 
 export function scheduleNotificationWait(title, body, wait) {
     Notifications.scheduleNotificationAsync({
@@ -44,6 +45,23 @@ function getDaysDiff(olderDate, newerDate) {
     newerDate.setSeconds(0);
     newerDate.setMilliseconds(0);
     return (newerDate.getTime() - olderDate.getTime()) / (1000 * 60 * 60 * 24);
+}
+
+export function selectQuietTimeRequests() {
+    getCategories((results) => {
+        var tickets = [];
+        var 
+        var i;
+        for (i = 0; i < results.length; i++) {
+            var j;
+            // TODO: setup reqCnt!!!
+            for (j = 0; j < results[i].reqCnt; j++) {
+                tickets.push(tagID);
+            }
+        }
+
+
+    });
 }
 
 export function rescheduleNotifs() {
