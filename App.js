@@ -20,31 +20,13 @@ import RefactorRequestScreen from "./pages/refactorRequest";
 import ThisRequestScreen from "./pages/individualRequest";
 import TempDash from "./pages/tempDash";
 import ScheduledPrayers from "./pages/prayerTime";
+import RootNav from "./pages/RootNav";
 
 const Stack = createStackNavigator();
 
 const App = () => {
   return (
-    <NavigationContainer>
-      <Stack.Navigator
-        initialRouteName="Welcome"
-        screenOptions={{ headerShown: false }}
-      >
-        {<Stack.Screen name="Welcome" component={WelcomeScreen} />}
-        {<Stack.Screen name="Dash" component={Dashboard} />}
-        {<Stack.Screen name="Cat" component={CategoriesScreen} />}
-        {<Stack.Screen name="Requests" component={RequestsScreen} />}
-        {<Stack.Screen name="TempDash" component={TempDash} />}
-        {<Stack.Screen name="Pray" component={ScheduledPrayers} />}
-        {
-          <Stack.Screen
-            name="IndividualRequest"
-            component={ThisRequestScreen}
-          />
-        }
-        {<Stack.Screen name="Test" component={TestPage} />}
-      </Stack.Navigator>
-    </NavigationContainer>
+    <RootNav />
   );
 };
 

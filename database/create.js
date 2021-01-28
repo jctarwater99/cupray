@@ -3,14 +3,13 @@ import * as SQLite from "expo-sqlite";
 export function dropForTesting() {
   const db = SQLite.openDatabase("db.cupray");
   db.transaction((tx) => {
+    tx.executeSql("DROP TABLE IF EXISTS flags");
     tx.executeSql("DROP TABLE IF EXISTS requests");
     tx.executeSql("DROP TABLE IF EXISTS tags");
     tx.executeSql("DROP TABLE IF EXISTS request_tags");
     tx.executeSql("DROP TABLE IF EXISTS categories");
     tx.executeSql("DROP TABLE IF EXISTS daily_requests");
-    tx.executeSql("DROP TABLE IF EXISTS reminders", [], () => {
-      console.log("Last drop");
-    });
+    tx.executeSql("DROP TABLE IF EXISTS reminders");
   });
 }
 
@@ -19,6 +18,19 @@ export function dropForTesting() {
 export function createDatabase() {
   const db = SQLite.openDatabase("db.cupray");
   db.transaction((tx) => {
+    // Flags
+    tx.executeSql(
+      "CREATE TABLE IF NOT EXISTS flags ( " +
+        "id INTEGER PRIMARY KEY," +
+        "name TEXT," +
+        "value TEXT);",
+      null,
+      () => void 0,
+      (tx, result) => {
+        console.log("Creating 'flags' table failed", result);
+      }
+    );
+
     // Requests
     tx.executeSql(
       "CREATE TABLE IF NOT EXISTS requests (" +
