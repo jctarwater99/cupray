@@ -198,3 +198,23 @@ export function getCategoriesWithActiveCount(callback) {
     );
   });
 }
+export function getTagsForTagsPage(callback) {
+  db.transaction((tx) => {
+    tx.executeSql(
+      "SELECT * FROM ( " +
+        "SELECT name, id, 0 as isCategory from tags WHERE tags.name != 'Archived' " +
+        "EXCEPT " +
+        "SELECT name, tagID as id, 0 as isCategory from categories " +
+        "UNION " +
+        "SELECT name, tagID as id, 1 as isCategory from categories ) " +
+        "ORDER BY name",
+      [],
+      (tx, result) => {
+        callback(result.rows._array);
+      },
+      (tx, result) => {
+        console.log("getTags query failed", result);
+      }
+    );
+  });
+}

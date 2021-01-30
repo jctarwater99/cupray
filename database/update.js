@@ -89,6 +89,18 @@ export function editTag(newTagName, tagID) {
     );
   });
 }
+export function editCatName(newCatName, tagID) {
+  db.transaction((tx) => {
+    tx.executeSql(
+      "UPDATE categories SET name = ? WHERE tagID = ?",
+      [newCatName, tagID],
+      () => void 0,
+      (tx, result) => {
+        console.log("Updating category name failed", result);
+      }
+    );
+  });
+}
 
 export function deleteRequest(reqID) {
   db.transaction((tx) => {
