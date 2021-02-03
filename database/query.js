@@ -218,3 +218,17 @@ export function getTagsForTagsPage(callback) {
     );
   });
 }
+export function getFlag(name, callback) {
+  db.transaction((tx) => {
+    tx.executeSql(
+      "SELECT value FROM flags WHERE name = ?",
+      [name],
+      (tx, result) => {
+        callback(result.rows._array[0]);
+      },
+      (tx, result) => {
+        console.log("get flag query failed", result);
+      }
+    );
+  });
+}

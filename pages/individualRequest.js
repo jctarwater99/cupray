@@ -11,7 +11,6 @@ import {
   Text,
   View,
 } from "react-native";
-import { CheckBox } from "react-native-elements";
 import * as queries from "../database/query";
 import * as updates from "../database/update";
 import * as inserts from "../database/insert";
@@ -20,13 +19,11 @@ import Modal from "react-native-modal";
 import { Dropdown } from "react-native-material-dropdown-v2";
 import DateTimePicker from "@react-native-community/datetimepicker";
 
-import { LogBox } from "react-native";
-
 // Ignore log notification by message
+import { LogBox } from "react-native";
 LogBox.ignoreLogs([
   "Warning: componentWillReceiveProps has been renamed, and is not recommended for use. See https://fb.me/react-unsafe-component-lifecycles for details.",
 ]);
-
 LogBox.ignoreLogs([
   "Animated: `useNativeDriver` was not specified. This is a required option and must be explicitly set to `true` or `false`",
 ]);
@@ -338,8 +335,11 @@ const ThisRequestScreen = ({ route, navigation }) => {
   })();
 
   const handleChangeDate = (event, selectedDate) => {
-    const newDate = selectedDate || selectedTime;
     setDatePickerVisibility(Platform.OS === "ios"); // This is pretty creative, I like it :)
+    if (event.type == "dismissed") {
+      return;
+    }
+    const newDate = selectedDate || selectedTime;
     setSelectedDate(newDate);
     parseDate(newDate, setDisplayDate);
   };

@@ -23,7 +23,7 @@ export function populateDB() {
 export function populateDBwithFlags() {
   db_insert.insertFlag(
     "lastScheduled",
-    "Mon Feb 15 2021 10:12:10 GMT-0600 (CST)"
+    "Tue Feb 01 2021 00:00:00 GMT-0500 (EST)"
   );
 }
 
