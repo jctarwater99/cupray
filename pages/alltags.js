@@ -57,145 +57,148 @@ const AllTags = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <View style={{ flexDirection: "row", marginRight: width * 0.3}}>
-        <TouchableOpacity onPress={() => navigation.openDrawer()}>
-          <Image
-            style={{
-              marginRight: width * 0.05,
-              marginTop: height * 0.015,
-              width: 30,
-              height: 30,
-              resizeMode: 'contain'
-            }}
-            source={require("../assets/hamburger.png")}
-          ></Image>
-        </TouchableOpacity>
-        <Text style={styles.title}>
-          All Tags<Text style={styles.titleAccent}>.</Text>
-        </Text>
-      </View>
-      <View style={styles.folderContainer}>
-        <FlatList
-          data={tags}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={({ item, index }) => listItemView(item)}
-        />
-      </View>
-      <View style={styles.addCat}>
-        <TouchableOpacity
-          onPress={() => {
-            setIsNewTag(true);
-            setCurrentTag("e.g. Jerry");
-            toggleEditPopupVisibility(!editPopupVisible);
-          }} // goto create category page or popup or something
-          style={styles.createCategoryButton}
-        >
-          <Text style={styles.plusSign}>+</Text>
-        </TouchableOpacity>
-        <Text style={[styles.plusSign, { marginTop: height * 0.01 }]}>
-          Add Tag
-        </Text>
+      <FlatList
+        ListHeaderComponent={
+          <View style={{ flexDirection: "row", marginRight: width * 0.3 }}>
+            <TouchableOpacity onPress={() => navigation.openDrawer()}>
+              <Image
+                style={{
+                  marginRight: width * 0.05,
+                  marginTop: height * 0.015,
+                  width: 30,
+                  height: 30,
+                  resizeMode: "contain",
+                }}
+                source={require("../assets/hamburger.png")}
+              ></Image>
+            </TouchableOpacity>
+            <Text style={styles.title}>
+              All Tags<Text style={styles.titleAccent}>.</Text>
+            </Text>
+          </View>
+        }
+        data={tags}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({ item, index }) => listItemView(item)}
+        showsVerticalScrollIndicator={false}
+        ListFooterComponent={
+          <View style={styles.addCat}>
+            <TouchableOpacity
+              onPress={() => {
+                setIsNewTag(true);
+                setCurrentTag("e.g. Jerry");
+                toggleEditPopupVisibility(!editPopupVisible);
+              }} // goto create category page or popup or something
+              style={styles.createCategoryButton}
+            >
+              <Text style={styles.plusSign}>+</Text>
+            </TouchableOpacity>
+            <Text style={[styles.plusSign, { marginTop: height * 0.01 }]}>
+              Add Tag
+            </Text>
 
-        <Modal
-          isVisible={editPopupVisible}
-          backdropOpacity={0.25}
-          animationInTiming={200}
-          animationOutTiming={600}
-          style={styles.modalContent}
-          onBackdropPress={() => {
-            toggleEditPopupVisibility(!editPopupVisible);
-          }}
-        >
-          <View style={styles.popUpContainer}>
-            <Text style={styles.popUpHeader}>Edit Tag</Text>
-            <TextInput
-              maxLength={15} // max number of chars
-              multiline={true}
-              value={selectedTagName}
-              onChange={(text) => setSelectedTagName(text.nativeEvent.text)}
-              style={{
-                backgroundColor: "white",
-                color: "#7E8C96",
-                padding: 5,
-                textAlignVertical: "top",
-                fontWeight: "600",
-                alignSelf: "stretch",
-                textAlign: "center",
-                marginLeft: width * 0.1,
-                marginRight: width * 0.1,
-                marginBottom: height * 0.05,
-              }}
-            />
-
-            <View
-              style={{
-                flexDirection: "row",
-                position: "absolute",
-                bottom: height * 0.03,
+            <Modal
+              isVisible={editPopupVisible}
+              backdropOpacity={0.25}
+              animationInTiming={200}
+              animationOutTiming={600}
+              style={styles.modalContent}
+              onBackdropPress={() => {
+                toggleEditPopupVisibility(!editPopupVisible);
               }}
             >
-              <TouchableOpacity
-                style={[
-                  { width: width * 0.6 },
-                  isNewTag ? { display: none } : {},
-                ]}
-                onPress={() => {
-                  // Provide warning
-                  Alert.alert(
-                    "Warning",
-                    "Deleting this Tag could cause requests associated with it to archive automatically. Are you sure?",
-                    [
-                      {
-                        text: "Delete",
-                        onPress: () => {
-                          let id = selectedTag.id;
-                          updates.deleteRequestTagsOfTag(id);
-                          if (selectedTag.isCategory) {
-                            updates.archiveRequestsInCategory(id);
-                            updates.deleteCategory(id);
-                          }
-                          updates.deleteTag(id);
-                          toggleEditPopupVisibility(!editPopupVisible);
-                          refreshPage();
-                        },
-                      },
-                      {
-                        text: "Cancel",
-                        style: "cancel",
-                        onPress: () => {
-                          toggleEditPopupVisibility(!editPopupVisible);
-                        },
-                      },
-                    ]
-                  );
-                }}
-              >
-                <Text style={styles.plusSign}>Delete</Text>
-              </TouchableOpacity>
+              <View style={styles.popUpContainer}>
+                <Text style={styles.popUpHeader}>Edit Tag</Text>
+                <TextInput
+                  maxLength={15} // max number of chars
+                  multiline={true}
+                  value={selectedTagName}
+                  onChange={(text) => setSelectedTagName(text.nativeEvent.text)}
+                  style={{
+                    backgroundColor: "white",
+                    color: "#7E8C96",
+                    padding: 5,
+                    textAlignVertical: "top",
+                    fontWeight: "600",
+                    alignSelf: "stretch",
+                    textAlign: "center",
+                    marginLeft: width * 0.1,
+                    marginRight: width * 0.1,
+                    marginBottom: height * 0.05,
+                  }}
+                />
 
-              <TouchableOpacity
-                // This is the save button for the edit page?
-                style={{ width: width * 0.58 }}
-                onPress={() => {
-                  if (isNewTag) {
-                    inserts.insertNewTag(selectedTagName);
-                  } else {
-                    let id = selectedTag.id;
-                    updates.editTag(selectedTagName, id);
-                    if (selectedTag.isCategory) {
-                      updates.editCatName(selectedTagName, id);
-                    }
-                  }
-                  toggleEditPopupVisibility(!editPopupVisible);
-                  refreshPage();
-                }}
-              >
-                <Text style={styles.plusSign}>Save</Text>
-              </TouchableOpacity>
-            </View>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    position: "absolute",
+                    bottom: height * 0.03,
+                  }}
+                >
+                  <TouchableOpacity
+                    style={[
+                      { width: width * 0.6 },
+                      isNewTag ? { display: none } : {},
+                    ]}
+                    onPress={() => {
+                      // Provide warning
+                      Alert.alert(
+                        "Warning",
+                        "Deleting this Tag could cause requests associated with it to archive automatically. Are you sure?",
+                        [
+                          {
+                            text: "Delete",
+                            onPress: () => {
+                              let id = selectedTag.id;
+                              updates.deleteRequestTagsOfTag(id);
+                              if (selectedTag.isCategory) {
+                                updates.archiveRequestsInCategory(id);
+                                updates.deleteCategory(id);
+                              }
+                              updates.deleteTag(id);
+                              toggleEditPopupVisibility(!editPopupVisible);
+                              refreshPage();
+                            },
+                          },
+                          {
+                            text: "Cancel",
+                            style: "cancel",
+                            onPress: () => {
+                              toggleEditPopupVisibility(!editPopupVisible);
+                            },
+                          },
+                        ]
+                      );
+                    }}
+                  >
+                    <Text style={styles.plusSign}>Delete</Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    // This is the save button for the edit page?
+                    style={{ width: width * 0.58 }}
+                    onPress={() => {
+                      if (isNewTag) {
+                        inserts.insertNewTag(selectedTagName);
+                      } else {
+                        let id = selectedTag.id;
+                        updates.editTag(selectedTagName, id);
+                        if (selectedTag.isCategory) {
+                          updates.editCatName(selectedTagName, id);
+                        }
+                      }
+                      toggleEditPopupVisibility(!editPopupVisible);
+                      refreshPage();
+                    }}
+                  >
+                    <Text style={styles.plusSign}>Save</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </Modal>
           </View>
-        </Modal>
-      </View>
+        }
+      />
     </View> // Nested much? lol
   );
 };
