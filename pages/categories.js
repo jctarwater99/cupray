@@ -49,6 +49,7 @@ const CategoriesScreen = ({ navigation }) => {
     if (Platform.OS == "ios") {
       setTimePickerVisibility(true);
     }
+    checkBooks();
   }, []);
 
   let handleDayPress = (number) => {
@@ -206,17 +207,22 @@ const CategoriesScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-       <View style={{ flexDirection: "row"}}>
-      <TouchableOpacity
-      onPress={() => navigation.openDrawer()}>
-        <Image
-        style={{marginRight: width * 0.05, marginTop: height * 0.015, width: 30, height: 30, resizeMode: 'contain'}}
-        source={require("../assets/hamburger.png")}>
-        </Image>
+      <View style={{ flexDirection: "row" }}>
+        <TouchableOpacity onPress={() => navigation.openDrawer()}>
+          <Image
+            style={{
+              marginRight: width * 0.05,
+              marginTop: height * 0.015,
+              width: 30,
+              height: 30,
+              resizeMode: "contain",
+            }}
+            source={require("../assets/hamburger.png")}
+          ></Image>
         </TouchableOpacity>
-      <Text style={styles.title}>
-        Categories<Text style={styles.titleAccent}>.</Text>
-      </Text>
+        <Text style={styles.title}>
+          Categories<Text style={styles.titleAccent}>.</Text>
+        </Text>
       </View>
       <View style={styles.folderContainer}>
         <FlatList

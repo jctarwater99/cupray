@@ -30,17 +30,20 @@ async function requestPermissionsAsync() {
 }
 
 const WelcomeScreen = ({ navigation }) => {
-  Notifications.setNotificationHandler(({
+  Notifications.setNotificationHandler({
     handleNotification: async () => ({
       shouldShowAlert: true,
       shouldPlaySound: false,
       shouldSetBadge: false,
-    })
-  }));
+    }),
+  });
   return (
     <View style={styles.welcomeContainer}>
       <View style={styles.contentContainer}>
-        <Image style={styles.pray} source={require("../assets/cupray_logo.png")} />
+        <Image
+          style={styles.pray}
+          source={require("../assets/cupray_logo.png")}
+        />
         <Text style={styles.cu}>
           CU<Text style={styles.cupray}>Pray.</Text>
         </Text>
@@ -90,7 +93,7 @@ const styles = StyleSheet.create({
   pray: {
     width: 150,
     height: 150,
-    resizeMode: 'contain',
+    resizeMode: "contain",
   },
 
   cu: {

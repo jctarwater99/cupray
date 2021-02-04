@@ -28,6 +28,7 @@ const AllTags = ({ navigation }) => {
 
   useEffect(() => {
     queries.getTagsForTagsPage(setTags);
+    checkBooks();
   }, []);
 
   let refreshPage = () => {

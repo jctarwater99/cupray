@@ -14,6 +14,7 @@ import {
 import * as queries from "../database/query";
 import * as updates from "../database/update";
 import * as inserts from "../database/insert";
+import * as scheduler from "../schedule/scheduler";
 import { Category, Tag } from "../database/objects";
 import Modal from "react-native-modal";
 import { Dropdown } from "react-native-material-dropdown-v2";
@@ -71,6 +72,7 @@ const ThisRequestScreen = ({ route, navigation }) => {
         state[1] = false;
       }
       setBoxes(state);
+      checkBooks();
     });
 
     queries.getTagsForRequest(route.params.req_id, (rTags) => {
@@ -243,7 +245,7 @@ const ThisRequestScreen = ({ route, navigation }) => {
     if (route.params.isNewReq) {
       // Create New "New Request"
       inserts.insertRequest({ subject: "Subject", description: "Description" });
-      //updates.updateActiveReqCount(route.params.cat_id);
+      scheduler.rescheduleNotifs();
       navigation.navigate("Cat");
     }
   };
@@ -566,7 +568,7 @@ const ThisRequestScreen = ({ route, navigation }) => {
                   marginTop: height * 0.023,
                   width: 30,
                   height: 30,
-                  resizeMode: 'contain'
+                  resizeMode: "contain",
                 }}
                 source={require("../assets/hamburger.png")}
               ></Image>

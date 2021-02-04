@@ -12,21 +12,27 @@ const Dashboard = ({ navigation }) => {
     queries.getNewReqId((result) => {
       setNewReqId(result);
     });
+    checkBooks();
   }, []);
 
   return (
     <View style={styles.dashboardContainer}>
-      <View style={{flex: .3, flexDirection: "row"}}>
-      <TouchableOpacity
-      onPress={() => navigation.openDrawer()}>
-        <Image
-        style={{marginRight: width * 0.05, marginTop: height * 0.015, width: 30, height: 30, resizeMode: 'contain'}}
-        source={require("../assets/hamburger.png")}>
-        </Image>
+      <View style={{ flex: 0.3, flexDirection: "row" }}>
+        <TouchableOpacity onPress={() => navigation.openDrawer()}>
+          <Image
+            style={{
+              marginRight: width * 0.05,
+              marginTop: height * 0.015,
+              width: 30,
+              height: 30,
+              resizeMode: "contain",
+            }}
+            source={require("../assets/hamburger.png")}
+          ></Image>
         </TouchableOpacity>
-      <Text style={styles.title}>
-        Home<Text style={styles.titleAccent}>.</Text>
-      </Text>
+        <Text style={styles.title}>
+          Home<Text style={styles.titleAccent}>.</Text>
+        </Text>
       </View>
       <View style={styles.verseContainer}>
         <Text style={styles.verseOf}>Pray Without Ceasing</Text>
@@ -42,7 +48,9 @@ const Dashboard = ({ navigation }) => {
         <View style={{ marginRight: width * 0.1 }}>
           <TouchableOpacity
             style={styles.icon}
-            onPress={() => {navigation.navigate("Cat"); queries.getDailyRequests((result) => {console.log(result);});}}
+            onPress={() => {
+              navigation.navigate("Cat");
+            }}
           >
             <Image
               style={styles.dashImage}
@@ -67,8 +75,9 @@ const Dashboard = ({ navigation }) => {
       </View>
       <View style={styles.iconRow}>
         <View style={{ marginRight: width * 0.1 }}>
-          <TouchableOpacity style={styles.icon}
-          onPress={() => navigation.navigate("AllReqs")}
+          <TouchableOpacity
+            style={styles.icon}
+            onPress={() => navigation.navigate("AllReqs")}
           >
             <Image
               style={styles.dashImage}
@@ -91,7 +100,15 @@ const Dashboard = ({ navigation }) => {
             }}
           >
             <Image
-              style={[styles.dashImage, { width: 56, height: 56, marginTop: height * 0.042, marginLeft: width * 0.1 }]}
+              style={[
+                styles.dashImage,
+                {
+                  width: 56,
+                  height: 56,
+                  marginTop: height * 0.042,
+                  marginLeft: width * 0.1,
+                },
+              ]}
               source={require("../assets/plus.png")}
             />
           </TouchableOpacity>
@@ -158,7 +175,7 @@ const styles = StyleSheet.create({
     marginTop: height * 0.025,
     width: 85,
     height: 85,
-    resizeMode: 'contain',
+    resizeMode: "contain",
   },
 
   dashText: {

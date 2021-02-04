@@ -26,6 +26,7 @@ const RequestsScreen = ({ route, navigation }) => {
       setRequests(results)
     );
     queries.getNewReqId(setNewReqId);
+    checkBooks();
   }, []);
 
   let refreshPage = () => {
@@ -76,7 +77,7 @@ const RequestsScreen = ({ route, navigation }) => {
                 marginTop: height * 0.015,
                 width: 30,
                 height: 30,
-                resizeMode: 'contain'
+                resizeMode: "contain",
               }}
               source={require("../assets/hamburger.png")}
             ></Image>

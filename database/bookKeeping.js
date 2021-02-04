@@ -2,6 +2,7 @@ import * as SQLite from "expo-sqlite";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import * as queries from "./query";
 import * as updates from "./update";
+import * as scheduler from "../schedule/scheduler";
 
 // Call this function at the end of every useEffect()
 export function checkBooks() {
@@ -21,8 +22,9 @@ export function checkBooks() {
     updates.setFlag("lastScheduled", currDate.toString());
     updates.archive(currDate.getTime());
     // Schedule
-
+    scheduler.scheduleNotifs();
 
     // Also, don't forget to call Noah's reschedule whenever creating new requests
+    // And delete notifications when requests are deleted either manually or through category
   });
 }

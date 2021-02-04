@@ -37,13 +37,14 @@ const ScheduledPrayers = ({ route, navigation }) => {
       setRequests(results);
       console.log(results);
       var i;
-      let reqStates = []; 
-      for(i = 0; i < 5 && i < results.length; i++){
+      let reqStates = [];
+      for (i = 0; i < 5 && i < results.length; i++) {
         reqStates.push(results[i].isPrayedFor == 1); // Super important that we don't change from 0/1 to true/false in the db now, RN expects bool
       }
       setRequestStates(reqStates);
     });
     setDayOfTheWeek();
+    checkBooks();
   }, []);
 
   let setDayOfTheWeek = () => {
@@ -89,26 +90,36 @@ const ScheduledPrayers = ({ route, navigation }) => {
     setRequestStates(temp);
 
     // Update value in database
-    // 
     //
-  }
+    //
+  };
 
   let listItemView = (request, index) => {
     return (
       <TouchableOpacity
         key={request.id}
-        style={[styles.requestBar,
-        //requestStates[index] ? styleActive: styleInactive
-      ]}
+        style={[
+          styles.requestBar,
+          //requestStates[index] ? styleActive: styleInactive
+        ]}
         // Navigate @ Request, need isNew??
       >
-        
         <View>
-        <CheckBox
-          checkedIcon={<Image style= {{width: 20, height:20}} source={require('../assets/checked.png')} />}
-          uncheckedIcon={<Image style= {{width: 20, height:20}} source={require('../assets/unchecked.png')} />}
-          checked={requestStates[index]}
-          onPress={() => handleButtonPress(index)}
+          <CheckBox
+            checkedIcon={
+              <Image
+                style={{ width: 20, height: 20 }}
+                source={require("../assets/checked.png")}
+              />
+            }
+            uncheckedIcon={
+              <Image
+                style={{ width: 20, height: 20 }}
+                source={require("../assets/unchecked.png")}
+              />
+            }
+            checked={requestStates[index]}
+            onPress={() => handleButtonPress(index)}
           />
         </View>
         <Text style={styles.requestTitles}>{request.subject}</Text>
@@ -118,17 +129,24 @@ const ScheduledPrayers = ({ route, navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={{flex: .7, flexDirection: "row", marginLeft: width * 0.05}}>
-      <TouchableOpacity
-      onPress={() => navigation.openDrawer()}>
-        <Image
-        style={{marginRight: width * 0.05, marginTop: height * 0.015, width: 30, height: 30, resizeMode: 'contain'}}
-        source={require("../assets/hamburger.png")}>
-        </Image>
+      <View
+        style={{ flex: 0.7, flexDirection: "row", marginLeft: width * 0.05 }}
+      >
+        <TouchableOpacity onPress={() => navigation.openDrawer()}>
+          <Image
+            style={{
+              marginRight: width * 0.05,
+              marginTop: height * 0.015,
+              width: 30,
+              height: 30,
+              resizeMode: "contain",
+            }}
+            source={require("../assets/hamburger.png")}
+          ></Image>
         </TouchableOpacity>
-      <Text style={styles.title}>
-        Pray<Text style={styles.titleAccent}>.</Text>
-      </Text>
+        <Text style={styles.title}>
+          Pray<Text style={styles.titleAccent}>.</Text>
+        </Text>
       </View>
       <Text style={styles.header1}> Today's Schedule </Text>
 
