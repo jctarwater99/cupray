@@ -8,6 +8,13 @@ import * as queries from "../database/query";
 import * as updates from "../database/update";
 import * as Notifications from "expo-notifications";
 import { updateRequest } from "../database/update";
+import * as bookKeeping from "../database/bookKeeping";
+
+// Ignoring potential problems
+import { LogBox } from "react-native";
+LogBox.ignoreLogs([
+  "Your project is accessing the following APIs from a deprecated global rather than a module import: Constants (expo-constants).",
+]);
 
 var { height, width } = Dimensions.get("window");
 
@@ -46,7 +53,7 @@ const WelcomeScreen = ({ navigation }) => {
           <TouchableOpacity
             style={styles.bbutton}
             onPress={() => {
-              updates.archive(new Date().getTime());
+              bookKeeping.checkBooks();
               navigation.navigate("Dash");
             }}
           >

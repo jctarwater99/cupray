@@ -141,7 +141,7 @@ export function deleteRequestTag(requestTag) {
   });
 }
 
-export function editFlag(flagName, newFlagValue) {
+export function setFlag(flagName, newFlagValue) {
   db.transaction((tx) => {
     tx.executeSql(
       "UPDATE flags SET value = ? WHERE name = ?",
