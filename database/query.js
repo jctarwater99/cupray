@@ -143,7 +143,7 @@ export function getTagsForRequest(id, callback) {
 export function getDailyRequests(callback) {
   db.transaction((tx) => {
     tx.executeSql(
-      "SELECT subject, requests.id, isPrayedFor FROM daily_requests, requests " +
+      "SELECT DISTINCT subject, requests.id, isPrayedFor FROM daily_requests, requests " +
         "WHERE requests.id = daily_requests.requestID;",
       [],
       (tx, result) => {

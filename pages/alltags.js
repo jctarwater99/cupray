@@ -16,6 +16,7 @@ import * as updates from "../database/update";
 import * as inserts from "../database/insert";
 import Modal from "react-native-modal";
 import { insertRequest } from "../database/insert";
+import { checkBooks } from "../database/bookKeeping";
 
 var { height, width } = Dimensions.get("window");
 

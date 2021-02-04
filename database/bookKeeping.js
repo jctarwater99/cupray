@@ -23,6 +23,7 @@ export function checkBooks() {
     updates.archive(currDate.getTime());
     // Schedule
     scheduler.scheduleNotifs();
+    scheduler.selectQuietTimeRequests();
 
     // Also, don't forget to call Noah's reschedule whenever creating new requests
     // And delete notifications when requests are deleted either manually or through category

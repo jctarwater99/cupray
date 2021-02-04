@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Image, TouchableOpacity, Dimensions, FlatList } from "react-native";
 import { StyleSheet, Button, Text, View } from "react-native";
 import * as queries from "../database/query";
+import { checkBooks } from "../database/bookKeeping";
 
 var { height, width } = Dimensions.get("window");
 

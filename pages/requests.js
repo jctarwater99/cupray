@@ -12,6 +12,7 @@ import * as queries from "../database/query";
 import * as updates from "../database/update";
 import { Category } from "../database/objects";
 import Modal from "react-native-modal";
+import { checkBooks } from "../database/bookKeeping";
 
 var { height, width } = Dimensions.get("window");
 

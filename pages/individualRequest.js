@@ -19,6 +19,7 @@ import { Category, Tag } from "../database/objects";
 import Modal from "react-native-modal";
 import { Dropdown } from "react-native-material-dropdown-v2";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import { checkBooks } from "../database/bookKeeping";
 
 // Ignore log notification by message
 import { LogBox } from "react-native";

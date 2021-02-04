@@ -14,6 +14,7 @@ import * as queries from "../database/query";
 import * as updates from "../database/update";
 import { Category } from "../database/objects";
 import { CheckBox } from "react-native-elements";
+import { checkBooks } from "../database/bookKeeping";
 
 var { height, width } = Dimensions.get("window");
 
@@ -34,8 +35,7 @@ const ScheduledPrayers = ({ route, navigation }) => {
     // each request has a request.isPrayedFor boolean variable you can use to
     // decide whether or not to render the check mark
     queries.getDailyRequests((results) => {
-      setRequests(results);
-      console.log(results);
+      setRequests(results.slice(0, 5));
       var i;
       let reqStates = [];
       for (i = 0; i < 5 && i < results.length; i++) {
