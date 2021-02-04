@@ -18,6 +18,7 @@ import RefactorRequestScreen from "./refactorRequest";
 import ThisRequestScreen from "./individualRequest";
 import TempDash from "./tempDash";
 import ScheduledPrayers from "./prayerTime";
+import AllReqs from "./allrequests";
 
 const Stack = createStackNavigator();
 
@@ -33,6 +34,7 @@ export default function StackNavigator() {
         {<Stack.Screen name="Requests" component={RequestsScreen} />}
         {<Stack.Screen name="TempDash" component={TempDash} />}
         {<Stack.Screen name="Pray" component={ScheduledPrayers} />}
+        {<Stack.Screen name="AllReqs" component={AllReqs} />}
         {<Stack.Screen name="IndividualRequest" component={ThisRequestScreen}/>}
         {<Stack.Screen name="Test" component={TestPage} />}
       </Stack.Navigator>

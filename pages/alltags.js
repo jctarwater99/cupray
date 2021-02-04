@@ -57,7 +57,7 @@ const AllTags = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <View style={{ flexDirection: "row" }}>
+      <View style={{ flexDirection: "row", marginRight: width * 0.3}}>
         <TouchableOpacity onPress={() => navigation.openDrawer()}>
           <Image
             style={{
@@ -65,12 +65,13 @@ const AllTags = ({ navigation }) => {
               marginTop: height * 0.015,
               width: 30,
               height: 30,
+              resizeMode: 'contain'
             }}
             source={require("../assets/hamburger.png")}
           ></Image>
         </TouchableOpacity>
         <Text style={styles.title}>
-          Tags<Text style={styles.titleAccent}>.</Text>
+          All Tags<Text style={styles.titleAccent}>.</Text>
         </Text>
       </View>
       <View style={styles.folderContainer}>
@@ -98,8 +99,8 @@ const AllTags = ({ navigation }) => {
         <Modal
           isVisible={editPopupVisible}
           backdropOpacity={0.25}
-          animationInTiming={400}
-          animationOutTiming={800}
+          animationInTiming={200}
+          animationOutTiming={600}
           style={styles.modalContent}
           onBackdropPress={() => {
             toggleEditPopupVisibility(!editPopupVisible);
@@ -122,6 +123,7 @@ const AllTags = ({ navigation }) => {
                 textAlign: "center",
                 marginLeft: width * 0.1,
                 marginRight: width * 0.1,
+                marginBottom: height * 0.05,
               }}
             />
 
@@ -204,7 +206,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#EFEFEF",
     alignItems: "center",
-    marginTop: height * 0.005,
+    marginTop: height * 0.06,
   },
 
   requestContainer: {
@@ -255,7 +257,7 @@ const styles = StyleSheet.create({
     color: "#003A63",
     fontSize: 46,
     fontWeight: "700",
-    marginRight: width * 0.15,
+    marginBottom: height * 0.01,
   },
 
   titleAccent: {
