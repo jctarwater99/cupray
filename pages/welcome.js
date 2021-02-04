@@ -5,7 +5,7 @@ import { StyleSheet, Button, Text, View } from "react-native";
 import { populateDB } from "../database/populate";
 import { createDatabase, dropForTesting } from "../database/create";
 import * as Notifications from 'expo-notifications';
-import { scheduleNotifs } from '../schedule/scheduler';
+import { scheduleNotifs, selectQuietTimeRequests } from '../schedule/scheduler';
 
 var { height, width } = Dimensions.get("window");
 
@@ -52,6 +52,7 @@ const WelcomeScreen = ({ navigation }) => {
           <TouchableOpacity
             style={styles.bbutton}
             onPress={() => {
+              selectQuietTimeRequests();
               navigation.navigate("Dash");
             }}
           >

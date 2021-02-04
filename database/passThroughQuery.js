@@ -125,3 +125,18 @@ export function getReminders(callback) {
     );
   });
 }
+
+export function clearDailyRequests(callback) {
+  db.transaction((tx) => {
+    tx.executeSql(
+      "DELETE FROM daily_requests;",
+      [],
+      () => {
+        callback();
+      },
+      () => {
+        console.log("clearDailyRequests failed");
+      }
+    );
+  });
+}

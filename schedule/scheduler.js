@@ -1,7 +1,8 @@
 import * as queries from "../database/passThroughQuery";
 import * as Notifications from 'expo-notifications';
 import { Reminder } from "../database/objects";
-import { getCategories } from "../database/query";
+import { getCategoriesWithActiveCount } from "../database/query";
+import { insertDailyRequest } from "../database/insert";
 
 export function scheduleNotificationWait(title, body, wait) {
     Notifications.scheduleNotificationAsync({
@@ -48,19 +49,64 @@ function getDaysDiff(olderDate, newerDate) {
 }
 
 export function selectQuietTimeRequests() {
-    getCategories((results) => {
-        var tickets = [];
-        var 
-        var i;
-        for (i = 0; i < results.length; i++) {
-            var j;
-            // TODO: setup reqCnt!!!
-            for (j = 0; j < results[i].reqCnt; j++) {
-                tickets.push(tagID);
+    queries.clearDailyRequests(() => {
+        getCategoriesWithActiveCount((results) => {
+            var tickets = [];
+            var idList = [];
+            var i;
+            for (i = 0; i < results.length; i++) {
+                var j;
+                for (j = 0; j < results[i].active_count; j++) {
+                    tickets.push(results[i].tagID);
+                }
             }
-        }
+
+            
+            for (i = 0; i < 8; i++) {
+                if (tickets.length > 0) {
+                    var randomChoice = Math.floor(Math.random() * tickets.length);
+                    var id = tickets[randomChoice];
+                    tickets.splice(randomChoice, 1);
+                    idList.push(id);
+                }
+            }
 
 
+            while(idList.length > 0) {
+                var curNum = idList[0];
+                var cnt = 1;
+                idList.splice(0, 1);
+                for(i = 0; i < idList.length; i++) {
+                    if (idList[i] == curNum) {
+                        cnt++;
+                        idList.splice(i, 1);
+                        i--;
+                    }
+                }
+                queries.getRequestsInCategory(curNum, (results, cnt, placeholder) => {
+                    var tickets2 = [];
+                    var i;
+                    for (i = 0; i < results.length; i++) {
+                        var j;
+                        for (j = 0; j < results[i].weight; j++) {
+                            tickets2.push(results[i].id);
+                        }
+                    }
+
+                    for (i = 0; i < cnt; i++) {
+                        var id = tickets2[Math.floor(Math.random() * tickets2.length)];
+                        insertDailyRequest({requestID: id, isPrayedFor: 0});
+                        var j;
+                        for (j = 0; j < tickets2.length; j++) {
+                            if (tickets2[j] == id) {
+                                tickets2.splice(j, 1);
+                                j--;
+                            }
+                        }
+                    }
+                }, cnt, 0);
+            }
+        });
     });
 }
 

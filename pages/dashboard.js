@@ -42,7 +42,7 @@ const Dashboard = ({ navigation }) => {
         <View style={{ marginRight: width * 0.1 }}>
           <TouchableOpacity
             style={styles.icon}
-            onPress={() => navigation.navigate("Cat")}
+            onPress={() => {navigation.navigate("Cat"); queries.getDailyRequests((result) => {console.log(result);});}}
           >
             <Image
               style={styles.dashImage}

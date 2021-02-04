@@ -189,8 +189,8 @@ export function getCategoriesWithActiveCount(callback) {
         "GROUP BY name ",
       [],
       (tx, result) => {
-        console.log(result.rows._array);
-        //callback(result.rows._array);
+        //console.log(result.rows._array);
+        callback(result.rows._array);
       },
       (tx, result) => {
         console.log("Get categories with active count failed", result);
