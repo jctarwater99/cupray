@@ -143,7 +143,7 @@ export function getTagsForRequest(id, callback) {
 export function getDailyRequests(callback) {
   db.transaction((tx) => {
     tx.executeSql(
-      "SELECT * FROM daily_requests, requests " +
+      "SELECT subject, requests.id, isPrayedFor FROM daily_requests, requests " +
         "WHERE requests.id = daily_requests.requestID;",
       [],
       (tx, result) => {
@@ -194,6 +194,40 @@ export function getCategoriesWithActiveCount(callback) {
       },
       (tx, result) => {
         console.log("Get categories with active count failed", result);
+      }
+    );
+  });
+}
+export function getTagsForTagsPage(callback) {
+  db.transaction((tx) => {
+    tx.executeSql(
+      "SELECT * FROM ( " +
+        "SELECT name, id, 0 as isCategory from tags WHERE tags.name != 'Archived' " +
+        "EXCEPT " +
+        "SELECT name, tagID as id, 0 as isCategory from categories " +
+        "UNION " +
+        "SELECT name, tagID as id, 1 as isCategory from categories ) " +
+        "ORDER BY name",
+      [],
+      (tx, result) => {
+        callback(result.rows._array);
+      },
+      (tx, result) => {
+        console.log("getTags query failed", result);
+      }
+    );
+  });
+}
+export function getFlag(name, callback) {
+  db.transaction((tx) => {
+    tx.executeSql(
+      "SELECT value FROM flags WHERE name = ?",
+      [name],
+      (tx, result) => {
+        callback(result.rows._array[0]);
+      },
+      (tx, result) => {
+        console.log("get flag query failed", result);
       }
     );
   });

@@ -4,8 +4,17 @@ import { Image, TouchableOpacity, Dimensions, FlatList } from "react-native";
 import { StyleSheet, Button, Text, View } from "react-native";
 import { populateDB } from "../database/populate";
 import { createDatabase, dropForTesting } from "../database/create";
-import * as Notifications from 'expo-notifications';
-import { scheduleNotifs, selectQuietTimeRequests } from '../schedule/scheduler';
+import * as queries from "../database/query";
+import * as updates from "../database/update";
+import * as Notifications from "expo-notifications";
+import { updateRequest } from "../database/update";
+import * as bookKeeping from "../database/bookKeeping";
+
+// Ignoring potential problems
+import { LogBox } from "react-native";
+LogBox.ignoreLogs([
+  "Your project is accessing the following APIs from a deprecated global rather than a module import: Constants (expo-constants).",
+]);
 
 var { height, width } = Dimensions.get("window");
 
@@ -31,8 +40,7 @@ const WelcomeScreen = ({ navigation }) => {
   return (
     <View style={styles.welcomeContainer}>
       <View style={styles.contentContainer}>
-        <Image style={styles.pray} source={require("../assets/pray.png")} />
-
+        <Image style={styles.pray} source={require("../assets/cupray_logo.png")} />
         <Text style={styles.cu}>
           CU<Text style={styles.cupray}>Pray.</Text>
         </Text>
@@ -52,7 +60,7 @@ const WelcomeScreen = ({ navigation }) => {
           <TouchableOpacity
             style={styles.bbutton}
             onPress={() => {
-              selectQuietTimeRequests();
+              bookKeeping.checkBooks();
               navigation.navigate("Dash");
             }}
           >
@@ -80,8 +88,9 @@ const styles = StyleSheet.create({
   },
 
   pray: {
-    width: 74,
-    height: 103,
+    width: 150,
+    height: 150,
+    resizeMode: 'contain',
   },
 
   cu: {

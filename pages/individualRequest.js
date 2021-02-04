@@ -11,7 +11,6 @@ import {
   Text,
   View,
 } from "react-native";
-import { CheckBox } from "react-native-elements";
 import * as queries from "../database/query";
 import * as updates from "../database/update";
 import * as inserts from "../database/insert";
@@ -20,13 +19,11 @@ import Modal from "react-native-modal";
 import { Dropdown } from "react-native-material-dropdown-v2";
 import DateTimePicker from "@react-native-community/datetimepicker";
 
-import { LogBox } from "react-native";
-
 // Ignore log notification by message
+import { LogBox } from "react-native";
 LogBox.ignoreLogs([
   "Warning: componentWillReceiveProps has been renamed, and is not recommended for use. See https://fb.me/react-unsafe-component-lifecycles for details.",
 ]);
-
 LogBox.ignoreLogs([
   "Animated: `useNativeDriver` was not specified. This is a required option and must be explicitly set to `true` or `false`",
 ]);
@@ -41,7 +38,7 @@ const ThisRequestScreen = ({ route, navigation }) => {
   let [tagStates, setTagStates] = useState([]);
   let [changedTags, changeTags] = useState([]);
   let [expireTime, setExpireTime] = useState("");
-  let [selectedDate, setSelectedDate] = useState("");
+  let [selectedDate, setSelectedDate] = useState(new Date());
   let [displayDate, setDisplayDate] = useState("");
 
   let [inEditMode, setMode] = useState(route.params.isNewReq);
@@ -54,11 +51,6 @@ const ThisRequestScreen = ({ route, navigation }) => {
   let [newTag, setNewTag] = useState("");
 
   useEffect(() => {
-    // On IOS, can't calculate the date fast if we wait till the query returns and it breaks stuff
-    // So we do it here
-    let date = new Date();
-    setSelectedDate(date);
-
     // Loads request
     queries.getRequest(route.params.req_id, (results) => {
       setRequest(results);
@@ -154,7 +146,9 @@ const ThisRequestScreen = ({ route, navigation }) => {
         onPress={() => handleTagPress(index)}
         style={[
           styles.tagBubble,
-          tagStates[index]
+          name == "Archived"
+            ? styles.hidden
+            : tagStates[index]
             ? styles.active
             : inEditMode
             ? styles.inactive
@@ -341,8 +335,11 @@ const ThisRequestScreen = ({ route, navigation }) => {
   })();
 
   const handleChangeDate = (event, selectedDate) => {
-    const newDate = selectedDate || selectedTime;
     setDatePickerVisibility(Platform.OS === "ios"); // This is pretty creative, I like it :)
+    if (event.type == "dismissed") {
+      return;
+    }
+    const newDate = selectedDate || selectedTime;
     setSelectedDate(newDate);
     parseDate(newDate, setDisplayDate);
   };
@@ -554,18 +551,27 @@ const ThisRequestScreen = ({ route, navigation }) => {
     return (
       <SafeAreaView style={{ flex: 1 }}>
         <View style={styles.container}>
-        <View style={{
-              flexDirection: "row"
-            }}>
-      <TouchableOpacity
-      style ={{ justifyContent: 'flex-start' }}
-      onPress={() => navigation.openDrawer()}>
-        <Image
-        style={{marginRight: width * 0.05, marginTop: height * 0.023, width: 30, height: 30}}
-        source={require("../assets/hamburger.png")}>
-        </Image>
-        </TouchableOpacity>
-          <Text style={styles.title}>{subject}</Text>
+          <View
+            style={{
+              flexDirection: "row",
+            }}
+          >
+            <TouchableOpacity
+              style={{ justifyContent: "flex-start" }}
+              onPress={() => navigation.openDrawer()}
+            >
+              <Image
+                style={{
+                  marginRight: width * 0.05,
+                  marginTop: height * 0.023,
+                  width: 30,
+                  height: 30,
+                  resizeMode: 'contain'
+                }}
+                source={require("../assets/hamburger.png")}
+              ></Image>
+            </TouchableOpacity>
+            <Text style={styles.title}>{subject}</Text>
           </View>
           <View
             style={{
@@ -583,8 +589,7 @@ const ThisRequestScreen = ({ route, navigation }) => {
               <Text style={styles.editButtonText}>EDIT</Text>
             </TouchableOpacity>
           </View>
-          <ScrollView 
-          style={styles.requestContainer}>
+          <ScrollView style={styles.requestContainer}>
             <View>
               <View>
                 <Text style={styles.boxheaders}>Description</Text>
@@ -668,7 +673,7 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.27,
     shadowRadius: 3.65,
-    overflow: 'scroll',
+    overflow: "scroll",
 
     elevation: 6,
     borderRadius: 20,

@@ -19,6 +19,7 @@ var { height, width } = Dimensions.get("window");
 
 const ScheduledPrayers = ({ route, navigation }) => {
   let [requests, setRequests] = useState([]);
+  let [requestStates, setRequestStates] = useState(false);
   let [days, setDays] = useState([
     false,
     false,
@@ -32,7 +33,16 @@ const ScheduledPrayers = ({ route, navigation }) => {
   useEffect(() => {
     // each request has a request.isPrayedFor boolean variable you can use to
     // decide whether or not to render the check mark
-    queries.getDailyRequests((results) => setRequests(results));
+    queries.getDailyRequests((results) => {
+      setRequests(results);
+      console.log(results);
+      var i;
+      let reqStates = []; 
+      for(i = 0; i < 5 && i < results.length; i++){
+        reqStates.push(results[i].isPrayedFor == 1); // Super important that we don't change from 0/1 to true/false in the db now, RN expects bool
+      }
+      setRequestStates(reqStates);
+    });
     setDayOfTheWeek();
   }, []);
 
@@ -73,16 +83,33 @@ const ScheduledPrayers = ({ route, navigation }) => {
     );
   };
 
-  let listItemView = (request) => {
+  let handleButtonPress = (index) => {
+    let temp = [...requestStates];
+    temp[index] = !temp[index];
+    setRequestStates(temp);
+
+    // Update value in database
+    // 
+    //
+  }
+
+  let listItemView = (request, index) => {
     return (
       <TouchableOpacity
         key={request.id}
-        style={styles.requestBar}
+        style={[styles.requestBar,
+        //requestStates[index] ? styleActive: styleInactive
+      ]}
         // Navigate @ Request, need isNew??
       >
-        <View style={styles.circle} />
+        
         <View>
-          <Text style={styles.requestDone}>{"✓"}</Text>
+        <CheckBox
+          checkedIcon={<Image style= {{width: 20, height:20}} source={require('../assets/checked.png')} />}
+          uncheckedIcon={<Image style= {{width: 20, height:20}} source={require('../assets/unchecked.png')} />}
+          checked={requestStates[index]}
+          onPress={() => handleButtonPress(index)}
+          />
         </View>
         <Text style={styles.requestTitles}>{request.subject}</Text>
       </TouchableOpacity>
@@ -91,10 +118,18 @@ const ScheduledPrayers = ({ route, navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <View style={{flex: .7, flexDirection: "row", marginLeft: width * 0.05}}>
+      <TouchableOpacity
+      onPress={() => navigation.openDrawer()}>
+        <Image
+        style={{marginRight: width * 0.05, marginTop: height * 0.015, width: 30, height: 30, resizeMode: 'contain'}}
+        source={require("../assets/hamburger.png")}>
+        </Image>
+        </TouchableOpacity>
       <Text style={styles.title}>
         Pray<Text style={styles.titleAccent}>.</Text>
       </Text>
-
+      </View>
       <Text style={styles.header1}> Today's Schedule </Text>
 
       <View style={styles.dateContainer}>
@@ -113,7 +148,7 @@ const ScheduledPrayers = ({ route, navigation }) => {
         <FlatList
           data={requests}
           keyExtractor={(item, index) => index.toString()}
-          renderItem={({ item }) => listItemView(item)}
+          renderItem={({ item, index }) => listItemView(item, index)}
         />
       </View>
     </SafeAreaView>
@@ -124,14 +159,15 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#EFEFEF",
-    marginTop: height * 0.08,
+    marginTop: height * 0.06,
   },
 
   title: {
     color: "#D6C396",
     fontSize: 46,
     fontWeight: "700",
-    marginLeft: width * 0.08,
+    marginBottom: height * 0.01,
+    marginRight: width * 0.1,
   },
 
   titleAccent: {
@@ -146,7 +182,6 @@ const styles = StyleSheet.create({
     color: "#003A63",
     fontSize: 20,
     fontWeight: "700",
-    marginTop: height * 0.03,
     marginLeft: width * 0.06,
   },
 
@@ -228,7 +263,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     backgroundColor: "#E8E7E4",
     margin: height * 0.01,
-    padding: 12,
+    padding: 10,
     alignSelf: "center",
   },
 
@@ -237,6 +272,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: "700",
     marginLeft: width * 0.05,
+    marginTop: height * 0.012,
   },
 
   requestDone: {

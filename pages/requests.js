@@ -8,12 +8,9 @@ import {
   SafeAreaView,
 } from "react-native";
 import { StyleSheet, Button, Text, View } from "react-native";
-import { populateDB } from "../database/populate";
-import { createDatabase } from "../database/create";
 import * as queries from "../database/query";
 import * as updates from "../database/update";
 import { Category } from "../database/objects";
-import { CheckBox } from "react-native-elements";
 import Modal from "react-native-modal";
 
 var { height, width } = Dimensions.get("window");
@@ -71,18 +68,23 @@ const RequestsScreen = ({ route, navigation }) => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.container}>
-      <View style={{flexDirection: "row"}}>
-      <TouchableOpacity
-      onPress={() => navigation.openDrawer()}>
-        <Image
-        style={{marginRight: width * 0.05, marginTop: height * 0.015, width: 30, height: 30}}
-        source={require("../assets/hamburger.png")}>
-        </Image>
-        </TouchableOpacity>
-        <Text style={styles.title}>
-          Requests<Text style={styles.titleAccent}>.</Text>
-        </Text>
-          </View>
+        <View style={{ flexDirection: "row" }}>
+          <TouchableOpacity onPress={() => navigation.openDrawer()}>
+            <Image
+              style={{
+                marginRight: width * 0.05,
+                marginTop: height * 0.015,
+                width: 30,
+                height: 30,
+                resizeMode: 'contain'
+              }}
+              source={require("../assets/hamburger.png")}
+            ></Image>
+          </TouchableOpacity>
+          <Text style={styles.title}>
+            Requests<Text style={styles.titleAccent}>.</Text>
+          </Text>
+        </View>
         <View>
           <FlatList
             data={requests}

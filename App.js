@@ -16,7 +16,6 @@ import { disableExpoCliLogging } from "expo/build/logs/Logs";
 import { SafeAreaView } from "react-native-safe-area-context";
 import CategoriesScreen from "./pages/categories";
 import RequestsScreen from "./pages/requests";
-import RefactorRequestScreen from "./pages/refactorRequest";
 import ThisRequestScreen from "./pages/individualRequest";
 import TempDash from "./pages/tempDash";
 import ScheduledPrayers from "./pages/prayerTime";
@@ -25,9 +24,7 @@ import RootNav from "./pages/RootNav";
 const Stack = createStackNavigator();
 
 const App = () => {
-  return (
-    <RootNav />
-  );
+  return <RootNav />;
 };
 
 export default App;

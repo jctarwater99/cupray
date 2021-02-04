@@ -3,21 +3,21 @@ import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import {
-    Request,
-    Request_Tag,
-    Tag,
-    Reminder,
-    Category,
-  } from "../database/objects";
+  Request,
+  Request_Tag,
+  Tag,
+  Reminder,
+  Category,
+} from "../database/objects";
 import WelcomeScreen from "./welcome";
 import Dashboard from "./dashboard";
 import TestPage from "./testPage";
 import CategoriesScreen from "./categories";
 import RequestsScreen from "./requests";
-import RefactorRequestScreen from "./refactorRequest";
 import ThisRequestScreen from "./individualRequest";
 import TempDash from "./tempDash";
 import ScheduledPrayers from "./prayerTime";
+import AllReqs from "./allrequests";
 
 const Stack = createStackNavigator();
 
@@ -33,8 +33,9 @@ export default function StackNavigator() {
         {<Stack.Screen name="Requests" component={RequestsScreen} />}
         {<Stack.Screen name="TempDash" component={TempDash} />}
         {<Stack.Screen name="Pray" component={ScheduledPrayers} />}
+        {<Stack.Screen name="AllReqs" component={AllReqs} />}
         {<Stack.Screen name="IndividualRequest" component={ThisRequestScreen}/>}
         {<Stack.Screen name="Test" component={TestPage} />}
       </Stack.Navigator>
   );
-};
+}
