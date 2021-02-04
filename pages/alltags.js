@@ -74,7 +74,7 @@ const AllTags = ({ navigation }) => {
           All Tags<Text style={styles.titleAccent}>.</Text>
         </Text>
       </View>
-      <View style={styles.folderContainer}>
+      <View>
         <FlatList
           data={tags}
           keyExtractor={(item, index) => index.toString()}
