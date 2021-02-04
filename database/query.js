@@ -143,7 +143,7 @@ export function getTagsForRequest(id, callback) {
 export function getDailyRequests(callback) {
   db.transaction((tx) => {
     tx.executeSql(
-      "SELECT * FROM daily_requests, requests " +
+      "SELECT subject, requests.id, isPrayedFor FROM daily_requests, requests " +
         "WHERE requests.id = daily_requests.requestID;",
       [],
       (tx, result) => {

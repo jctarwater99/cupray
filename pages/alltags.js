@@ -82,14 +82,14 @@ const AllTags = ({ navigation }) => {
         renderItem={({ item, index }) => listItemView(item)}
         showsVerticalScrollIndicator={false}
         ListFooterComponent={
-          <View style={styles.addCat}>
+          <View style={styles.addReq}>
             <TouchableOpacity
               onPress={() => {
                 setIsNewTag(true);
                 setCurrentTag("e.g. Jerry");
                 toggleEditPopupVisibility(!editPopupVisible);
               }} // goto create category page or popup or something
-              style={styles.createCategoryButton}
+              style={styles.createReqButton}
             >
               <Text style={styles.plusSign}>+</Text>
             </TouchableOpacity>
@@ -288,6 +288,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: "700",
     textAlign: "center",
+    marginTop: height * 0.003,
   },
 
   popUpContainer: {

@@ -5,23 +5,24 @@ import * as updates from "./update";
 
 // Call this function at the end of every useEffect()
 export function checkBooks() {
-  let date = new Date();
-  date.setHours(0);
-  date.setMinutes(0);
-  date.setSeconds(0);
-  date.setMilliseconds(0);
+  let currDate = new Date();
+  currDate.setHours(0);
+  currDate.setMinutes(0);
+  currDate.setSeconds(0);
+  currDate.setMilliseconds(0);
 
   queries.getFlag("lastScheduled", (lastScheduled) => {
     // Check when requests were last scheduled
     let lastDate = new Date(lastScheduled.value);
 
-    if (date.getTime() == lastDate.getTime()) {
+    if (currDate.getTime() == lastDate.getTime()) {
       return;
     }
-    updates.setFlag("lastScheduled", date.toString());
-    updates.archive(date.getTime());
+    updates.setFlag("lastScheduled", currDate.toString());
+    updates.archive(currDate.getTime());
+    // Schedule
 
-    // Check when requests were last added (do they need to be rescheduled?)
-    // if so, reschedule
+
+    // Also, don't forget to call Noah's reschedule whenever creating new requests
   });
 }
