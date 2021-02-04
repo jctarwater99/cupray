@@ -33,8 +33,7 @@ const WelcomeScreen = ({ navigation }) => {
   return (
     <View style={styles.welcomeContainer}>
       <View style={styles.contentContainer}>
-        <Image style={styles.pray} source={require("../assets/pray.png")} />
-
+        <Image style={styles.pray} source={require("../assets/cupray_logo.png")} />
         <Text style={styles.cu}>
           CU<Text style={styles.cupray}>Pray.</Text>
         </Text>
@@ -82,8 +81,9 @@ const styles = StyleSheet.create({
   },
 
   pray: {
-    width: 74,
-    height: 103,
+    width: 150,
+    height: 150,
+    resizeMode: 'contain',
   },
 
   cu: {

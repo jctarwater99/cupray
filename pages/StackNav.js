@@ -17,23 +17,25 @@ import RequestsScreen from "./requests";
 import ThisRequestScreen from "./individualRequest";
 import TempDash from "./tempDash";
 import ScheduledPrayers from "./prayerTime";
+import AllReqs from "./allrequests";
 
 const Stack = createStackNavigator();
 
 export default function StackNavigator() {
   return (
-    <Stack.Navigator
-      initialRouteName="Welcome"
-      screenOptions={{ headerShown: false }}
-    >
-      {<Stack.Screen name="Welcome" component={WelcomeScreen} />}
-      {<Stack.Screen name="Dash" component={Dashboard} />}
-      {<Stack.Screen name="Cat" component={CategoriesScreen} />}
-      {<Stack.Screen name="Requests" component={RequestsScreen} />}
-      {<Stack.Screen name="TempDash" component={TempDash} />}
-      {<Stack.Screen name="Pray" component={ScheduledPrayers} />}
-      {<Stack.Screen name="IndividualRequest" component={ThisRequestScreen} />}
-      {<Stack.Screen name="Test" component={TestPage} />}
-    </Stack.Navigator>
+      <Stack.Navigator
+        initialRouteName="Welcome"
+        screenOptions={{ headerShown: false }}
+      >
+        {<Stack.Screen name="Welcome" component={WelcomeScreen} />}
+        {<Stack.Screen name="Dash" component={Dashboard} />}
+        {<Stack.Screen name="Cat" component={CategoriesScreen} />}
+        {<Stack.Screen name="Requests" component={RequestsScreen} />}
+        {<Stack.Screen name="TempDash" component={TempDash} />}
+        {<Stack.Screen name="Pray" component={ScheduledPrayers} />}
+        {<Stack.Screen name="AllReqs" component={AllReqs} />}
+        {<Stack.Screen name="IndividualRequest" component={ThisRequestScreen}/>}
+        {<Stack.Screen name="Test" component={TestPage} />}
+      </Stack.Navigator>
   );
 }

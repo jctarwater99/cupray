@@ -20,7 +20,7 @@ const Dashboard = ({ navigation }) => {
       <TouchableOpacity
       onPress={() => navigation.openDrawer()}>
         <Image
-        style={{marginRight: width * 0.05, marginTop: height * 0.015, width: 30, height: 30}}
+        style={{marginRight: width * 0.05, marginTop: height * 0.015, width: 30, height: 30, resizeMode: 'contain'}}
         source={require("../assets/hamburger.png")}>
         </Image>
         </TouchableOpacity>
@@ -46,7 +46,7 @@ const Dashboard = ({ navigation }) => {
           >
             <Image
               style={styles.dashImage}
-              source={require("../assets/journal2.png")}
+              source={require("../assets/journal.png")}
             />
           </TouchableOpacity>
           <Text style={styles.dashText}>Prayer Journal</Text>
@@ -59,7 +59,7 @@ const Dashboard = ({ navigation }) => {
           >
             <Image
               style={styles.dashImage}
-              source={require("../assets/pray_blue.png")}
+              source={require("../assets/prayer_hands.png")}
             />
           </TouchableOpacity>
           <Text style={styles.dashText}>Prayer Time</Text>
@@ -67,13 +67,15 @@ const Dashboard = ({ navigation }) => {
       </View>
       <View style={styles.iconRow}>
         <View style={{ marginRight: width * 0.1 }}>
-          <TouchableOpacity style={styles.icon}>
+          <TouchableOpacity style={styles.icon}
+          onPress={() => navigation.navigate("AllReqs")}
+          >
             <Image
               style={styles.dashImage}
-              source={require("../assets/journal1.png")}
+              source={require("../assets/Archive.png")}
             />
           </TouchableOpacity>
-          <Text style={styles.dashText}>Scripture</Text>
+          <Text style={styles.dashText}>Archived</Text>
         </View>
 
         <View>
@@ -89,7 +91,7 @@ const Dashboard = ({ navigation }) => {
             }}
           >
             <Image
-              style={[styles.dashImage, { marginLeft: width * 0.13 }]}
+              style={[styles.dashImage, { width: 56, height: 56, marginTop: height * 0.042, marginLeft: width * 0.1 }]}
               source={require("../assets/plus.png")}
             />
           </TouchableOpacity>
@@ -125,7 +127,6 @@ const styles = StyleSheet.create({
   },
 
   titleAccent: {
-    color: "#003A63",
     color: "#D6C396",
     fontSize: 46,
     fontWeight: "700",
@@ -153,8 +154,11 @@ const styles = StyleSheet.create({
   },
 
   dashImage: {
-    marginLeft: width * 0.09,
+    marginLeft: width * 0.06,
     marginTop: height * 0.025,
+    width: 85,
+    height: 85,
+    resizeMode: 'contain',
   },
 
   dashText: {

@@ -91,10 +91,18 @@ const ScheduledPrayers = ({ route, navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <View style={{flex: .35, flexDirection: "row", marginLeft: width * 0.05}}>
+      <TouchableOpacity
+      onPress={() => navigation.openDrawer()}>
+        <Image
+        style={{marginRight: width * 0.05, marginTop: height * 0.015, width: 30, height: 30, resizeMode: 'contain'}}
+        source={require("../assets/hamburger.png")}>
+        </Image>
+        </TouchableOpacity>
       <Text style={styles.title}>
         Pray<Text style={styles.titleAccent}>.</Text>
       </Text>
-
+      </View>
       <Text style={styles.header1}> Today's Schedule </Text>
 
       <View style={styles.dateContainer}>
@@ -124,14 +132,15 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#EFEFEF",
-    marginTop: height * 0.08,
+    marginTop: height * 0.06,
   },
 
   title: {
     color: "#D6C396",
     fontSize: 46,
     fontWeight: "700",
-    marginLeft: width * 0.08,
+    marginBottom: height * 0.01,
+    marginRight: width * 0.1,
   },
 
   titleAccent: {
@@ -146,7 +155,6 @@ const styles = StyleSheet.create({
     color: "#003A63",
     fontSize: 20,
     fontWeight: "700",
-    marginTop: height * 0.03,
     marginLeft: width * 0.06,
   },
 

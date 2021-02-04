@@ -76,6 +76,7 @@ const RequestsScreen = ({ route, navigation }) => {
                 marginTop: height * 0.015,
                 width: 30,
                 height: 30,
+                resizeMode: 'contain'
               }}
               source={require("../assets/hamburger.png")}
             ></Image>
