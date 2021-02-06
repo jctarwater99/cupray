@@ -73,7 +73,7 @@ const ThisRequestScreen = ({ route, navigation }) => {
         state[1] = false;
       }
       setBoxes(state);
-      checkBooks();
+      scheduler.rescheduleNotifs();
     });
 
     queries.getTagsForRequest(route.params.req_id, (rTags) => {
@@ -536,9 +536,6 @@ const ThisRequestScreen = ({ route, navigation }) => {
                 </View>
               </Modal>
 
-              <Text style={styles.boxheaders}>Frequency</Text>
-              <Text style={styles.subtitle}>Daily</Text>
-
               <Text style={styles.boxheaders}>Reminder Expiration</Text>
 
               <View>
@@ -636,9 +633,6 @@ const ThisRequestScreen = ({ route, navigation }) => {
                 {tagButtons()}
               </View>
 
-              <Text style={styles.boxheaders}>Frequency</Text>
-              <Text style={styles.subtitle}>Daily</Text>
-
               <Text style={styles.boxheaders}>Reminder Expiration</Text>
               <Text style={styles.subtitle}>{displayDate}</Text>
             </View>
@@ -668,7 +662,7 @@ const styles = StyleSheet.create({
   },
 
   requestContainer: {
-    width: 327,
+    width: width * 0.92,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,

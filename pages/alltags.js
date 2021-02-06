@@ -115,6 +115,11 @@ const AllTags = ({ navigation }) => {
                   maxLength={15} // max number of chars
                   multiline={true}
                   value={selectedTagName}
+                  // onFocus={() => {
+                  //   if (isNewTag) {
+                  //     setSelectedTagName("");
+                  //   }
+                  // }}
                   onChange={(text) => setSelectedTagName(text.nativeEvent.text)}
                   style={{
                     backgroundColor: "white",

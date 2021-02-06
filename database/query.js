@@ -143,8 +143,11 @@ export function getTagsForRequest(id, callback) {
 export function getDailyRequests(callback) {
   db.transaction((tx) => {
     tx.executeSql(
-      "SELECT DISTINCT subject, requests.id, isPrayedFor FROM daily_requests, requests " +
-        "WHERE requests.id = daily_requests.requestID;",
+      "SELECT DISTINCT daily_requests.id as dID, subject, requests.id as rID, " +
+        "isPrayedFor, categories.name as cat_name FROM daily_requests " +
+        "INNER JOIN requests ON requests.id = daily_requests.requestID " +
+        "INNER JOIN request_tags ON requests.id = request_tags.requestID " +
+        "INNER JOIN categories ON categories.tagID = request_tags.tagID;",
       [],
       (tx, result) => {
         callback(result.rows._array);

@@ -154,14 +154,6 @@ export function setFlag(flagName, newFlagValue) {
   });
 }
 
-//
-//
-//
-//
-//
-//
-//
-
 export function deleteRequestTagsInCategory(catID) {
   db.transaction((tx) => {
     // delete request_tags in this list
@@ -303,6 +295,21 @@ export function archive(currTime) {
       () => void 0,
       (tx, result) => {
         console.log("Archiving requests failed", result);
+      }
+    );
+  });
+}
+
+export function updateIsPrayedFor(isPrayedFor, id) {
+  db.transaction((tx) => {
+    tx.executeSql(
+      "UPDATE daily_requests SET isPrayedFor = ? WHERE id = ?",
+      [isPrayedFor, id],
+      (tx, result) => {
+        console.log(isPrayedFor, " and ", result);
+      }, //() => void 0,
+      (tx, result) => {
+        console.log("Updating flag failed", result);
       }
     );
   });

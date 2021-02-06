@@ -50,6 +50,7 @@ const WelcomeScreen = ({ navigation }) => {
         <Text
           style={styles.thePrayer}
           onPress={() => {
+            Notifications.cancelAllScheduledNotificationsAsync();
             dropForTesting();
             createDatabase();
             requestPermissionsAsync();

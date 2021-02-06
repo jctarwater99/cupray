@@ -114,8 +114,8 @@ export function selectQuietTimeRequests() {
 }
 
 export function rescheduleNotifs() {
-  Notification.cancelAllScheduledNotificationsAsync();
-  queries.resetReminders(scheduleNotifs());
+  Notifications.cancelAllScheduledNotificationsAsync();
+  queries.resetReminders(() => scheduleNotifs());
 }
 
 export function scheduleNotifs() {

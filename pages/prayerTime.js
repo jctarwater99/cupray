@@ -90,18 +90,25 @@ const ScheduledPrayers = ({ route, navigation }) => {
     setRequestStates(temp);
 
     // Update value in database
-    //
-    //
+    updates.updateIsPrayedFor(temp[index] ? 1 : 0, requests[index].dID);
   };
 
   let listItemView = (request, index) => {
     return (
       <TouchableOpacity
-        key={request.id}
+        key={request.dID}
         style={[
           styles.requestBar,
           //requestStates[index] ? styleActive: styleInactive
         ]}
+        onPress={() =>
+          navigation.navigate("IndividualRequest", {
+            // cat_id: route.params.cat_id,
+            cat_name: request.cat_name,
+            req_id: request.rID,
+            isNewReq: false,
+          })
+        }
         // Navigate @ Request, need isNew??
       >
         <View>

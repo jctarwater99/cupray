@@ -20,6 +20,7 @@ import { Category } from "../database/objects";
 import Modal from "react-native-modal";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { checkBooks } from "../database/bookKeeping";
+import * as scheduler from "../schedule/scheduler";
 
 var { height, width } = Dimensions.get("window");
 
@@ -203,6 +204,7 @@ const CategoriesScreen = ({ navigation }) => {
       queries.getCategories((results) => {
         setCategories(results);
       });
+      scheduler.rescheduleNotifs();
     }, 200);
   };
 
@@ -472,7 +474,7 @@ const styles = StyleSheet.create({
   },
 
   folderContainer: {
-    width: 327,
+    width: 327, // Yayira, stop using absolute positioning
     shadowColor: "#000",
     shadowOffset: {
       width: 0,

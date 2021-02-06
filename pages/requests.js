@@ -13,6 +13,7 @@ import * as updates from "../database/update";
 import { Category } from "../database/objects";
 import Modal from "react-native-modal";
 import { checkBooks } from "../database/bookKeeping";
+import * as scheduler from "../schedule/scheduler";
 
 var { height, width } = Dimensions.get("window");
 
@@ -35,6 +36,7 @@ const RequestsScreen = ({ route, navigation }) => {
       queries.getRequestsInCategory(route.params.cat_id, (results) =>
         setRequests(results)
       );
+      scheduler.rescheduleNotifs();
     }, 150);
   };
 
@@ -46,7 +48,7 @@ const RequestsScreen = ({ route, navigation }) => {
         // Navigate @ Request, need isNew??
         onPress={() => {
           navigation.navigate("IndividualRequest", {
-            cat_id: route.params.cat_id,
+            //cat_id: route.params.cat_id,
             cat_name: route.params.cat_name,
             req_id: request.id,
             isNewReq: false,
@@ -149,6 +151,7 @@ const RequestsScreen = ({ route, navigation }) => {
                       text: "Archive",
                       onPress: () => {
                         updates.archiveRequest(requestID);
+
                         toggleDeletePopupVisibility(!deletePopupVisible);
                         refreshPage();
                       },
