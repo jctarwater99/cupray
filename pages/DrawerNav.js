@@ -53,6 +53,7 @@ drawerStyle={{
     <Drawer.Screen
     name="Dashboard"
     component={StackNavigator}/>
+    
     <Drawer.Screen
     name="Prayer Time"
     component={ScheduledPrayers}

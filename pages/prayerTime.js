@@ -115,13 +115,13 @@ const ScheduledPrayers = ({ route, navigation }) => {
           <CheckBox
             checkedIcon={
               <Image
-                style={{ width: 20, height: 20 }}
+                style={{ width: 30, height: 30 }}
                 source={require("../assets/checked.png")}
               />
             }
             uncheckedIcon={
               <Image
-                style={{ width: 20, height: 20 }}
+                style={{ width: 30, height: 30 }}
                 source={require("../assets/unchecked.png")}
               />
             }
@@ -205,7 +205,7 @@ const styles = StyleSheet.create({
     width: 250,
     height: 28,
     color: "#003A63",
-    fontSize: 20,
+    fontSize: 25,
     fontWeight: "700",
     marginLeft: width * 0.06,
   },
@@ -288,16 +288,15 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     backgroundColor: "#E8E7E4",
     margin: height * 0.01,
-    padding: 10,
+    padding: 5,
     alignSelf: "center",
   },
 
   requestTitles: {
     color: "#003A63",
-    fontSize: 15,
+    fontSize: 19,
     fontWeight: "700",
-    marginLeft: width * 0.05,
-    marginTop: height * 0.012,
+    marginTop: height * 0.02,
   },
 
   requestDone: {

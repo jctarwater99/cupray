@@ -551,28 +551,7 @@ const ThisRequestScreen = ({ route, navigation }) => {
     return (
       <SafeAreaView style={{ flex: 1 }}>
         <View style={styles.container}>
-          <View
-            style={{
-              flexDirection: "row",
-            }}
-          >
-            <TouchableOpacity
-              style={{ justifyContent: "flex-start" }}
-              onPress={() => navigation.openDrawer()}
-            >
-              <Image
-                style={{
-                  marginRight: width * 0.05,
-                  marginTop: height * 0.023,
-                  width: 30,
-                  height: 30,
-                  resizeMode: "contain",
-                }}
-                source={require("../assets/hamburger.png")}
-              ></Image>
-            </TouchableOpacity>
             <Text style={styles.title}>{subject}</Text>
-          </View>
           <View
             style={{
               flexDirection: "row",
@@ -670,7 +649,7 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.27,
     shadowRadius: 3.65,
-    overflow: "scroll",
+    overflow: "visible",
 
     elevation: 6,
     borderRadius: 20,

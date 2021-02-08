@@ -39,7 +39,7 @@ const About = ({ navigation }) => {
           ></Image>
           <Text style={styles.title}>This is app is brought to you by <Text style={styles.titleAccent}>Team Oreo </Text> 
           with Cedarville University</Text>
-          <Text style={styles.subtitle}>Pleas send feedback to <Text style={styles.subtitleAccent}>jctarwater@cedarville.edu</Text></Text>
+          <Text style={styles.subtitle}>Pleas send feedback to <Text style={styles.subtitleAccent}> random google form</Text></Text>
           <Text style={styles.title}>:)</Text>
       </View>
         </View>
