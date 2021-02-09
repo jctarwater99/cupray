@@ -137,7 +137,7 @@ const ScheduledPrayers = ({ route, navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <View
-        style={{ flex: 0.7, flexDirection: "row", marginLeft: width * 0.05 }}
+        style={{ flex: 0.85, flexDirection: "row", marginLeft: width * 0.05 }}
       >
         <TouchableOpacity onPress={() => navigation.openDrawer()}>
           <Image
@@ -146,7 +146,7 @@ const ScheduledPrayers = ({ route, navigation }) => {
               marginTop: height * 0.015,
               width: 30,
               height: 30,
-              resizeMode: "contain",
+              resizeMode: "5contain",
             }}
             source={require("../assets/hamburger.png")}
           ></Image>
@@ -203,7 +203,6 @@ const styles = StyleSheet.create({
 
   header1: {
     width: 250,
-    height: 28,
     color: "#003A63",
     fontSize: 25,
     fontWeight: "700",

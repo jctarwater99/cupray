@@ -92,6 +92,7 @@ const RequestsScreen = ({ route, navigation }) => {
         <View>
           <FlatList
             data={requests}
+            removeClippedSubviews={false}
             keyExtractor={(item, index) => index.toString()}
             renderItem={({ item }) => listItemView(item)}
           />

@@ -123,17 +123,14 @@ export function insertNewRequest(request, callback) {
   });
 }
 
-export function insertNewTag(tagName, Category) {
+export function insertNewTag(tagName) {
   db.transaction((tx) => {
     tx.executeSql(
       "INSERT INTO tags(name) VALUES(?);",
       [tagName],
+      void 0,
       (tx, result) => {
-        Category.tagID = result.insertId;
-        insertCategory(Category);
-      },
-      (tx, result) => {
-        console.log("Inserting requestTag failed", result);
+        console.log("Inserting tag failed", result);
       }
     );
   });

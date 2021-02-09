@@ -47,6 +47,7 @@ const AllTags = ({ navigation }) => {
           setIsNewTag(false);
           setSelectedTagName(tag.name);
           setSelectedTag(tag);
+          console.log("one");
           toggleEditPopupVisibility(!editPopupVisible);
         }}
       >
@@ -83,12 +84,14 @@ const AllTags = ({ navigation }) => {
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item, index }) => listItemView(item)}
         showsVerticalScrollIndicator={false}
+        removeClippedSubviews={false}
         ListFooterComponent={
           <View style={styles.addReq}>
             <TouchableOpacity
               onPress={() => {
                 setIsNewTag(true);
-                setCurrentTag("e.g. Jerry");
+                setSelectedTagName("e.g. Jerry");
+                console.log("two");
                 toggleEditPopupVisibility(!editPopupVisible);
               }} // goto create category page or popup or something
               style={styles.createReqButton}
@@ -106,6 +109,7 @@ const AllTags = ({ navigation }) => {
               animationOutTiming={600}
               style={styles.modalContent}
               onBackdropPress={() => {
+                console.log("three");
                 toggleEditPopupVisibility(!editPopupVisible);
               }}
             >
@@ -115,12 +119,12 @@ const AllTags = ({ navigation }) => {
                   maxLength={15} // max number of chars
                   multiline={true}
                   value={selectedTagName}
-                  // onFocus={() => {
-                  //   if (isNewTag) {
-                  //     setSelectedTagName("");
-                  //   }
-                  // }}
-                  onChange={(text) => setSelectedTagName(text.nativeEvent.text)}
+                  onFocus={() => {
+                    if (isNewTag) {
+                      setSelectedTagName("");
+                    }
+                  }}
+                  onChangeText={(text) => setSelectedTagName(text)}
                   style={{
                     backgroundColor: "white",
                     color: "#7E8C96",
@@ -145,7 +149,7 @@ const AllTags = ({ navigation }) => {
                   <TouchableOpacity
                     style={[
                       { width: width * 0.6 },
-                      isNewTag ? { display: none } : {},
+                      isNewTag ? { display: "none" } : {},
                     ]}
                     onPress={() => {
                       // Provide warning
@@ -163,6 +167,7 @@ const AllTags = ({ navigation }) => {
                                 updates.deleteCategory(id);
                               }
                               updates.deleteTag(id);
+                              console.log("four");
                               toggleEditPopupVisibility(!editPopupVisible);
                               refreshPage();
                             },
@@ -171,6 +176,7 @@ const AllTags = ({ navigation }) => {
                             text: "Cancel",
                             style: "cancel",
                             onPress: () => {
+                              console.log("five");
                               toggleEditPopupVisibility(!editPopupVisible);
                             },
                           },
@@ -194,6 +200,7 @@ const AllTags = ({ navigation }) => {
                           updates.editCatName(selectedTagName, id);
                         }
                       }
+                      console.log("six");
                       toggleEditPopupVisibility(!editPopupVisible);
                       refreshPage();
                     }}

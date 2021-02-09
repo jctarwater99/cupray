@@ -124,6 +124,7 @@ const AllReqs = ({ navigation }) => {
           </View>
         }
         data={requests}
+        removeClippedSubviews={false}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item, index }) => listItemView(item)}
         showsVerticalScrollIndicator={false}

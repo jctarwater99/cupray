@@ -229,7 +229,7 @@ const CategoriesScreen = ({ navigation }) => {
       </View>
       <View style={styles.folderContainer}>
         <FlatList
-          showsVerticalScrollIndicator={"false"}
+          showsVerticalScrollIndicator={false}
           data={categories}
           keyExtractor={(item, index) => index.toString()}
           ItemSeparatorComponent={listViewItemSeparator}
