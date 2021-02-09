@@ -568,6 +568,13 @@ const ThisRequestScreen = ({ route, navigation }) => {
               <Text style={styles.editButtonText}>EDIT</Text>
             </TouchableOpacity>
           </View>
+          <View style={{   shadowColor: "#000",
+              shadowOffset: {
+                width: 0,
+                height: 2,
+              },
+              shadowOpacity: 0.27,
+              shadowRadius: 3.65, }}>
           <ScrollView style={styles.requestContainer}>
             <View>
               <View>
@@ -616,6 +623,7 @@ const ThisRequestScreen = ({ route, navigation }) => {
               <Text style={styles.subtitle}>{displayDate}</Text>
             </View>
           </ScrollView>
+          </View>
         </View>
       </SafeAreaView>
     );
@@ -642,6 +650,7 @@ const styles = StyleSheet.create({
 
   requestContainer: {
     width: width * 0.92,
+    maxHeight: height * 0.7,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -649,7 +658,7 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.27,
     shadowRadius: 3.65,
-    overflow: "visible",
+    overflow: "hidden",
 
     elevation: 6,
     borderRadius: 20,

@@ -229,6 +229,7 @@ const CategoriesScreen = ({ navigation }) => {
       </View>
       <View style={styles.folderContainer}>
         <FlatList
+          showsVerticalScrollIndicator={"false"}
           data={categories}
           keyExtractor={(item, index) => index.toString()}
           ItemSeparatorComponent={listViewItemSeparator}
@@ -475,6 +476,7 @@ const styles = StyleSheet.create({
 
   folderContainer: {
     width: 327, // Yayira, stop using absolute positioning
+    maxHeight: height * 0.6,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
