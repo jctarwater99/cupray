@@ -86,23 +86,46 @@ export function getRequestsInCategory(categoryId, callback) {
   });
 }
 
-// Currently probably results in duplicates
-// Need to do select * from requests except
-// select start from requests, tags, RTs were
-// RTs.tag = Archived
-// Yep, that should fix it.
-export function getAllActiveRequests(callback) {
+// We don't really use this anymore....
+export function getAllRequests(callback) {
   db.transaction((tx) => {
     tx.executeSql(
-      "SELECT * from requests, tags, request_tags as rt " +
-        "WHERE rt.requestID = request.id AND rt.tagID = tags.id " +
-        "EXCEPT WHERE tags.name = 'Archived';",
+      "SELECT * from requests " +
+        "INNER JOIN request_tags as RT on RT.requestID = requests.id " +
+        "INNER JOIN categories on categories.tagID = RT.tagID " +
+        // All of this unnecessary code (apparently) would get rid of the "newSubject"
+        // if connecting requests to a category didn't already do that
+        // "WHERE requests.id IN ( " +
+        // "SELECT requests.id FROM requests " +
+        // "EXCEPT " +
+        // "SELECT * FROM ( " +
+        // "SELECT requests.id FROM requests ORDER BY id DESC LIMIT 1))" +
+        "ORDER BY requests.expire_time",
       [],
       (tx, result) => {
         callback(result.rows._array);
       },
       (tx, result) => {
-        console.log("getAllActiveRequests query failed", result);
+        console.log("getAllRequests query failed", result);
+      }
+    );
+  });
+}
+
+export function getAllRequestsInCategory(category, callback) {
+  db.transaction((tx) => {
+    tx.executeSql(
+      "SELECT name, requests.id, requestID, subject FROM requests " +
+        "INNER JOIN request_tags as RT on RT.requestID = requests.id " +
+        "INNER JOIN tags on tags.id = RT.tagID " +
+        "WHERE UPPER(tags.name) LIKE UPPER(?) " +
+        "ORDER BY requests.expire_time",
+      [category],
+      (tx, result) => {
+        callback(result.rows._array);
+      },
+      (tx, result) => {
+        console.log("getAllRequests query failed", result);
       }
     );
   });
@@ -134,7 +157,7 @@ export function getTagsForRequest(id, callback) {
         callback(result.rows._array);
       },
       (tx, result) => {
-        console.log("getRequest query failed", result);
+        console.log("get tags for request query failed", result);
       }
     );
   });

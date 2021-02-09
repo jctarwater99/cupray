@@ -551,7 +551,7 @@ const ThisRequestScreen = ({ route, navigation }) => {
     return (
       <SafeAreaView style={{ flex: 1 }}>
         <View style={styles.container}>
-            <Text style={styles.title}>{subject}</Text>
+          <Text style={styles.title}>{subject}</Text>
           <View
             style={{
               flexDirection: "row",

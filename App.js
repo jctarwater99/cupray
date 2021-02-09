@@ -11,7 +11,6 @@ import {
 } from "./database/objects";
 import WelcomeScreen from "./pages/welcome";
 import Dashboard from "./pages/dashboard";
-import TestPage from "./pages/testPage";
 import { disableExpoCliLogging } from "expo/build/logs/Logs";
 import { SafeAreaView } from "react-native-safe-area-context";
 import CategoriesScreen from "./pages/categories";

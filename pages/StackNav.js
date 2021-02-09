@@ -11,7 +11,6 @@ import {
 } from "../database/objects";
 import WelcomeScreen from "./welcome";
 import Dashboard from "./dashboard";
-import TestPage from "./testPage";
 import CategoriesScreen from "./categories";
 import RequestsScreen from "./requests";
 import ThisRequestScreen from "./individualRequest";
@@ -23,19 +22,18 @@ const Stack = createStackNavigator();
 
 export default function StackNavigator() {
   return (
-      <Stack.Navigator
-        initialRouteName="Welcome"
-        screenOptions={{ headerShown: false }}
-      >
-        {<Stack.Screen name="Welcome" component={WelcomeScreen} />}
-        {<Stack.Screen name="Dash" component={Dashboard} />}
-        {<Stack.Screen name="Cat" component={CategoriesScreen} />}
-        {<Stack.Screen name="Requests" component={RequestsScreen} />}
-        {<Stack.Screen name="TempDash" component={TempDash} />}
-        {<Stack.Screen name="Pray" component={ScheduledPrayers} />}
-        {<Stack.Screen name="AllReqs" component={AllReqs} />}
-        {<Stack.Screen name="IndividualRequest" component={ThisRequestScreen}/>}
-        {<Stack.Screen name="Test" component={TestPage} />}
-      </Stack.Navigator>
+    <Stack.Navigator
+      initialRouteName="Welcome"
+      screenOptions={{ headerShown: false }}
+    >
+      {<Stack.Screen name="Welcome" component={WelcomeScreen} />}
+      {<Stack.Screen name="Dash" component={Dashboard} />}
+      {<Stack.Screen name="Cat" component={CategoriesScreen} />}
+      {<Stack.Screen name="Requests" component={RequestsScreen} />}
+      {<Stack.Screen name="TempDash" component={TempDash} />}
+      {<Stack.Screen name="Pray" component={ScheduledPrayers} />}
+      {<Stack.Screen name="AllReqs" component={AllReqs} />}
+      {<Stack.Screen name="IndividualRequest" component={ThisRequestScreen} />}
+    </Stack.Navigator>
   );
 }
