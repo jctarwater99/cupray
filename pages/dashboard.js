@@ -172,7 +172,7 @@ const styles = StyleSheet.create({
   },
 
   dashImage: {
-    marginLeft: width * 0.06,
+    marginLeft: width * 0.065,
     marginTop: height * 0.025,
     width: 85,
     height: 85,

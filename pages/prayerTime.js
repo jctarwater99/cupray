@@ -99,7 +99,7 @@ const ScheduledPrayers = ({ route, navigation }) => {
         key={request.dID}
         style={[
           styles.requestBar,
-          //requestStates[index] ? styleActive: styleInactive
+          requestStates[index] ? styles.reqBarChecked : styles.reqBarUnchecked,
         ]}
         onPress={() =>
           navigation.navigate("IndividualRequest", {
@@ -289,6 +289,13 @@ const styles = StyleSheet.create({
     margin: height * 0.01,
     padding: 5,
     alignSelf: "center",
+  },
+
+  reqBarChecked: {
+    backgroundColor: "#CCCCCC",
+  },
+  reqBarUnchecked: {
+    backgroundColor: "#E8E7E4",
   },
 
   requestTitles: {

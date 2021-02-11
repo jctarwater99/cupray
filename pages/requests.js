@@ -72,7 +72,10 @@ const RequestsScreen = ({ route, navigation }) => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.container}>
-        <View style={{ flexDirection: "row" }}>
+        <View>
+          <FlatList
+          ListHeaderComponent={
+            <View style={{ flexDirection: "row" }}>
           <TouchableOpacity onPress={() => navigation.openDrawer()}>
             <Image
               style={{
@@ -89,14 +92,14 @@ const RequestsScreen = ({ route, navigation }) => {
             Requests<Text style={styles.titleAccent}>.</Text>
           </Text>
         </View>
-        <View>
-          <FlatList
+          }
             data={requests}
+            showsVerticalScrollIndicator={false}
             removeClippedSubviews={false}
             keyExtractor={(item, index) => index.toString()}
             renderItem={({ item }) => listItemView(item)}
-          />
-          <View style={styles.addReq}>
+            ListFooterComponent={
+              <View style={styles.addReq}>
             <TouchableOpacity
               onPress={() => {
                 navigation.navigate("IndividualRequest", {
@@ -115,6 +118,8 @@ const RequestsScreen = ({ route, navigation }) => {
               Add Request{" "}
             </Text>
           </View>
+            }
+          />
         </View>
       </View>
 
