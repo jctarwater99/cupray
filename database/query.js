@@ -1,5 +1,6 @@
 import * as SQLite from "expo-sqlite";
 import { Request, Request_Tag, Tag, Reminder, Frequency } from "./objects";
+import * as populate from "../database/populate";
 
 const db = SQLite.openDatabase("db.cupray");
 
@@ -259,6 +260,23 @@ export function getFlag(name, callback) {
       [name],
       (tx, result) => {
         callback(result.rows._array[0]);
+      },
+      (tx, result) => {
+        console.log("get flag query failed", result);
+      }
+    );
+  });
+}
+
+export function checkIfPopMinRan(callback) {
+  db.transaction((tx) => {
+    tx.executeSql(
+      "SELECT value FROM flags WHERE name = 'lastScheduled'",
+      [],
+      (tx, result) => {
+        if (result.rows._array.length == 0) {
+          populate.populateMinimum();
+        }
       },
       (tx, result) => {
         console.log("get flag query failed", result);

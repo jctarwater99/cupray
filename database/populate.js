@@ -16,7 +16,6 @@ export function populateDB() {
   populateDBwithTags();
   populateDBwithRequestTags();
   populateDBwithReminders();
-  populateDBwithReminders();
   populateDBwithCategories();
   populateDBwithDailyRequests();
 }
@@ -377,4 +376,49 @@ export function populateDBwithDailyRequests() {
 
 export function populateDBwithReminders() {
   console.log("Finished Inserting Reminders");
+}
+
+export function populateMinimum() {
+  // Date this was made
+  let curr = 1611866029666;
+  let baseC = 1610727130000;
+  let baseE = 1613405530000;
+  let offset = new Date().getTime() - curr;
+  function addReq(sub, desc, priority) {
+    request = new Request();
+    request.subject = sub;
+    request.description = desc;
+    request.create_time = baseC + offset;
+    request.expire_time = baseE + offset;
+    request.remind_freq = 1;
+    request.remind_days = "";
+    request.remind_time = "15:15";
+    request.previous_weight = 1;
+    request.weight = priority;
+    request.priority = priority;
+    requests.push(request);
+  }
+
+  var requests = [];
+
+  sub = "Subject";
+  desc = "Description";
+  addReq(sub, desc, 1);
+
+  db_insert.insertRequest(requests[0]);
+
+  db_insert.insertFlag(
+    "lastScheduled",
+    "Tue Feb 01 2021 00:00:00 GMT-0500 (EST)"
+  );
+
+  function createTag(name) {
+    var tag = new Tag();
+    tag.name = name;
+    return tag;
+  }
+
+  var tags = new Array();
+  tags.push(createTag("Archived")); // 1
+  db_insert.insertTag(tags[0]);
 }

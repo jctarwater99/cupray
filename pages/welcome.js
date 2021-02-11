@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import { Image, TouchableOpacity, Dimensions, FlatList } from "react-native";
 import { StyleSheet, Button, Text, View } from "react-native";
-import { populateDB } from "../database/populate";
+import { populateDB, populateMinimum } from "../database/populate";
 import { createDatabase, dropForTesting } from "../database/create";
 import * as queries from "../database/query";
 import * as updates from "../database/update";
@@ -30,6 +30,14 @@ async function requestPermissionsAsync() {
 }
 
 const WelcomeScreen = ({ navigation }) => {
+  useEffect(() => {
+    createDatabase();
+    queries.checkIfPopMinRan();
+    setTimeout(() => {
+      queries.checkIfPopMinRan();
+    }, 200);
+  }, []);
+
   Notifications.setNotificationHandler({
     handleNotification: async () => ({
       shouldShowAlert: true,
@@ -50,12 +58,7 @@ const WelcomeScreen = ({ navigation }) => {
         <Text
           style={styles.thePrayer}
           onPress={() => {
-            Notifications.cancelAllScheduledNotificationsAsync();
-            dropForTesting();
-            createDatabase();
-            requestPermissionsAsync();
-            populateDB();
-            //navigation.navigate("TempDash");
+            navigation.navigate("TempDash");
           }}
         >
           The prayer journal app for your 1000 days
@@ -64,6 +67,7 @@ const WelcomeScreen = ({ navigation }) => {
           <TouchableOpacity
             style={styles.bbutton}
             onPress={() => {
+              requestPermissionsAsync();
               bookKeeping.checkBooks();
               navigation.navigate("Dash");
             }}

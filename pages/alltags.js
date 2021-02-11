@@ -192,7 +192,7 @@ const AllTags = ({ navigation }) => {
                     style={{ width: width * 0.58 }}
                     onPress={() => {
                       if (isNewTag) {
-                        inserts.insertNewTag(selectedTagName);
+                        inserts.insertTag({ name: selectedTagName });
                       } else {
                         let id = selectedTag.id;
                         updates.editTag(selectedTagName, id);

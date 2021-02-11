@@ -1,94 +1,85 @@
 import React, { useEffect, useState } from "react";
 import { Image, TouchableOpacity, Dimensions, FlatList } from "react-native";
 import { StyleSheet, Button, Text, View } from "react-native";
+import * as Notifications from "expo-notifications";
 import * as queries from "../database/query";
 import * as updates from "../database/update";
+import { populateDB, populateMinimum } from "../database/populate";
+import { createDatabase, dropForTesting } from "../database/create";
 
 var { height, width } = Dimensions.get("window");
 
 const TempDash = ({ navigation }) => {
-  let [isPressed, setIsPressed] = useState([0, 1, 0]);
-  let [test, setTest] = useState([]);
-
-  useEffect(() => {setTest([0,1,0])}, [])
-
-  let handlePress = (number) => {
-    let newDays = [...test]; // can't change days manually, must create deep copy
-    newDays[number] = !newDays[number];
-    setTest(newDays);
-  };
-
-  let createButton = (text, index) =>{
-    return (
+  return (
+    <View style={{ flex: 1, margin: 25, marginTop: 100 }}>
+      <Text style={{ marginBottom: 35, fontSize: 20, fontWeight: "400" }}>
+        Debug Menu For Testing Purposes
+      </Text>
       <TouchableOpacity
-        key={index} 
-        style={[
-          styles.dayOfTheWeek,
-          test[index] ? styles.active : styles.inactive,
-        ]}
+        style={{
+          marginLeft: 75,
+          width: 150,
+          backgroundColor: "#0F0F0F",
+          padding: 5,
+        }}
         onPress={() => {
-          handlePress(index);
+          dropForTesting();
+          createDatabase();
+          populateDB();
         }}
       >
-        <Text style={test[index] ? styles.activeText : styles.inactiveText}>
-          {text}
-        </Text>
+        <Text style={{ color: "#FFFFFF" }}>Populate Database</Text>
       </TouchableOpacity>
-    )
-  }
-
-  let makeNewItem = () =>{
-    let text = ["test1", "test2", "test3"]
-    let i = 0;
-    let buttonList = [];
-    for(const txt of text){
-      buttonList.push(createButton(txt, i));
-      i++;
-    }
-    return buttonList;
-    
-  }
-
-  return (
-    <View style={{ flex: 1 }}>
-      <View style = {{flex: 1}} />
-      <View style = {{flex: 1}} >
-      {makeNewItem()}
-      </View>
-      <View style = {{flex: 1}} />
+      <TouchableOpacity
+        style={{
+          marginTop: 20,
+          marginLeft: 75,
+          width: 150,
+          backgroundColor: "#0F0F0F",
+          padding: 5,
+        }}
+        onPress={() => {
+          Notifications.cancelAllScheduledNotificationsAsync();
+        }}
+      >
+        <Text style={{ color: "#FFFFFF" }}>Clear Notifications</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={{
+          marginTop: 20,
+          marginLeft: 75,
+          width: 150,
+          backgroundColor: "#0F0F0F",
+          padding: 5,
+        }}
+        onPress={() => {
+          Notifications.cancelAllScheduledNotificationsAsync();
+          dropForTesting();
+        }}
+      >
+        <Text style={{ color: "#FFFFFF" }}>Clear Database</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={{
+          marginTop: 20,
+          marginLeft: 75,
+          width: 150,
+          backgroundColor: "#0F0F0F",
+          padding: 5,
+        }}
+        onPress={() => {
+          createDatabase();
+          populateMinimum();
+        }}
+      >
+        <Text style={{ color: "#FFFFFF" }}>Create Database</Text>
+      </TouchableOpacity>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   // Overall container for screen
-  pressed: {
-    backgroundColor: "#000000",
-    height: 45,
-  },
-  unpressed: {
-    backgroundColor: "#FFFFFF",
-    height: 45,
-  },
-  default: {
-    height: 35,
-    width: 35,
-    borderRadius: 35,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  active: {
-    backgroundColor: "#D6C396",
-  },
-  inactive: {
-    backgroundColor: "#D3D3D3",
-  },
-  activeText: {
-    color: "#fff",
-  },
-  inactiveText: {
-    color: "#003A63",
-  },
 });
 
 export default TempDash;
