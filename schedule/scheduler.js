@@ -89,16 +89,20 @@ export function selectQuietTimeRequests() {
             for (i = 0; i < results.length; i++) {
               var j;
               for (j = 0; j < results[i].weight; j++) {
-                tickets2.push(results[i].id);
+                tickets2.push(results[i]);
               }
             }
 
             for (i = 0; i < cnt; i++) {
-              var id = tickets2[Math.floor(Math.random() * tickets2.length)];
-              insertDailyRequest({ requestID: id, isPrayedFor: 0 });
+              var req = tickets2[Math.floor(Math.random() * tickets2.length)];
+              insertDailyRequest({
+                requestID: req.id,
+                isPrayedFor: 0,
+                category: req.category,
+              });
               var j;
               for (j = 0; j < tickets2.length; j++) {
-                if (tickets2[j] == id) {
+                if (tickets2[j] == req.id) {
                   tickets2.splice(j, 1);
                   j--;
                 }

@@ -53,10 +53,12 @@ export function populateDBwithRequests() {
 
   // 1
   request = new Request();
-  request.subject = "Old Subject";
-  request.description = "Old Description";
+  request.subject = "Safe Ending";
+  request.description =
+    "With all the covid craziness, I just pray that everyone (especially myself, lol) would" +
+    "be able to finish this semester strongly";
   request.create_time = "";
-  request.expire_time = "";
+  request.expire_time = baseE + offset;
   request.remind_freq = 0;
   request.remind_days = "";
   request.remind_time = "";
@@ -319,11 +321,16 @@ export function populateDBwithRequestTags() {
   RTs.push(createRT(4, 4)); // Sisters rela-ship    sister
   RTs.push(createRT(4, 8)); // Sisters rela-ship    Family
   RTs.push(createRT(9, 1)); // Proposal,            Archived
+  RTs.push(createRT(1, 1)); // Good semester despite covid,            Archived
+  RTs.push(createRT(1, 5)); // Good semester despite covid,            myself
+  RTs.push(createRT(1, 9)); // Good semester despite covid,            friends
   RTs.push(createRT(9, 2)); // Proposal,            Bob
   RTs.push(createRT(9, 5)); // Proposal,            friends
   RTs.push(createRT(2, 9)); // SD                   myself
   RTs.push(createRT(10, 9)); // Contentment          myself
   RTs.push(createRT(11, 9)); // Consistency in word  myself
+  RTs.push(createRT(6, 9)); // servants heart  myself
+  RTs.push(createRT(7, 6)); // National leadership  idk, church?
 
   RTs.push(createRT(12, 5)); // 13
   RTs.push(createRT(13, 5));
@@ -356,11 +363,11 @@ export function populateDBwithDailyRequests() {
   }
 
   var DRs = new Array();
-  DRs.push(createDR(8, 0)); // Bob's career,        Bob
-  DRs.push(createDR(5, 1)); // Division in church   church
-  DRs.push(createDR(4, 0)); // Sisters rela-ship    sister
-  DRs.push(createDR(2, 0)); // SD                   myself
-  DRs.push(createDR(18, 0)); // Camino Global       missions
+  DRs.push(createDR(8, 0, "Friends")); // Bob's career,        Bob
+  DRs.push(createDR(5, 1, "Church")); // Division in church   church
+  DRs.push(createDR(4, 0, "Family")); // Sisters rela-ship    sister
+  DRs.push(createDR(2, 0, "Myself")); // SD                   myself
+  DRs.push(createDR(18, 0, "Missions")); // Camino Global       missions
 
   DRs.forEach((element) => {
     db_insert.insertDailyRequest(element);

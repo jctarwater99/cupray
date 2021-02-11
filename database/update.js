@@ -303,7 +303,7 @@ export function archive(currTime) {
 export function updateIsPrayedFor(isPrayedFor, id) {
   db.transaction((tx) => {
     tx.executeSql(
-      "UPDATE daily_requests SET isPrayedFor = ? WHERE id = ?",
+      "UPDATE daily_requests SET isPrayedFor = ? WHERE requestID = ?",
       [isPrayedFor, id],
       (tx, result) => {
         console.log(isPrayedFor, " and ", result);

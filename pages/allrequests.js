@@ -18,10 +18,23 @@ var { height, width } = Dimensions.get("window");
 const AllReqs = ({ navigation }) => {
   let [requests, setRequests] = useState([]);
   let [searchTag, setSearchTag] = useState("");
+  let [allReqs, setAllReqs] = useState([]);
 
   useEffect(() => {
     queries.getAllRequestsInCategory("%", (result) => {
       setRequests(removeDupes(result));
+    });
+    queries.getAllRequests((results) => {
+      let reqs = [];
+      let j = 0;
+      for (var i = 0; i < results.length; i++) {
+        if (results[i].id == i - j + 1) {
+          reqs.push(results[i]);
+        } else {
+          j++;
+        }
+      }
+      setAllReqs(reqs);
     });
     bookKeeping.checkBooks();
   }, []);
@@ -42,8 +55,7 @@ const AllReqs = ({ navigation }) => {
         style={styles.requestContainer}
         onPress={() => {
           navigation.navigate("IndividualRequest", {
-            //cat_id: route.params.cat_id,
-            cat_name: request.name,
+            cat_name: allReqs[request.requestID - 1].name,
             req_id: request.requestID,
             isNewReq: false,
           });

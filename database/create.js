@@ -114,11 +114,12 @@ export function createDatabase() {
         "id INTEGER PRIMARY KEY, " +
         "requestID INT, " +
         "isPrayedFor INT, " +
+        "category TEXT, " +
         "FOREIGN KEY (requestID) REFERENCES requests(id));",
       null,
       () => void 0,
       (tx, result) => {
-        console.log("Creating 'categories' table failed", result);
+        console.log("Creating 'daily' table failed", result);
       }
     );
 

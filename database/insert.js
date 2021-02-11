@@ -138,8 +138,8 @@ export function insertNewTag(tagName) {
 export function insertDailyRequest(request) {
   db.transaction((tx) => {
     tx.executeSql(
-      "INSERT INTO daily_requests(requestID, isPrayedFor) VALUES(?, ?);",
-      [request.requestID, request.isPrayedFor],
+      "INSERT INTO daily_requests(requestID, isPrayedFor, category) VALUES(?, ?, ?);",
+      [request.requestID, request.isPrayedFor, request.category],
       () => void 0,
       (tx, result) => {
         console.log("Inserting Daily Request failed", result);

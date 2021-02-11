@@ -86,21 +86,13 @@ export function getRequestsInCategory(categoryId, callback) {
   });
 }
 
-// We don't really use this anymore....
 export function getAllRequests(callback) {
   db.transaction((tx) => {
     tx.executeSql(
-      "SELECT * from requests " +
-        "INNER JOIN request_tags as RT on RT.requestID = requests.id " +
-        "INNER JOIN categories on categories.tagID = RT.tagID " +
-        // All of this unnecessary code (apparently) would get rid of the "newSubject"
-        // if connecting requests to a category didn't already do that
-        // "WHERE requests.id IN ( " +
-        // "SELECT requests.id FROM requests " +
-        // "EXCEPT " +
-        // "SELECT * FROM ( " +
-        // "SELECT requests.id FROM requests ORDER BY id DESC LIMIT 1))" +
-        "ORDER BY requests.expire_time",
+      "SELECT requests.id, subject, name FROM requests " +
+        "INNER JOIN request_tags ON requests.id = request_tags.requestID " +
+        "INNER JOIN categories ON categories.tagID = request_tags.tagID " +
+        "ORDER BY requests.id;",
       [],
       (tx, result) => {
         callback(result.rows._array);
@@ -115,7 +107,7 @@ export function getAllRequests(callback) {
 export function getAllRequestsInCategory(category, callback) {
   db.transaction((tx) => {
     tx.executeSql(
-      "SELECT name, requests.id, requestID, subject FROM requests " +
+      "SELECT name, requestID, subject FROM requests " +
         "INNER JOIN request_tags as RT on RT.requestID = requests.id " +
         "INNER JOIN tags on tags.id = RT.tagID " +
         "WHERE UPPER(tags.name) LIKE UPPER(?) " +
@@ -125,7 +117,7 @@ export function getAllRequestsInCategory(category, callback) {
         callback(result.rows._array);
       },
       (tx, result) => {
-        console.log("getAllRequests query failed", result);
+        console.log("getAllRequests in category query failed", result);
       }
     );
   });
@@ -163,14 +155,30 @@ export function getTagsForRequest(id, callback) {
   });
 }
 
+// export function getDailyRequests(callback) {
+//   db.transaction((tx) => {
+//     tx.executeSql(
+//       "SELECT DISTINCT daily_requests.id as dID, subject, requests.id as rID, " +
+//         "isPrayedFor, categories.name as cat_name FROM daily_requests " +
+//         "INNER JOIN requests ON requests.id = daily_requests.requestID " +
+//         "INNER JOIN request_tags ON requests.id = request_tags.requestID " +
+//         "INNER JOIN categories ON categories.tagID = request_tags.tagID;",
+//       [],
+//       (tx, result) => {
+//         callback(result.rows._array);
+//       },
+//       (tx, result) => {
+//         console.log("getDailyRequests query failed", result);
+//       }
+//     );
+//   });
+// }
+
 export function getDailyRequests(callback) {
   db.transaction((tx) => {
     tx.executeSql(
-      "SELECT DISTINCT daily_requests.id as dID, subject, requests.id as rID, " +
-        "isPrayedFor, categories.name as cat_name FROM daily_requests " +
-        "INNER JOIN requests ON requests.id = daily_requests.requestID " +
-        "INNER JOIN request_tags ON requests.id = request_tags.requestID " +
-        "INNER JOIN categories ON categories.tagID = request_tags.tagID;",
+      "SELECT DISTINCT subject, requests.id as id, isPrayedFor, category FROM daily_requests " +
+        "INNER JOIN requests ON requests.id = daily_requests.requestID;",
       [],
       (tx, result) => {
         callback(result.rows._array);

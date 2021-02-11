@@ -90,7 +90,7 @@ const ScheduledPrayers = ({ route, navigation }) => {
     setRequestStates(temp);
 
     // Update value in database
-    updates.updateIsPrayedFor(temp[index] ? 1 : 0, requests[index].dID);
+    updates.updateIsPrayedFor(temp[index] ? 1 : 0, requests[index].id);
   };
 
   let listItemView = (request, index) => {
@@ -104,8 +104,8 @@ const ScheduledPrayers = ({ route, navigation }) => {
         onPress={() =>
           navigation.navigate("IndividualRequest", {
             // cat_id: route.params.cat_id,
-            cat_name: request.cat_name,
-            req_id: request.rID,
+            cat_name: request.Category,
+            req_id: request.id,
             isNewReq: false,
           })
         }
@@ -146,7 +146,7 @@ const ScheduledPrayers = ({ route, navigation }) => {
               marginTop: height * 0.015,
               width: 30,
               height: 30,
-              resizeMode: "5contain",
+              resizeMode: "contain",
             }}
             source={require("../assets/hamburger.png")}
           ></Image>
