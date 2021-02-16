@@ -74,7 +74,7 @@ export function getRequestsInCategory(categoryId, callback) {
         "SELECT requests.subject, requests.id FROM requests " +
         "INNER JOIN request_tags as RT ON RT.requestID = requests.id " +
         "INNER JOIN tags ON RT.tagID = tags.id " +
-        "WHERE tags.id = 1 " +
+        "WHERE tags.name = 'Archived';" +
         "ORDER BY requests.subject",
       [categoryId],
       (tx, result) => {
