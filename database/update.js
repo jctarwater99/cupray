@@ -314,3 +314,16 @@ export function updateIsPrayedFor(isPrayedFor, id) {
     );
   });
 }
+
+export function unexpire(reqID) {
+  db.transaction((tx) => {
+    tx.executeSql(
+      "DELETE FROM request_tags WHERE tagID = 1 AND requestID = ?",
+      [reqID],
+      () => void 0,
+      (tx, result) => {
+        console.log("Unexpiring request failed", result);
+      }
+    );
+  });
+}

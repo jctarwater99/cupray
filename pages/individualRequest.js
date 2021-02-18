@@ -199,7 +199,11 @@ const ThisRequestScreen = ({ route, navigation }) => {
     req.subject = subject;
     req.description = description;
 
-    req.expire_time = String(selectedDate);
+    if (new Date().getTime() < selectedDate.getTime()) {
+      updates.unexpire(route.params.req_id);
+    }
+
+    req.expire_time = selectedDate.getTime();
     req.remind_freq = request.remind_freq;
     req.remind_days = request.remind_days;
     req.remind_time = request.remind_time;
@@ -218,17 +222,10 @@ const ThisRequestScreen = ({ route, navigation }) => {
       return;
     }
 
-    // TODO: Double check that these 6 lines are unneeded, then delete
-    let catID = -1;
-    categories.forEach((element) => {
-      if (element.value == category) {
-        catID = element.id;
-      }
-    });
-
     // Actuall update part
     updates.updateRequest(route.params.req_id, req);
 
+    // Updating tags as well
     for (const tag in changedTags) {
       if (changedTags[tag] == 1 && tagStates[tag] == 1) {
         inserts.insertRequestTag({
@@ -568,61 +565,65 @@ const ThisRequestScreen = ({ route, navigation }) => {
               <Text style={styles.editButtonText}>EDIT</Text>
             </TouchableOpacity>
           </View>
-          <View style={{   shadowColor: "#000",
+          <View
+            style={{
+              shadowColor: "#000",
               shadowOffset: {
                 width: 0,
                 height: 2,
               },
               shadowOpacity: 0.27,
-              shadowRadius: 3.65, }}>
-          <ScrollView style={styles.requestContainer}>
-            <View>
+              shadowRadius: 3.65,
+            }}
+          >
+            <ScrollView style={styles.requestContainer}>
               <View>
-                <Text style={styles.boxheaders}>Description</Text>
-                <Text
+                <View>
+                  <Text style={styles.boxheaders}>Description</Text>
+                  <Text
+                    style={{
+                      padding: 5,
+                      color: "#7E8C96",
+                      marginBottom: 20,
+                      textAlignVertical: "top",
+                      fontWeight: "600",
+                    }}
+                  >
+                    {description}
+                  </Text>
+                </View>
+
+                <Text style={styles.boxheaders}>Priority</Text>
+                <View
                   style={{
-                    padding: 5,
-                    color: "#7E8C96",
-                    marginBottom: 20,
-                    textAlignVertical: "top",
-                    fontWeight: "600",
+                    flexDirection: "row",
+                    marginTop: 0,
+                    padding: 0,
+                    alignItems: "flex-end",
+                    //justifyContent: "flex-end",
                   }}
                 >
-                  {description}
-                </Text>
-              </View>
+                  {makeCheckBox("Box1", 0)}
+                  {makeCheckBox("Box2", 1)}
+                  {makeCheckBox("Box3", 2)}
+                </View>
+                <Text style={styles.boxheaders}>Tags</Text>
+                <View
+                  style={[
+                    {
+                      flexDirection: "row",
+                      alignSelf: "flex-start",
+                      flexWrap: "wrap",
+                    },
+                  ]}
+                >
+                  {tagButtons()}
+                </View>
 
-              <Text style={styles.boxheaders}>Priority</Text>
-              <View
-                style={{
-                  flexDirection: "row",
-                  marginTop: 0,
-                  padding: 0,
-                  alignItems: "flex-end",
-                  //justifyContent: "flex-end",
-                }}
-              >
-                {makeCheckBox("Box1", 0)}
-                {makeCheckBox("Box2", 1)}
-                {makeCheckBox("Box3", 2)}
+                <Text style={styles.boxheaders}>Reminder Expiration</Text>
+                <Text style={styles.subtitle}>{displayDate}</Text>
               </View>
-              <Text style={styles.boxheaders}>Tags</Text>
-              <View
-                style={[
-                  {
-                    flexDirection: "row",
-                    alignSelf: "flex-start",
-                    flexWrap: "wrap",
-                  },
-                ]}
-              >
-                {tagButtons()}
-              </View>
-
-              <Text style={styles.boxheaders}>Reminder Expiration</Text>
-              <Text style={styles.subtitle}>{displayDate}</Text>
-            </View>
-          </ScrollView>
+            </ScrollView>
           </View>
         </View>
       </SafeAreaView>
