@@ -42,13 +42,17 @@ function getReqs2(categoryId, callback, category, startDayNum) {
         "requests.description, tags.name as category FROM requests " +
         "INNER JOIN request_tags as RT ON RT.requestID = requests.id " +
         "INNER JOIN tags ON RT.tagID = tags.id " +
-        "WHERE tags.id = ?; " +
-        "EXCEPT " +
-        "SELECT requests.subject, requests.id FROM requests " +
+        "WHERE tags.id = ? AND requests.id IN ( " +
+        "SELECT requests.id FROM requests " +
         "INNER JOIN request_tags as RT ON RT.requestID = requests.id " +
         "INNER JOIN tags ON RT.tagID = tags.id " +
-        "tags.name = 'Archived';",
-      [categoryId],
+        "WHERE tags.id = ? " +
+        "EXCEPT " +
+        "SELECT requests.id FROM requests " +
+        "INNER JOIN request_tags as RT ON RT.requestID = requests.id " +
+        "INNER JOIN tags ON RT.tagID = tags.id " +
+        "WHERE tags.name = 'Archived')",
+      [categoryId, categoryId],
       (tx, result) => {
         callback(result.rows._array, category, startDayNum);
       },

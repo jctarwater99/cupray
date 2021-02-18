@@ -6,6 +6,7 @@ import * as queries from "../database/query";
 import * as updates from "../database/update";
 import { populateDB, populateMinimum } from "../database/populate";
 import { createDatabase, dropForTesting } from "../database/create";
+import { getRequestsInCategory } from "../database/passThroughQuery";
 
 var { height, width } = Dimensions.get("window");
 
@@ -73,6 +74,28 @@ const TempDash = ({ navigation }) => {
         }}
       >
         <Text style={{ color: "#FFFFFF" }}>Create Database</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={{
+          marginTop: 20,
+          marginLeft: 75,
+          width: 150,
+          backgroundColor: "#0F0F0F",
+          padding: 5,
+        }}
+        onPress={() => {
+          getRequestsInCategory(
+            5,
+            (result) => {
+              console.log(result);
+            },
+            5,
+            5
+          );
+        }}
+      >
+        <Text style={{ color: "#FFFFFF" }}>Get Categories</Text>
       </TouchableOpacity>
     </View>
   );
