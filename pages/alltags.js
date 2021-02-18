@@ -38,11 +38,14 @@ const AllTags = ({ navigation }) => {
     }, 200);
   };
 
-  let listItemView = (tag) => {
+  let listItemView = (tag, index) => {
     return (
       <TouchableOpacity
         key={tag.id}
-        style={styles.requestContainer}
+        style={[
+          styles.requestContainer,
+          tags[index].isCategory ? styles.oneWay : styles.otherWay,
+        ]}
         onPress={() => {
           setIsNewTag(false);
           setSelectedTagName(tag.name);
@@ -82,7 +85,7 @@ const AllTags = ({ navigation }) => {
         }
         data={tags}
         keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item, index }) => listItemView(item)}
+        renderItem={({ item, index }) => listItemView(item, index)}
         showsVerticalScrollIndicator={false}
         removeClippedSubviews={false}
         ListFooterComponent={
