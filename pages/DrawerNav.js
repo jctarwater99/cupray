@@ -37,6 +37,7 @@ const Drawer = createDrawerNavigator();
 export default function DrawerNavigator() {
 return (
 <Drawer.Navigator
+initialRouteName="Dashboard"
 drawerContent={props => <CustomDrawerContent {...props} />}
 drawerStyle={{
     backgroundColor: '#EFEFEF',
@@ -52,7 +53,8 @@ drawerStyle={{
 
     <Drawer.Screen
     name="Dashboard"
-    component={StackNavigator}/>
+    component={StackNavigator}
+    />
     
     <Drawer.Screen
     name="Prayer Time"
