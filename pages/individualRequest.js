@@ -19,6 +19,8 @@ import { Category, Tag } from "../database/objects";
 import Modal from "react-native-modal";
 import { Dropdown } from "react-native-material-dropdown-v2";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import QRCode from "react-native-qrcode-svg";
+
 import { checkBooks } from "../database/bookKeeping";
 
 // Ignore log notification by message
@@ -33,17 +35,15 @@ LogBox.ignoreLogs([
 var { height, width } = Dimensions.get("window");
 
 const ThisRequestScreen = ({ route, navigation }) => {
-  let [request, setRequest] = useState([]);
+  let [request, setRequest] = useState([]); // This isn't used a whole lot, is it?
   let [categories, setCategories] = useState([]);
   let [tags, setTags] = useState([]);
-  let [requestTags, setRTags] = useState([]);
   let [tagStates, setTagStates] = useState([]);
   let [changedTags, changeTags] = useState([]);
-  let [expireTime, setExpireTime] = useState("");
   let [selectedDate, setSelectedDate] = useState(new Date());
   let [displayDate, setDisplayDate] = useState("");
-
   let [inEditMode, setMode] = useState(route.params.isNewReq);
+
   let [checked, setBoxes] = useState([true, true, false]);
   let [subject, setSubject] = useState("");
   let [description, setDescription] = useState("");
@@ -51,46 +51,77 @@ const ThisRequestScreen = ({ route, navigation }) => {
   let [newTagPopup, toggleNewTagPopup] = useState(false);
   let [datePickerVisible, setDatePickerVisibility] = useState(false);
   let [newTag, setNewTag] = useState("");
+  let [qrcodePopupVisible, toggleQrcodePopupVisibility] = useState(false);
 
   useEffect(() => {
     // Loads request
-    queries.getRequest(route.params.req_id, (results) => {
-      setRequest(results);
-      setDescription(results.description);
-      setSubject(results.subject);
+    if (!route.params.isNewReq) {
+      queries.getRequest(route.params.req_id, (results) => {
+        setRequest(results);
+        setDescription(results.description);
+        setSubject(results.subject);
 
-      let date = new Date();
-      if (!route.params.isNewReq) {
         date = new Date(results.expire_time);
-      }
+        parseDate(date, setDisplayDate);
+        setSelectedDate(date);
+
+        let state = [true, true, false];
+        if (results.priority == 2) {
+          state[2] = true;
+        } else if (results.priority == 0) {
+          state[1] = false;
+        }
+        setBoxes(state);
+      });
+    } else {
+      setDescription(route.params.description);
+      setSubject(route.params.subject);
+
+      let date = new Date(new Date().getTime() + 2592000000);
       parseDate(date, setDisplayDate);
       setSelectedDate(date);
 
       let state = [true, true, false];
-      if (results.priority == 2) {
-        state[2] = true;
-      } else if (results.priority == 0) {
-        state[1] = false;
-      }
       setBoxes(state);
-      scheduler.rescheduleNotifs();
-    });
+    }
 
-    queries.getTagsForRequest(route.params.req_id, (rTags) => {
-      setRTags(rTags);
+    if (!route.params.isNewReq) {
+      queries.getTagsForRequest(route.params.req_id, (rTags) => {
+        queries.getTags((tags) => {
+          setTags(tags);
+
+          let i = 0;
+          let newTagValues = [];
+          let changeValues = [];
+          for (const tag in tags) {
+            if (rTags.length > 0 && tags[tag].name == rTags[i].name) {
+              if (i != rTags.length - 1) {
+                i++;
+              }
+              newTagValues.push(1);
+            } else newTagValues.push(0);
+            changeValues.push(0);
+          }
+          if (route.params.isNewReq && route.params.cat_name != "Category") {
+            for (const tag in tags) {
+              if (tags[tag].name == route.params.cat_name) {
+                newTagValues[tag] = 1;
+                changeValues[tag] = 1;
+              }
+            }
+          }
+          setTagStates(newTagValues);
+          changeTags(changeValues);
+        });
+      });
+    } else {
       queries.getTags((tags) => {
         setTags(tags);
 
-        let i = 0;
         let newTagValues = [];
         let changeValues = [];
         for (const tag in tags) {
-          if (rTags.length > 0 && tags[tag].name == rTags[i].name) {
-            if (i != rTags.length - 1) {
-              i++;
-            }
-            newTagValues.push(1);
-          } else newTagValues.push(0);
+          newTagValues.push(0);
           changeValues.push(0);
         }
         if (route.params.isNewReq && route.params.cat_name != "Category") {
@@ -104,7 +135,7 @@ const ThisRequestScreen = ({ route, navigation }) => {
         setTagStates(newTagValues);
         changeTags(changeValues);
       });
-    });
+    }
     if (Platform.OS == "ios") {
       setDatePickerVisibility(true);
     }
@@ -130,6 +161,14 @@ const ThisRequestScreen = ({ route, navigation }) => {
   let handleTagPress = (number) => {
     if (category == tags[number].name || tags[number].name == "Archived") {
       return;
+    }
+    if (category == "Category") {
+      for (var i = 0; i < categories.length; i++) {
+        if (tags[number].name == categories[i].value) {
+          setCategory(tags[number].name);
+          break;
+        }
+      }
     }
 
     let states = [...tagStates]; // can't change states manually, must create deep copy
@@ -556,7 +595,15 @@ const ThisRequestScreen = ({ route, navigation }) => {
               justifyContent: "space-between",
             }}
           >
-            <Text style={{ width: 95 }}></Text>
+            <TouchableOpacity
+              onPress={() => {
+                toggleQrcodePopupVisibility(!qrcodePopupVisible);
+              }}
+              style={styles.shareButton}
+            >
+              <Text style={styles.editButtonText}>SHARE</Text>
+            </TouchableOpacity>
+
             <Text style={styles.subtitle}>{route.params.cat_name} </Text>
             <TouchableOpacity
               onPress={() => setMode(true)}
@@ -623,6 +670,32 @@ const ThisRequestScreen = ({ route, navigation }) => {
                 <Text style={styles.boxheaders}>Reminder Expiration</Text>
                 <Text style={styles.subtitle}>{displayDate}</Text>
               </View>
+
+              <Modal
+                isVisible={qrcodePopupVisible}
+                backdropOpacity={0.25}
+                animationInTiming={400}
+                animationOutTiming={800}
+                style={styles.modalContent}
+                onBackdropPress={() => {
+                  toggleQrcodePopupVisibility(!qrcodePopupVisible);
+                }}
+              >
+                <View style={styles.popUpContainer}>
+                  <QRCode
+                    value={
+                      'cupray{"subject":"' +
+                      subject +
+                      '","description":"' +
+                      description +
+                      '"}'
+                    }
+                    size={width * 0.98}
+                    color="black"
+                    backgroundColor="white"
+                  />
+                </View>
+              </Modal>
             </ScrollView>
           </View>
         </View>
@@ -710,6 +783,22 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: "#7E8C96",
     marginRight: width * 0.06,
+  },
+
+  shareButton: {
+    width: 70,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.27,
+    shadowRadius: 2.65,
+
+    elevation: 6,
+    borderRadius: 10,
+    backgroundColor: "#7E8C96",
+    marginLeft: width * 0.06,
   },
 
   editButtonText: {

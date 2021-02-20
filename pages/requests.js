@@ -48,7 +48,6 @@ const RequestsScreen = ({ route, navigation }) => {
         // Navigate @ Request, need isNew??
         onPress={() => {
           navigation.navigate("IndividualRequest", {
-            //cat_id: route.params.cat_id,
             cat_name: route.params.cat_name,
             req_id: request.id,
             isNewReq: false,
@@ -74,25 +73,25 @@ const RequestsScreen = ({ route, navigation }) => {
       <View style={styles.container}>
         <View>
           <FlatList
-          ListHeaderComponent={
-            <View style={{ flexDirection: "row" }}>
-          <TouchableOpacity onPress={() => navigation.openDrawer()}>
-            <Image
-              style={{
-                marginRight: width * 0.05,
-                marginTop: height * 0.015,
-                width: 30,
-                height: 30,
-                resizeMode: "contain",
-              }}
-              source={require("../assets/hamburger.png")}
-            ></Image>
-          </TouchableOpacity>
-          <Text style={styles.title}>
-            Requests<Text style={styles.titleAccent}>.</Text>
-          </Text>
-        </View>
-          }
+            ListHeaderComponent={
+              <View style={{ flexDirection: "row" }}>
+                <TouchableOpacity onPress={() => navigation.openDrawer()}>
+                  <Image
+                    style={{
+                      marginRight: width * 0.05,
+                      marginTop: height * 0.015,
+                      width: 30,
+                      height: 30,
+                      resizeMode: "contain",
+                    }}
+                    source={require("../assets/hamburger.png")}
+                  ></Image>
+                </TouchableOpacity>
+                <Text style={styles.title}>
+                  Requests<Text style={styles.titleAccent}>.</Text>
+                </Text>
+              </View>
+            }
             data={requests}
             showsVerticalScrollIndicator={false}
             removeClippedSubviews={false}
@@ -100,24 +99,25 @@ const RequestsScreen = ({ route, navigation }) => {
             renderItem={({ item }) => listItemView(item)}
             ListFooterComponent={
               <View style={styles.addReq}>
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate("IndividualRequest", {
-                  cat_id: 1,
-                  cat_name: route.params.cat_name,
-                  req_id: newReqId,
-                  isNewReq: true,
-                });
-              }}
-              style={styles.createReqButton}
-            >
-              <Text style={[styles.plusSign]}>+</Text>
-            </TouchableOpacity>
-            <Text style={[styles.plusSign, { marginTop: height * 0.01 }]}>
-              {" "}
-              Add Request{" "}
-            </Text>
-          </View>
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate("IndividualRequest", {
+                      cat_name: route.params.cat_name,
+                      isNewReq: true,
+                      req_id: -1,
+                      subject: "Subject",
+                      description: "Description",
+                    });
+                  }}
+                  style={styles.createReqButton}
+                >
+                  <Text style={[styles.plusSign]}>+</Text>
+                </TouchableOpacity>
+                <Text style={[styles.plusSign, { marginTop: height * 0.01 }]}>
+                  {" "}
+                  Add Request{" "}
+                </Text>
+              </View>
             }
           />
         </View>

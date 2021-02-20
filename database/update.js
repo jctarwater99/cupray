@@ -327,3 +327,16 @@ export function unexpire(reqID) {
     );
   });
 }
+
+export function setQrData(subject, description) {
+  db.transaction((tx) => {
+    tx.executeSql(
+      "UPDATE requests SET subject = ?, description = ? WHERE id = SELECT id FROM requests ORDER BY id DESC LIMIT 1",
+      [subject, description],
+      () => void 0,
+      (tx, result) => {
+        console.log("Unexpiring request failed", result);
+      }
+    );
+  });
+}

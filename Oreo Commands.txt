@@ -40,3 +40,7 @@ Installing React native navigation for multiple screens?
 	> npx pod-install ios
 
 
+Installing qr codes
+	> npm install react-native-svg --save
+	> npm install react-native-qrcode-svg --save
+	> expo install expo-barcode-scanner

@@ -134,7 +134,7 @@ export function scheduleNotifs() {
           latestDate = curDate;
         }
       }
-      startDayNum = getDaysDiff(new Date(), latestDate) + 1;
+      startDayNum = getDaysDiff(new Date(), latestDate);
     }
     scheduleForCat(0, startDayNum);
   });

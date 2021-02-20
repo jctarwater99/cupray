@@ -101,14 +101,13 @@ const ScheduledPrayers = ({ route, navigation }) => {
           styles.requestBar,
           requestStates[index] ? styles.reqBarChecked : styles.reqBarUnchecked,
         ]}
-        onPress={() =>
+        onPress={() => {
           navigation.navigate("IndividualRequest", {
-            // cat_id: route.params.cat_id,
-            cat_name: request.Category,
+            cat_name: request.category,
             req_id: request.id,
             isNewReq: false,
-          })
-        }
+          });
+        }}
         // Navigate @ Request, need isNew??
       >
         <View>

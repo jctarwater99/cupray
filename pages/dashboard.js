@@ -10,11 +10,15 @@ const Dashboard = ({ navigation }) => {
   let [newReqId, setNewReqId] = useState(0);
 
   useEffect(() => {
+    getNewReq();
+    checkBooks();
+  }, []);
+
+  let getNewReq = () => {
     queries.getNewReqId((result) => {
       setNewReqId(result);
     });
-    checkBooks();
-  }, []);
+  };
 
   return (
     <View style={styles.dashboardContainer}>
@@ -93,10 +97,11 @@ const Dashboard = ({ navigation }) => {
             style={styles.icon}
             onPress={() => {
               navigation.navigate("IndividualRequest", {
-                cat_id: 1,
                 cat_name: "Category",
-                req_id: newReqId,
+                req_id: -1,
                 isNewReq: true,
+                subject: "Subject",
+                description: "Description",
               });
             }}
           >
