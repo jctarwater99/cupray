@@ -124,7 +124,7 @@ export function rescheduleNotifs() {
 
 export function scheduleNotifs() {
   queries.getReminders((results) => {
-    var startDayNum = 1;
+    var startDayNum = 0;
     if (results.length > 0) {
       var latestDate = new Date();
       var i;
