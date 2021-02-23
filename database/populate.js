@@ -112,7 +112,7 @@ export function populateDBwithRequests() {
   // 8
   sub = "Bob's Career";
   desc = "Please make Bob the best physicist ever to live";
-  addReq(sub, desc, 1);
+  addReq(sub, desc, 3);
 
   // 9
   sub = "Proposal";
@@ -130,7 +130,7 @@ export function populateDBwithRequests() {
   desc =
     "We make time for the things we value, that God would put a desire in me to know Him " +
     "and a sense of urgency so that I will be motivated to spend daily time in the word meditating.";
-  addReq(sub, desc, 2);
+  addReq(sub, desc, 1);
 
   // 12
   sub = "Friends' Success";
@@ -146,7 +146,7 @@ export function populateDBwithRequests() {
     "A lot of my friends have jobs. I'm thankful that you have given them success. I ask that " +
     "You would also help my girlfriend and my roommates girlfriend to have the same success as " +
     "they begin to get more serious about looking for a job after graduation.";
-  addReq(sub, desc, 2);
+  addReq(sub, desc, 1);
 
   // 14
   sub = "Friends' Relationships";
@@ -161,14 +161,14 @@ export function populateDBwithRequests() {
     "During this covid season, it has been harder for us to meet and have personal fellowship " +
     "as a church. I pray that you would give people the desire and the means to continue to meet " +
     "and fellowship, and have the close accountability that we should have as a church";
-  addReq(sub, desc, 2);
+  addReq(sub, desc, 1);
 
   // 16
   sub = "Leadership";
   desc =
     "Thank you for the strong, biblical leaders in my church. Continue to guide them and " +
     "help them to make good decisions that are in the best interest of the church.";
-  addReq(sub, desc, 3);
+  addReq(sub, desc, 1);
 
   // 17
   sub = "Tri-M";
@@ -199,14 +199,14 @@ export function populateDBwithRequests() {
     "Thank you for my grandmother and the impact she has had on my mother, myself, my siblings, " +
     "etc... Please help her move to go smoothly both for her and my parents as they figure out what " +
     "it's like to have an inlaw live with them.";
-  addReq(sub, desc, 0);
+  addReq(sub, desc, 1);
 
   // 21
   sub = "Aunt's surgery";
   desc =
     "Please help my aunt's surgery to go well, that there would be no complications, " +
     "and that she would have a rapid recovery";
-  addReq(sub, desc, 2);
+  addReq(sub, desc, 1);
 
   // 22
   sub = "Brother's Spiritual Growth";
@@ -220,7 +220,7 @@ export function populateDBwithRequests() {
   desc =
     "Heavenly Father, ....covid sucks. Please help it to end, and help me to stay motivated despite all " +
     "the demotivating factors surounding covid.";
-  addReq(sub, desc, 0);
+  addReq(sub, desc, 1);
 
   // 24
   sub = "Loving/aware";

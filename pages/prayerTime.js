@@ -35,10 +35,20 @@ const ScheduledPrayers = ({ route, navigation }) => {
     // each request has a request.isPrayedFor boolean variable you can use to
     // decide whether or not to render the check mark
     queries.getDailyRequests((results) => {
-      setRequests(results.slice(0, 5));
-      var i;
+      // Remove Duplicates
+      let uniq = [];
+      let included = [];
+      for (var i = 0; i < results.length; i++) {
+        if (!uniq.includes(results[i].id)) {
+          uniq.push(results[i].id);
+          included.push(results[i]);
+        }
+      }
+
+      results = included.slice(0, 5);
+      setRequests(results);
       let reqStates = [];
-      for (i = 0; i < 5 && i < results.length; i++) {
+      for (var i = 0; i < 5 && i < results.length; i++) {
         reqStates.push(results[i].isPrayedFor == 1); // Super important that we don't change from 0/1 to true/false in the db now, RN expects bool
       }
       setRequestStates(reqStates);

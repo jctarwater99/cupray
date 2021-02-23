@@ -66,9 +66,9 @@ const ThisRequestScreen = ({ route, navigation }) => {
         setSelectedDate(date);
 
         let state = [true, true, false];
-        if (results.priority == 2) {
+        if (results.priority == 3) {
           state[2] = true;
-        } else if (results.priority == 0) {
+        } else if (results.priority == 1) {
           state[1] = false;
         }
         setBoxes(state);
@@ -243,11 +243,11 @@ const ThisRequestScreen = ({ route, navigation }) => {
       updates.unexpire(route.params.req_id);
     }
 
-    let priority = 0;
+    let priority = 1;
     if (checked[2]) {
-      priority = 2;
+      priority = 3;
     } else if (checked[1]) {
-      priority = 1;
+      priority = 2;
     }
     req.priority = priority;
 
