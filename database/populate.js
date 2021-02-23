@@ -379,34 +379,6 @@ export function populateDBwithReminders() {
 }
 
 export function populateMinimum() {
-  // Date this was made
-  let curr = 1611866029666;
-  let baseC = 1610727130000;
-  let baseE = 1613405530000;
-  let offset = new Date().getTime() - curr;
-  function addReq(sub, desc, priority) {
-    request = new Request();
-    request.subject = sub;
-    request.description = desc;
-    request.create_time = baseC + offset;
-    request.expire_time = baseE + offset;
-    request.remind_freq = 1;
-    request.remind_days = "";
-    request.remind_time = "15:15";
-    request.previous_weight = 1;
-    request.weight = priority;
-    request.priority = priority;
-    requests.push(request);
-  }
-
-  var requests = [];
-
-  sub = "Subject";
-  desc = "Description";
-  addReq(sub, desc, 1);
-
-  db_insert.insertRequest(requests[0]);
-
   db_insert.insertFlag(
     "lastScheduled",
     "Tue Feb 01 2021 00:00:00 GMT-0500 (EST)"
@@ -421,4 +393,22 @@ export function populateMinimum() {
   var tags = new Array();
   tags.push(createTag("Archived")); // 1
   db_insert.insertTag(tags[0]);
+
+  function createCat(name, tagID, days, time) {
+    var cat = new Category();
+    cat.name = name;
+    cat.tagID = tagID;
+    cat.remind_time = time;
+    cat.remind_days = days;
+    return cat;
+  }
+
+  var cats = new Array();
+  cats.push(createCat("Friends", 5, "0111110", 1608141600000));
+  cats.push(createCat("Church", 6, "1000001", 1608145200000));
+  cats.push(createCat("Family", 8, "1111111", 1608159600000));
+
+  cats.forEach((element) => {
+    db_insert.insertCategory(element);
+  });
 }

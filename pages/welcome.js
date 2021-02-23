@@ -33,9 +33,6 @@ const WelcomeScreen = ({ navigation }) => {
   useEffect(() => {
     createDatabase();
     queries.checkIfPopMinRan();
-    setTimeout(() => {
-      queries.checkIfPopMinRan();
-    }, 200);
   }, []);
 
   Notifications.setNotificationHandler({
