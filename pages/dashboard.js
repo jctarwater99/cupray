@@ -7,18 +7,9 @@ import { checkBooks } from "../database/bookKeeping";
 var { height, width } = Dimensions.get("window");
 
 const Dashboard = ({ navigation }) => {
-  let [newReqId, setNewReqId] = useState(0);
-
   useEffect(() => {
-    getNewReq();
     checkBooks();
   }, []);
-
-  let getNewReq = () => {
-    queries.getNewReqId((result) => {
-      setNewReqId(result);
-    });
-  };
 
   return (
     <View style={styles.dashboardContainer}>

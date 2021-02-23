@@ -233,19 +233,15 @@ const ThisRequestScreen = ({ route, navigation }) => {
   };
 
   let saveChanges = () => {
-    // Creating request to pass to the update field
+    // Creating request to pass to the update or create field
     let req = new Request();
     req.subject = subject;
     req.description = description;
+    req.expire_time = selectedDate.getTime();
 
     if (new Date().getTime() < selectedDate.getTime()) {
       updates.unexpire(route.params.req_id);
     }
-
-    req.expire_time = selectedDate.getTime();
-    req.remind_freq = request.remind_freq;
-    req.remind_days = request.remind_days;
-    req.remind_time = request.remind_time;
 
     let priority = 0;
     if (checked[2]) {
@@ -261,29 +257,31 @@ const ThisRequestScreen = ({ route, navigation }) => {
       return;
     }
 
-    // Actuall update part
-    updates.updateRequest(route.params.req_id, req);
-
     // Updating tags as well
-    for (const tag in changedTags) {
-      if (changedTags[tag] == 1 && tagStates[tag] == 1) {
-        inserts.insertRequestTag({
-          requestID: route.params.req_id,
-          tagID: tags[tag].id,
-        });
-      } else if (changedTags[tag] == 1) {
-        updates.deleteRequestTag({
-          requestID: route.params.req_id,
-          tagID: tags[tag].id,
-        });
+    function updateTags(request_id) {
+      for (const tag in changedTags) {
+        if (changedTags[tag] == 1 && tagStates[tag] == 1) {
+          inserts.insertRequestTag({
+            requestID: request_id,
+            tagID: tags[tag].id,
+          });
+        } else if (changedTags[tag] == 1) {
+          updates.deleteRequestTag({
+            requestID: request_id,
+            tagID: tags[tag].id,
+          });
+        }
       }
     }
 
+    // Actuall update part
     if (route.params.isNewReq) {
-      // Create New "New Request"
-      inserts.insertRequest({ subject: "Subject", description: "Description" });
+      inserts.insertNewRequest(req, updateTags);
       scheduler.rescheduleNotifs();
       navigation.navigate("Cat");
+    } else {
+      updates.updateRequest(route.params.req_id, req);
+      updateTags(route.params.req_id);
     }
   };
 

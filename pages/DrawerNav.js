@@ -68,9 +68,8 @@ export default function DrawerNavigator() {
       }}
     >
       <Drawer.Screen name="Dashboard" component={StackNavigator} />
-
-      <Drawer.Screen name="Prayer Time" component={ScheduledPrayers} />
-      <Drawer.Screen name="Prayer Journal" component={CategoriesScreen} />
+      {/*      <Drawer.Screen name="Prayer Time" component={ScheduledPrayers} />
+      <Drawer.Screen name="Prayer Journal" component={CategoriesScreen} />    */}
       <Drawer.Screen name="All Requests" component={AllReqs} />
       <Drawer.Screen name="All Tags" component={AllTags} />
       <Drawer.Screen name="Scan QR Code" component={Scanner} />
