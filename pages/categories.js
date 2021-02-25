@@ -475,7 +475,7 @@ const styles = StyleSheet.create({
   },
 
   folderContainer: {
-    width: width * .85,
+    width: width * 0.85,
     maxHeight: height * 0.6,
     shadowColor: "#000",
     shadowOffset: {
@@ -508,7 +508,7 @@ const styles = StyleSheet.create({
   },
 
   popUpContainer: {
-    width: width * .85,
+    width: width * 0.85,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -597,9 +597,9 @@ const styles = StyleSheet.create({
 
   dayOfTheWeek: {
     margin: 3,
-    height: 35,
-    width: 35,
-    borderRadius: 35,
+    height: width * 0.095,
+    width: width * 0.095,
+    borderRadius: width * 0.095,
     alignItems: "center",
     justifyContent: "center",
   },

@@ -24,7 +24,6 @@ const RequestsScreen = ({ route, navigation }) => {
 
   useEffect(() => {
     queries.getRequestsInCategory(route.params.cat_id, (results) => {
-      console.log(results);
       setRequests(results);
     });
     checkBooks();
@@ -204,8 +203,8 @@ const styles = StyleSheet.create({
   },
 
   requestContainer: {
-    width: width * .85,
-    height: height * .08,
+    width: width * 0.85,
+    height: height * 0.08,
     flexDirection: "row",
     shadowColor: "#000",
     shadowOffset: {
@@ -288,7 +287,7 @@ const styles = StyleSheet.create({
   },
 
   popUpContainer: {
-    width: width * .85,
+    width: width * 0.85,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,

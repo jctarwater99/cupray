@@ -22,7 +22,6 @@ const AllReqs = ({ navigation }) => {
 
   useEffect(() => {
     queries.getAllRequestsInCategory("%", (result) => {
-      console.log(result);
       setRequests(removeDupes(result));
     });
     queries.getAllRequests((results) => {
@@ -70,7 +69,6 @@ const AllReqs = ({ navigation }) => {
         <View style={styles.circle} />
         <Text style={styles.requestTitles}>{request.subject}</Text>
         <View style={{ flex: 1 }}></View>
-        
       </TouchableOpacity>
     );
   };
@@ -154,8 +152,8 @@ const styles = StyleSheet.create({
   },
 
   requestContainer: {
-    width: width * .85,
-    height: height * .08,
+    width: width * 0.85,
+    height: height * 0.08,
     flexDirection: "row",
     shadowColor: "#000",
     shadowOffset: {
