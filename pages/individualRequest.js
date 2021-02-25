@@ -724,7 +724,7 @@ const styles = StyleSheet.create({
   },
 
   requestContainer: {
-    width: width * 0.92,
+    width: width * .85,
     maxHeight: height * 0.7,
     shadowColor: "#000",
     shadowOffset: {
@@ -852,7 +852,7 @@ const styles = StyleSheet.create({
   },
 
   popUpContainer: {
-    width: 327,
+    width: width * .85,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,

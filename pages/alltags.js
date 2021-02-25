@@ -230,8 +230,8 @@ const styles = StyleSheet.create({
   },
 
   requestContainer: {
-    width: 327,
-    height: 64,
+    width: width * .85,
+    height: height * .08,
     flexDirection: "row",
     shadowColor: "#000",
     shadowOffset: {
@@ -251,7 +251,7 @@ const styles = StyleSheet.create({
     color: "#7E8C96",
     fontSize: 15,
     fontWeight: "700",
-    marginTop: height * 0.025,
+    marginTop: height * 0.022,
     marginLeft: width * 0.05,
   },
 
