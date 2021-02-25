@@ -164,35 +164,62 @@ const CategoriesScreen = ({ navigation }) => {
 
   let listItemView = (category) => {
     return (
-      <Text
+      <View
         key={category.tagID}
-        style={styles.folderTitles}
-        onPress={() =>
-          navigation.navigate("Requests", {
-            cat_id: category.tagID,
-            cat_name: category.name,
-          })
-        }
-        onLongPress={() => {
-          let date = new Date(category.remind_time);
-          setSelectedCategory(category);
-          setSelectedCatName(category.name);
-          setSelectedTime(date);
-          let newDays = [0, 0, 0, 0, 0, 0, 0];
-          let i = 0;
-          for (const day of category.remind_days) {
-            newDays[i] = day == 1;
-            i++;
-          }
-          setDays(newDays);
-
-          parseTime(date, setDisplayTime);
-
-          toggleEditPopupVisibility(!editPopupVisible);
-        }}
+        style ={{flexDirection: "row"}}
+        
       >
-        {category.name}
-      </Text>
+      <TouchableOpacity
+      onPress={() =>
+        navigation.navigate("Requests", {
+          cat_id: category.tagID,
+          cat_name: category.name,
+        })
+      }
+      onLongPress={() => {
+        let date = new Date(category.remind_time);
+        setSelectedCategory(category);
+        setSelectedCatName(category.name);
+        setSelectedTime(date);
+        let newDays = [0, 0, 0, 0, 0, 0, 0];
+        let i = 0;
+        for (const day of category.remind_days) {
+          newDays[i] = day == 1;
+          i++;
+        }
+        setDays(newDays);
+
+        parseTime(date, setDisplayTime);
+
+        toggleEditPopupVisibility(!editPopupVisible);
+      }}
+      >
+       <Text style={styles.folderTitles}> {category.name} </Text>
+       </TouchableOpacity>
+       <View style={{ flex: 1 }}></View>
+        <TouchableOpacity 
+        style={{marginLeft: width * 0.1}}>
+          <Text style={styles.catMenu}
+          onPress={() => {
+            let date = new Date(category.remind_time);
+            setSelectedCategory(category);
+            setSelectedCatName(category.name);
+            setSelectedTime(date);
+            let newDays = [0, 0, 0, 0, 0, 0, 0];
+            let i = 0;
+            for (const day of category.remind_days) {
+              newDays[i] = day == 1;
+              i++;
+            }
+            setDays(newDays);
+  
+            parseTime(date, setDisplayTime);
+  
+            toggleEditPopupVisibility(!editPopupVisible);
+          }}
+          >{"⋮"}</Text>
+        </TouchableOpacity>
+      </View>
     );
   };
   let listViewItemSeparator = () => {
@@ -253,8 +280,8 @@ const CategoriesScreen = ({ navigation }) => {
         <Modal
           isVisible={createPopupVisible}
           backdropOpacity={0.25}
-          animationInTiming={400}
-          animationOutTiming={800}
+          animationInTiming={100}
+          animationOutTiming={100}
           style={styles.modalContent}
           onBackdropPress={() => {
             toggleCreatePopupVisibility(!createPopupVisible);
@@ -326,8 +353,8 @@ const CategoriesScreen = ({ navigation }) => {
         <Modal
           isVisible={editPopupVisible}
           backdropOpacity={0.25}
-          animationInTiming={400}
-          animationOutTiming={800}
+          animationInTiming={100}
+          animationOutTiming={100}
           style={styles.modalContent}
           onBackdropPress={() => {
             toggleEditPopupVisibility(!editPopupVisible);
@@ -499,6 +526,15 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     padding: height * 0.02,
     marginLeft: width * 0.06,
+  },
+
+
+  catMenu: {
+    color: "#003a63",
+    fontSize: 30,
+    fontWeight: "700",
+    marginTop: height * 0.02,
+    marginRight: width * 0.08,
   },
 
   modalContent: {

@@ -39,7 +39,7 @@ const Dashboard = ({ navigation }) => {
           Thessalonians 5:16-18
         </Text>
       </View>
-      <View style={{ flex: 0.1 }}></View>
+      <View style={{ flex: 0.15 }}></View>
       <View style={styles.iconRow}>
         <View style={{ marginRight: width * 0.1 }}>
           <TouchableOpacity
@@ -100,9 +100,9 @@ const Dashboard = ({ navigation }) => {
               style={[
                 styles.dashImage,
                 {
-                  width: 56,
-                  height: 56,
-                  marginTop: height * 0.042,
+                  width: width * 0.15,
+                  height: height * 0.15,
+                  marginTop: height * 0.01,
                   marginLeft: width * 0.1,
                 },
               ]}
@@ -112,7 +112,7 @@ const Dashboard = ({ navigation }) => {
           <Text style={styles.dashText}>Add Request</Text>
         </View>
       </View>
-      <View style={{ marginBottom: height * 0.05 }}>
+      <View style={{ marginBottom: height * 0.02 }}>
         <Image
           style={styles.CUlogo}
           source={require("../assets/cuLogoColor.png")}
@@ -168,10 +168,10 @@ const styles = StyleSheet.create({
   },
 
   dashImage: {
-    marginLeft: width * 0.065,
-    marginTop: height * 0.025,
-    width: 85,
-    height: 85,
+    flex: 0.95,
+    marginLeft: width * 0.07,
+    width: width * 0.2,
+    height: height * 0.2,
     resizeMode: "contain",
   },
 

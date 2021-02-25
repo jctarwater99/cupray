@@ -26,21 +26,11 @@ const About = ({ navigation }) => {
           ></Image>
         </TouchableOpacity>
       </View>
-      <View>
-      <Image
-            style={{
-              marginLeft: width * 0.24,
-              marginTop: height * 0.15,
-              width: 200,
-              height: 200,
-              resizeMode: 'contain',
-            }}
-            source={require("../assets/oreo.png")}
-          ></Image>
-          <Text style={styles.title}>This is app is brought to you by <Text style={styles.titleAccent}>Team Oreo </Text> 
-          with Cedarville University</Text>
-          <Text style={styles.subtitle}>Pleas send feedback to <Text style={styles.subtitleAccent}> random google form</Text></Text>
-          <Text style={styles.title}>:)</Text>
+      <View
+      style={{marginTop: height * 0.2}}>
+          <Text style={styles.title}>This is app is brought to you by <Text style={styles.titleAccent}>The CU Prayer Team </Text> 
+          at Cedarville University</Text>
+          <Text style={styles.subtitle}>Please send feedback to <Text style={styles.subtitleAccent}> random google form</Text></Text>
       </View>
         </View>
     ) };
