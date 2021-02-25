@@ -21,13 +21,12 @@ const RequestsScreen = ({ route, navigation }) => {
   let [requests, setRequests] = useState([]);
   let [deletePopupVisible, toggleDeletePopupVisibility] = useState(false);
   let [requestID, setRequestID] = useState(-1);
-  let [newReqId, setNewReqId] = useState(0);
 
   useEffect(() => {
-    queries.getRequestsInCategory(route.params.cat_id, (results) =>
-      setRequests(results)
-    );
-    queries.getNewReqId(setNewReqId);
+    queries.getRequestsInCategory(route.params.cat_id, (results) => {
+      console.log(results);
+      setRequests(results);
+    });
     checkBooks();
   }, []);
 
@@ -45,7 +44,6 @@ const RequestsScreen = ({ route, navigation }) => {
       <TouchableOpacity
         key={request.id}
         style={styles.requestContainer}
-        // Navigate @ Request, need isNew??
         onPress={() => {
           navigation.navigate("IndividualRequest", {
             cat_name: route.params.cat_name,

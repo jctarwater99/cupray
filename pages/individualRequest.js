@@ -35,7 +35,6 @@ LogBox.ignoreLogs([
 var { height, width } = Dimensions.get("window");
 
 const ThisRequestScreen = ({ route, navigation }) => {
-  let [request, setRequest] = useState([]); // This isn't used a whole lot, is it?
   let [categories, setCategories] = useState([]);
   let [tags, setTags] = useState([]);
   let [tagStates, setTagStates] = useState([]);
@@ -57,7 +56,6 @@ const ThisRequestScreen = ({ route, navigation }) => {
     // Loads request
     if (!route.params.isNewReq) {
       queries.getRequest(route.params.req_id, (results) => {
-        setRequest(results);
         setDescription(results.description);
         setSubject(results.subject);
 
@@ -679,7 +677,12 @@ const ThisRequestScreen = ({ route, navigation }) => {
                   toggleQrcodePopupVisibility(!qrcodePopupVisible);
                 }}
               >
-                <View style={styles.popUpContainer}>
+                <View
+                  style={[
+                    styles.popUpContainer,
+                    { backgroundColor: "transparent" },
+                  ]}
+                >
                   <QRCode
                     value={
                       'cupray{"subject":"' +

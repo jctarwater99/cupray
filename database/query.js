@@ -66,7 +66,7 @@ export function getTags(callback) {
 export function getRequestsInCategory(categoryId, callback) {
   db.transaction((tx) => {
     tx.executeSql(
-      "SELECT DISTINCT requests.subject, requests.id FROM requests " +
+      "SELECT DISTINCT requests.subject as subject, requests.id as id FROM requests " +
         "INNER JOIN request_tags as RT ON RT.requestID = requests.id " +
         "INNER JOIN tags ON RT.tagID = tags.id " +
         "WHERE tags.id = ? " +
@@ -90,7 +90,7 @@ export function getRequestsInCategory(categoryId, callback) {
 export function getAllRequests(callback) {
   db.transaction((tx) => {
     tx.executeSql(
-      "SELECT requests.id, subject, name FROM requests " +
+      "SELECT requests.id as id, subject, name FROM requests " +
         "INNER JOIN request_tags ON requests.id = request_tags.requestID " +
         "INNER JOIN categories ON categories.tagID = request_tags.tagID " +
         "ORDER BY requests.id;",
@@ -142,7 +142,7 @@ export function getRequest(id, callback) {
 export function getTagsForRequest(id, callback) {
   db.transaction((tx) => {
     tx.executeSql(
-      "SELECT DISTINCT tags.name, tags.id FROM tags, request_tags " +
+      "SELECT DISTINCT tags.name as name, tags.id as id FROM tags, request_tags " +
         "ON request_tags.tagID = tags.id " +
         "WHERE request_tags.requestID = ? ORDER BY name;",
       [id],
@@ -155,25 +155,6 @@ export function getTagsForRequest(id, callback) {
     );
   });
 }
-
-// export function getDailyRequests(callback) {
-//   db.transaction((tx) => {
-//     tx.executeSql(
-//       "SELECT DISTINCT daily_requests.id as dID, subject, requests.id as rID, " +
-//         "isPrayedFor, categories.name as cat_name FROM daily_requests " +
-//         "INNER JOIN requests ON requests.id = daily_requests.requestID " +
-//         "INNER JOIN request_tags ON requests.id = request_tags.requestID " +
-//         "INNER JOIN categories ON categories.tagID = request_tags.tagID;",
-//       [],
-//       (tx, result) => {
-//         callback(result.rows._array);
-//       },
-//       (tx, result) => {
-//         console.log("getDailyRequests query failed", result);
-//       }
-//     );
-//   });
-// }
 
 export function getDailyRequests(callback) {
   db.transaction((tx) => {

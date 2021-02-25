@@ -22,6 +22,7 @@ const AllReqs = ({ navigation }) => {
 
   useEffect(() => {
     queries.getAllRequestsInCategory("%", (result) => {
+      console.log(result);
       setRequests(removeDupes(result));
     });
     queries.getAllRequests((results) => {
