@@ -145,9 +145,13 @@ const ScheduledPrayers = ({ route, navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View
+    
+        <FlatList
+        ListHeaderComponent={
+          <View>
+           <View
         style={{ flex: 0.85, flexDirection: "row", marginLeft: width * 0.05 }}
-      >
+            >
         <TouchableOpacity onPress={() => navigation.openDrawer()}>
           <Image
             style={{
@@ -179,12 +183,13 @@ const ScheduledPrayers = ({ route, navigation }) => {
       </View>
       <View>
         <Text style={styles.header2}> Daily: </Text>
-        <FlatList
+        </View>
+        </View>
+        }
           data={requests}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item, index }) => listItemView(item, index)}
         />
-      </View>
     </SafeAreaView>
   );
 };
@@ -282,7 +287,7 @@ const styles = StyleSheet.create({
   },
 
   requestBar: {
-    width: 327,
+    width: width * .85,
     flexDirection: "row",
     shadowColor: "#000",
     shadowOffset: {

@@ -128,6 +128,7 @@ const RequestsScreen = ({ route, navigation }) => {
         backdropOpacity={0.25}
         animationInTiming={400}
         animationOutTiming={800}
+        style={styles.modalContent}
         onBackdropPress={() => {
           toggleDeletePopupVisibility(!deletePopupVisible);
         }}
@@ -205,8 +206,8 @@ const styles = StyleSheet.create({
   },
 
   requestContainer: {
-    width: 327,
-    height: 64,
+    width: width * .85,
+    height: height * .08,
     flexDirection: "row",
     shadowColor: "#000",
     shadowOffset: {
@@ -282,8 +283,14 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
 
+  modalContent: {
+    justifyContent: "center",
+    alignItems: "center",
+    margin: 0,
+  },
+
   popUpContainer: {
-    width: 327,
+    width: width * .85,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,

@@ -69,9 +69,7 @@ const AllReqs = ({ navigation }) => {
         <View style={styles.circle} />
         <Text style={styles.requestTitles}>{request.subject}</Text>
         <View style={{ flex: 1 }}></View>
-        <View>
-          <Text style={styles.requestArrow}>{"➤"}</Text>
-        </View>
+        
       </TouchableOpacity>
     );
   };
@@ -155,8 +153,8 @@ const styles = StyleSheet.create({
   },
 
   requestContainer: {
-    width: 327,
-    height: 64,
+    width: width * .85,
+    height: height * .08,
     flexDirection: "row",
     shadowColor: "#000",
     shadowOffset: {

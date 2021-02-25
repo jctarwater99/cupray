@@ -475,7 +475,7 @@ const styles = StyleSheet.create({
   },
 
   folderContainer: {
-    width: 327, // Yayira, stop using absolute positioning
+    width: width * .85,
     maxHeight: height * 0.6,
     shadowColor: "#000",
     shadowOffset: {
@@ -508,7 +508,7 @@ const styles = StyleSheet.create({
   },
 
   popUpContainer: {
-    width: 327,
+    width: width * .85,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,

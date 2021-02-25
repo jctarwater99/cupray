@@ -212,8 +212,7 @@ const styles = StyleSheet.create({
 
   verseContainer: {
     flex: 1,
-    width: 337,
-    height: 230,
+    width: width * .85,
     alignItems: "center",
     shadowColor: "#000",
     shadowOffset: {
