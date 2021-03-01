@@ -13,18 +13,19 @@ const About = ({ navigation }) => {
     return ( 
         <View style={styles.container}>
             <View style={{ flexDirection: "row", marginRight: width * 0.02}}>
-        <TouchableOpacity onPress={() => navigation.openDrawer()}>
+        <TouchableOpacity onPress={() => navigation.navigate("Dash")}>
           <Image
             style={{
-              marginLeft: width * 0.05,
+              marginLeft: width * 0.06,
               marginTop: height * 0.015,
               width: 30,
               height: 30,
               resizeMode: 'contain'
             }}
-            source={require("../assets/hamburger.png")}
+            source={require("../assets/Home_blue.png")}
           ></Image>
         </TouchableOpacity>
+        
       </View>
       <View
       style={{marginTop: height * 0.2}}>

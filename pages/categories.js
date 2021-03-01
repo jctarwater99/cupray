@@ -238,16 +238,16 @@ const CategoriesScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={{ flexDirection: "row" }}>
-        <TouchableOpacity onPress={() => navigation.openDrawer()}>
+        <TouchableOpacity onPress={() => navigation.navigate("Dash")}>
           <Image
             style={{
-              marginRight: width * 0.05,
+              marginRight: width * 0.03,
               marginTop: height * 0.015,
               width: 30,
               height: 30,
               resizeMode: "contain",
             }}
-            source={require("../assets/hamburger.png")}
+            source={require("../assets/Home_blue.png")}
           ></Image>
         </TouchableOpacity>
         <Text style={styles.title}>

@@ -73,14 +73,14 @@ const Dashboard = ({ navigation }) => {
         <View style={{ marginRight: width * 0.1 }}>
           <TouchableOpacity
             style={styles.icon}
-            onPress={() => navigation.navigate("AllReqs")}
+            onPress={() => navigation.navigate("Scan QR Code")}
           >
             <Image
               style={styles.dashImage}
-              source={require("../assets/Archive.png")}
+              source={require("../assets/QRCode.png")}
             />
           </TouchableOpacity>
-          <Text style={styles.dashText}>Archived</Text>
+          <Text style={styles.dashText}>Scan QR Code</Text>
         </View>
 
         <View>
