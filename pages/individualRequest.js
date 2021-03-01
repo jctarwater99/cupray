@@ -20,6 +20,7 @@ import Modal from "react-native-modal";
 import { Dropdown } from "react-native-material-dropdown-v2";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import QRCode from "react-native-qrcode-svg";
+import { StackActions } from "@react-navigation/native";
 
 import { checkBooks } from "../database/bookKeeping";
 
@@ -276,7 +277,9 @@ const ThisRequestScreen = ({ route, navigation }) => {
     if (route.params.isNewReq) {
       inserts.insertNewRequest(req, updateTags);
       scheduler.rescheduleNotifs();
-      navigation.navigate("Cat");
+
+      const popAction = StackActions.pop(route.params.fromDash ? 1 : 2);
+      navigation.dispatch(popAction);
     } else {
       updates.updateRequest(route.params.req_id, req);
       updateTags(route.params.req_id);
@@ -724,7 +727,7 @@ const styles = StyleSheet.create({
   },
 
   requestContainer: {
-    width: width * .85,
+    width: width * 0.85,
     maxHeight: height * 0.7,
     shadowColor: "#000",
     shadowOffset: {
@@ -852,7 +855,7 @@ const styles = StyleSheet.create({
   },
 
   popUpContainer: {
-    width: width * .85,
+    width: width * 0.85,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,

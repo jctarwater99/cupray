@@ -392,7 +392,13 @@ export function populateMinimum() {
 
   var tags = new Array();
   tags.push(createTag("Archived")); // 1
-  db_insert.insertTag(tags[0]);
+  tags.push(createTag("Friends"));
+  tags.push(createTag("Church"));
+  tags.push(createTag("Family"));
+
+  tags.forEach((element) => {
+    db_insert.insertTag(element);
+  });
 
   function createCat(name, tagID, days, time) {
     var cat = new Category();
@@ -404,9 +410,9 @@ export function populateMinimum() {
   }
 
   var cats = new Array();
-  cats.push(createCat("Friends", 5, "0111110", 1608141600000));
-  cats.push(createCat("Church", 6, "1000001", 1608145200000));
-  cats.push(createCat("Family", 8, "1111111", 1608159600000));
+  cats.push(createCat("Friends", 2, "0111110", 1608141600000));
+  cats.push(createCat("Church", 3, "1000001", 1608145200000));
+  cats.push(createCat("Family", 4, "1111111", 1608159600000));
 
   cats.forEach((element) => {
     db_insert.insertCategory(element);

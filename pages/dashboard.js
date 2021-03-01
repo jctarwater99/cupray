@@ -91,6 +91,7 @@ const Dashboard = ({ navigation }) => {
                 cat_name: "Category",
                 req_id: -1,
                 isNewReq: true,
+                fromDash: true,
                 subject: "Subject",
                 description: "Description",
               });
@@ -212,7 +213,7 @@ const styles = StyleSheet.create({
 
   verseContainer: {
     flex: 1,
-    width: width * .85,
+    width: width * 0.85,
     alignItems: "center",
     shadowColor: "#000",
     shadowOffset: {
