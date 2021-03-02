@@ -65,7 +65,7 @@ const AllTags = ({ navigation }) => {
     <View style={styles.container}>
       <FlatList
         ListHeaderComponent={
-          <View style={{ flexDirection: "row", marginRight: width * 0.3 }}>
+          <View style={{ flexDirection: "row", marginRight: width * 0.2 }}>
             <TouchableOpacity onPress={() => navigation.openDrawer()}>
               <Image
                 style={{
@@ -231,7 +231,7 @@ const styles = StyleSheet.create({
 
   requestContainer: {
     width: width * .85,
-    height: height * .08,
+    height: width * .17,
     flexDirection: "row",
     shadowColor: "#000",
     shadowOffset: {
@@ -249,7 +249,7 @@ const styles = StyleSheet.create({
 
   requestTitles: {
     color: "#7E8C96",
-    fontSize: 15,
+    fontSize: width * 0.05,
     fontWeight: "700",
     marginTop: height * 0.022,
     marginLeft: width * 0.05,
@@ -264,25 +264,25 @@ const styles = StyleSheet.create({
   },
 
   circle: {
-    width: 26,
-    height: 26,
+    width: width * 0.08,
+    height: width * 0.08,
     borderRadius: 100 / 2,
-    borderWidth: 2,
+    borderWidth: 3,
     borderColor: "#D6C396",
-    marginTop: height * 0.019,
+    marginTop: height * 0.02,
     marginLeft: width * 0.05,
   },
 
   title: {
     color: "#003A63",
-    fontSize: 46,
+    fontSize: width * 0.12,
     fontWeight: "700",
     marginBottom: height * 0.01,
   },
 
   titleAccent: {
     color: "#D6C396",
-    fontSize: 46,
+    fontSize: width * 0.12,
     fontWeight: "700",
   },
 

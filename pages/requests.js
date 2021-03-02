@@ -66,8 +66,8 @@ const RequestsScreen = ({ route, navigation }) => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
+      <View>
         <View>
           <FlatList
             ListHeaderComponent={
@@ -199,12 +199,12 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#EFEFEF",
     alignItems: "center",
-    marginTop: height * 0.005,
+    marginTop: height * 0.06,
   },
 
   requestContainer: {
-    width: width * 0.85,
-    height: height * 0.08,
+    width: width * .85,
+    height: width * .17,
     flexDirection: "row",
     shadowColor: "#000",
     shadowOffset: {
@@ -237,25 +237,25 @@ const styles = StyleSheet.create({
   },
 
   circle: {
-    width: 26,
-    height: 26,
+    width: width * 0.08,
+    height: width * 0.08,
     borderRadius: 100 / 2,
     borderWidth: 2,
     borderColor: "#D6C396",
-    marginTop: height * 0.019,
+    marginTop: height * 0.02,
     marginLeft: width * 0.05,
   },
 
   title: {
     color: "#003A63",
-    fontSize: 46,
+    fontSize: width * 0.12,
     fontWeight: "700",
     marginRight: width * 0.15,
   },
 
   titleAccent: {
     color: "#D6C396",
-    fontSize: 46,
+    fontSize: width * 0.12,
     fontWeight: "700",
   },
 

@@ -203,7 +203,7 @@ const styles = StyleSheet.create({
 
   title: {
     color: "#D6C396",
-    fontSize: 46,
+    fontSize: width * 0.12,
     fontWeight: "700",
     marginBottom: height * 0.01,
     marginRight: width * 0.1,
@@ -211,7 +211,7 @@ const styles = StyleSheet.create({
 
   titleAccent: {
     color: "#003A63",
-    fontSize: 46,
+    fontSize: width * 0.12,
     fontWeight: "700",
   },
 

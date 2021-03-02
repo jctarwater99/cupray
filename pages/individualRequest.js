@@ -394,8 +394,8 @@ const ThisRequestScreen = ({ route, navigation }) => {
 
   if (inEditMode) {
     return (
-      <SafeAreaView style={{ flex: 1 }}>
-        <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
+        <View style={{alignItems: "center",}}>
           {/*subject*/}
           <TextInput
             defaultValue={"Enter Subject"}
@@ -463,6 +463,17 @@ const ThisRequestScreen = ({ route, navigation }) => {
               <Text style={styles.editButtonText}>SAVE</Text>
             </TouchableOpacity>
           </View>
+          <View
+            style={{
+              shadowColor: "#000",
+              shadowOffset: {
+                width: 0,
+                height: 2,
+              },
+              shadowOpacity: 0.27,
+              shadowRadius: 3.65,
+            }}
+          >
           <ScrollView style={styles.requestContainer}>
             <View>
               <View>
@@ -580,12 +591,13 @@ const ThisRequestScreen = ({ route, navigation }) => {
             </View>
           </ScrollView>
         </View>
+        </View>
       </SafeAreaView>
     );
   } else {
     return (
-      <SafeAreaView style={{ flex: 1 }}>
-        <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
+        <View style={{alignItems: "center",}}>
           <Text style={styles.title}>{subject}</Text>
           <View
             style={{
@@ -723,7 +735,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#EFEFEF",
     alignItems: "center",
-    marginTop: height * 0.002,
+    marginTop: height * 0.03,
   },
 
   requestContainer: {

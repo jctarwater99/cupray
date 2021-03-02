@@ -27,19 +27,18 @@ var { height, width } = Dimensions.get("window");
 function CustomDrawerContent(props) {
   return (
     <DrawerContentScrollView {...props}>
-      <SafeAreaView style={{ marginTop: height * 0.05 }}>
-        <View style={{ flex: 1 }}>
+      <SafeAreaView style={{ flex:1, marginTop: height * 0.05 }}>
+        <View style={{ flex: .8 }}>
           <DrawerItemList {...props} />
         </View>
+        <View style={{ height: height * 0.05}}></View>
       </SafeAreaView>
-      <View>
+      <View style={{ flex: .2, alignItems: 'center', justifyContent: 'flex-end', }}>
         <Image
           source={require("../assets/logo_menu.png")}
           style={{
-            marginLeft: width * 0.15,
-            marginTop: height * 0.18,
-            height: 150,
-            width: 150,
+            height: width * 0.35,
+            width: width * 0.35,
             resizeMode: "contain",
           }}
         />
@@ -80,19 +79,15 @@ export default function DrawerNavigator() {
 const styles = StyleSheet.create({
   cu: {
     color: "#003a63",
-    width: 233,
-    height: 82,
-    fontSize: 59,
+    fontSize: width * 0.15,
     fontWeight: "700",
     textAlign: "center",
-    marginLeft: width * 0.05,
+    marginRight: width * 0.02,
   },
 
   cupray: {
-    width: 233,
-    height: 82,
     color: "#d6c396",
-    fontSize: 59,
+    fontSize: width * 0.15,
     fontWeight: "700",
     textAlign: "center",
   },

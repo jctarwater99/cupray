@@ -13,7 +13,7 @@ const Dashboard = ({ navigation }) => {
 
   return (
     <View style={styles.dashboardContainer}>
-      <View style={{ flex: 0.3, flexDirection: "row" }}>
+      <View style={{flexDirection: "row" }}>
         <TouchableOpacity onPress={() => navigation.openDrawer()}>
           <Image
             style={{
@@ -39,9 +39,9 @@ const Dashboard = ({ navigation }) => {
           Thessalonians 5:16-18
         </Text>
       </View>
-      <View style={{ flex: 0.15 }}></View>
-      <View style={styles.iconRow}>
-        <View style={{ marginRight: width * 0.1 }}>
+      <View style={{ flex: 0.12 }}></View>
+      <View style={[styles.iconRow]}>
+        <View style={{ marginRight: width * 0.11 }}>
           <TouchableOpacity
             style={styles.icon}
             onPress={() => {
@@ -69,8 +69,8 @@ const Dashboard = ({ navigation }) => {
           <Text style={styles.dashText}>Prayer Time</Text>
         </View>
       </View>
-      <View style={styles.iconRow}>
-        <View style={{ marginRight: width * 0.1 }}>
+      <View style={[styles.iconRow, { marginTop: height * 0.03}]}>
+        <View style={{ marginRight: width * 0.11 }}>
           <TouchableOpacity
             style={styles.icon}
             onPress={() => navigation.navigate("Scan QR Code")}
@@ -113,19 +113,17 @@ const Dashboard = ({ navigation }) => {
           <Text style={styles.dashText}>Add Request</Text>
         </View>
       </View>
-      <View style={{ marginBottom: height * 0.02 }}>
-        <Image
+      <Image
           style={styles.CUlogo}
           source={require("../assets/cuLogoColor.png")}
         />
-      </View>
     </View>
   );
 };
 const styles = StyleSheet.create({
   // Overall container for screen
   dashboardContainer: {
-    flex: 1,
+    flex: .95,
     backgroundColor: "#EFEFEF",
     alignItems: "center",
     justifyContent: "center",
@@ -135,7 +133,7 @@ const styles = StyleSheet.create({
   title: {
     flex: 0.8,
     color: "#003A63",
-    fontSize: 46,
+    fontSize: width * 0.12,
     fontWeight: "700",
     marginBottom: height * 0.01,
     marginRight: width * 0.1,
@@ -143,17 +141,18 @@ const styles = StyleSheet.create({
 
   titleAccent: {
     color: "#D6C396",
-    fontSize: 46,
+    fontSize: width * 0.12,
     fontWeight: "700",
   },
 
   iconRow: {
-    flex: 0.8,
+    flex: 0.6,
     flexDirection: "row",
+    marginBottom: height * 0.1,
   },
 
   icon: {
-    width: width * 0.35,
+    width: width * 0.34,
     height: height * 0.16,
     shadowColor: "#000",
     shadowOffset: {
@@ -171,14 +170,14 @@ const styles = StyleSheet.create({
   dashImage: {
     flex: 0.95,
     marginLeft: width * 0.07,
-    width: width * 0.2,
-    height: height * 0.2,
+    width: width * 0.19,
+    height: height * 0.19,
     resizeMode: "contain",
   },
 
   dashText: {
     color: "#003a63",
-    fontSize: 15,
+    fontSize: width * 0.04,
     fontWeight: "700",
     alignSelf: "center",
     marginLeft: width * 0.01,
@@ -186,9 +185,10 @@ const styles = StyleSheet.create({
   },
 
   CUlogo: {
-    width: 186,
-    height: 54,
+    width: width * 0.3,
+    height: width * 0.09,
     opacity: 0.85,
+    marginTop: height * 0.02,
   },
 
   verseOf: {
@@ -202,17 +202,17 @@ const styles = StyleSheet.create({
   },
 
   nowMay: {
-    width: 263,
-    height: 116,
     color: "#efefef",
-    fontSize: 17,
+    fontSize: width * 0.05,
     fontWeight: "100",
     textAlign: "center",
     marginTop: height * 0.02,
+    marginBottom: height * 0.02,
+    paddingLeft: width * 0.05,
+    paddingRight: width * 0.05,
   },
 
   verseContainer: {
-    flex: 1,
     width: width * 0.85,
     alignItems: "center",
     shadowColor: "#000",
@@ -235,13 +235,7 @@ const styles = StyleSheet.create({
     width: 270,
   },
 
-  plusSymbol: {
-    color: "#003A63",
-    fontSize: 46,
-    fontWeight: "700",
-    marginLeft: width * 0.115,
-    marginTop: height * 0.045,
-  },
+ 
 });
 
 export default Dashboard;

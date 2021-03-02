@@ -586,19 +586,18 @@ const styles = StyleSheet.create({
     height: 36,
     borderRadius: 6,
     backgroundColor: "#D3D3D3",
-    padding: 10,
+    padding: 7,
   },
 
   plusSign: {
     color: "#003a63",
     fontSize: 15,
     fontWeight: "700",
-    marginTop: height * -0.003,
     textAlign: "center",
   },
   title: {
     color: "#D6C396",
-    fontSize: 46,
+    fontSize: width * 0.12,
     fontWeight: "700",
     marginBottom: height * 0.01,
     marginRight: width * 0.1,
@@ -606,7 +605,7 @@ const styles = StyleSheet.create({
 
   titleAccent: {
     color: "#003A63",
-    fontSize: 46,
+    fontSize: width * 0.12,
     fontWeight: "700",
   },
 

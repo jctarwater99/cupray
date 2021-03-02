@@ -52,6 +52,7 @@ const WelcomeScreen = ({ navigation }) => {
         <Text style={styles.cu}>
           CU<Text style={styles.cupray}>Pray.</Text>
         </Text>
+        <View style={{ marginBottom: height * 0.09}}>
         <Text
           style={styles.thePrayer}
           onPress={() => {
@@ -60,6 +61,7 @@ const WelcomeScreen = ({ navigation }) => {
         >
           The prayer journal app for your 1000 days
         </Text>
+        </View>
         <View style={{ flex: 1, justifyContent: "flex-end" }}>
           <TouchableOpacity
             style={styles.bbutton}
@@ -89,12 +91,12 @@ const styles = StyleSheet.create({
   contentContainer: {
     alignItems: "center",
     justifyContent: "center",
-    marginTop: height * 0.3,
+    marginTop: height * 0.24,
   },
 
   pray: {
-    width: 150,
-    height: 150,
+    width: width * 0.5,
+    height: width * 0.5,
     resizeMode: "contain",
   },
 
@@ -102,7 +104,7 @@ const styles = StyleSheet.create({
     color: "#efefef",
     width: 233,
     height: 82,
-    fontSize: 59,
+    fontSize: width * 0.16,
     fontWeight: "700",
     textAlign: "center",
   },
@@ -111,7 +113,7 @@ const styles = StyleSheet.create({
     width: 233,
     height: 82,
     color: "#d6c396",
-    fontSize: 59,
+    fontSize: width * 0.16,
     fontWeight: "700",
     textAlign: "center",
   },
@@ -123,11 +125,11 @@ const styles = StyleSheet.create({
     fontSize: 19,
     fontWeight: "700",
     textAlign: "center",
-    marginTop: height * -0.015,
+    marginBottom: height * .3,
   },
 
   bbutton: {
-    width: 244,
+    width: width * 0.7,
     height: 61,
     alignItems: "center",
     shadowColor: "#000",
@@ -141,7 +143,7 @@ const styles = StyleSheet.create({
     elevation: 6,
     borderRadius: 20,
     backgroundColor: "#e8e7e4",
-    marginBottom: height * 0.12,
+    marginBottom: height * 0.16,
   },
 
   prayButton: {

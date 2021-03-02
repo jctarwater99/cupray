@@ -118,17 +118,11 @@ const AllReqs = ({ navigation }) => {
                   borderColor: "#333",
                   backgroundColor: "#fff",
                   padding: 10,
-                  width: "80%",
+                  width: "95%",
                 }}
                 textStyle={{ color: "#000" }}
               />
-              <View style={{ width: "3%" }} />
-              <TouchableOpacity
-                onPress={() => getRequests()}
-                style={styles.searchButton}
-              >
-                <Text style={styles.searchButtonTxt}>Go</Text>
-              </TouchableOpacity>
+              
             </View>
           </View>
         }
@@ -152,8 +146,8 @@ const styles = StyleSheet.create({
   },
 
   requestContainer: {
-    width: width * 0.85,
-    height: height * 0.08,
+    width: width * .85,
+    height: width * .17,
     flexDirection: "row",
     shadowColor: "#000",
     shadowOffset: {
@@ -186,25 +180,25 @@ const styles = StyleSheet.create({
   },
 
   circle: {
-    width: 26,
-    height: 26,
+    width: width * 0.08,
+    height: width * 0.08,
     borderRadius: 100 / 2,
     borderWidth: 2,
     borderColor: "#D6C396",
-    marginTop: height * 0.019,
+    marginTop: height * 0.02,
     marginLeft: width * 0.05,
   },
 
   title: {
     color: "#D6C396",
-    fontSize: 46,
+    fontSize: width * 0.12,
     fontWeight: "700",
     marginBottom: height * 0.01,
   },
 
   titleAccent: {
     color: "#003A63",
-    fontSize: 46,
+    fontSize: width * 0.12,
     fontWeight: "700",
   },
 
