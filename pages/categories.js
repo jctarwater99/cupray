@@ -164,43 +164,15 @@ const CategoriesScreen = ({ navigation }) => {
 
   let listItemView = (category) => {
     return (
-      <View
-        key={category.tagID}
-        style ={{flexDirection: "row"}}
-        
-      >
-      <TouchableOpacity
-      onPress={() =>
-        navigation.navigate("Requests", {
-          cat_id: category.tagID,
-          cat_name: category.name,
-        })
-      }
-      onLongPress={() => {
-        let date = new Date(category.remind_time);
-        setSelectedCategory(category);
-        setSelectedCatName(category.name);
-        setSelectedTime(date);
-        let newDays = [0, 0, 0, 0, 0, 0, 0];
-        let i = 0;
-        for (const day of category.remind_days) {
-          newDays[i] = day == 1;
-          i++;
-        }
-        setDays(newDays);
-
-        parseTime(date, setDisplayTime);
-
-        toggleEditPopupVisibility(!editPopupVisible);
-      }}
-      >
-       <Text style={styles.folderTitles}> {category.name} </Text>
-       </TouchableOpacity>
-       <View style={{ flex: 1 }}></View>
-        <TouchableOpacity 
-        style={{marginLeft: width * 0.1}}>
-          <Text style={styles.catMenu}
-          onPress={() => {
+      <View key={category.tagID} style={{ flexDirection: "row" }}>
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate("Requests", {
+              cat_id: category.tagID,
+              cat_name: category.name,
+            })
+          }
+          onLongPress={() => {
             let date = new Date(category.remind_time);
             setSelectedCategory(category);
             setSelectedCatName(category.name);
@@ -212,12 +184,38 @@ const CategoriesScreen = ({ navigation }) => {
               i++;
             }
             setDays(newDays);
-  
+
             parseTime(date, setDisplayTime);
-  
+
             toggleEditPopupVisibility(!editPopupVisible);
           }}
-          >{"⋮"}</Text>
+        >
+          <Text style={styles.folderTitles}> {category.name} </Text>
+        </TouchableOpacity>
+        <View style={{ flex: 1 }}></View>
+        <TouchableOpacity style={{ marginLeft: width * 0.1 }}>
+          <Text
+            style={styles.catMenu}
+            onPress={() => {
+              let date = new Date(category.remind_time);
+              setSelectedCategory(category);
+              setSelectedCatName(category.name);
+              setSelectedTime(date);
+              let newDays = [0, 0, 0, 0, 0, 0, 0];
+              let i = 0;
+              for (const day of category.remind_days) {
+                newDays[i] = day == 1;
+                i++;
+              }
+              setDays(newDays);
+
+              parseTime(date, setDisplayTime);
+
+              toggleEditPopupVisibility(!editPopupVisible);
+            }}
+          >
+            {"⋮"}
+          </Text>
         </TouchableOpacity>
       </View>
     );
@@ -251,7 +249,7 @@ const CategoriesScreen = ({ navigation }) => {
           ></Image>
         </TouchableOpacity>
         <Text style={styles.title}>
-          Categories<Text style={styles.titleAccent}>.</Text>
+          Journal<Text style={styles.titleAccent}>.</Text>
         </Text>
       </View>
       <View style={styles.folderContainer}>
@@ -527,7 +525,6 @@ const styles = StyleSheet.create({
     padding: height * 0.02,
     marginLeft: width * 0.06,
   },
-
 
   catMenu: {
     color: "#003a63",

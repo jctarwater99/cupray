@@ -85,7 +85,8 @@ const RequestsScreen = ({ route, navigation }) => {
                   ></Image>
                 </TouchableOpacity>
                 <Text style={styles.title}>
-                  Requests<Text style={styles.titleAccent}>.</Text>
+                  {route.params.cat_name}
+                  <Text style={styles.titleAccent}>.</Text>
                 </Text>
               </View>
             }
@@ -203,8 +204,8 @@ const styles = StyleSheet.create({
   },
 
   requestContainer: {
-    width: width * .85,
-    height: width * .17,
+    width: width * 0.85,
+    height: width * 0.17,
     flexDirection: "row",
     shadowColor: "#000",
     shadowOffset: {
