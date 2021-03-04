@@ -43,7 +43,7 @@ function CustomDrawerContent(props) {
           }}
         />
         <Text style={styles.cu}>
-          CU<Text style={styles.cupray}>Pray.</Text>
+          GO<Text style={styles.cupray}>Pray.</Text>
         </Text>
       </View>
     </DrawerContentScrollView>

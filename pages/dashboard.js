@@ -40,7 +40,7 @@ const Dashboard = ({ navigation }) => {
         </Text>
       </View>
       <View style={{ flex: 0.12 }}></View>
-      <View style={[styles.iconRow]}>
+      <View style={[styles.iconRow, { marginTop: height * 0.015}]}>
         <View style={{ marginRight: width * 0.11 }}>
           <TouchableOpacity
             style={styles.icon}
@@ -69,7 +69,7 @@ const Dashboard = ({ navigation }) => {
           <Text style={styles.dashText}>Prayer Time</Text>
         </View>
       </View>
-      <View style={[styles.iconRow, { marginTop: height * 0.03}]}>
+      <View style={[styles.iconRow, { marginTop: height * 0.04}]}>
         <View style={{ marginRight: width * 0.11 }}>
           <TouchableOpacity
             style={styles.icon}
@@ -113,10 +113,7 @@ const Dashboard = ({ navigation }) => {
           <Text style={styles.dashText}>Add Request</Text>
         </View>
       </View>
-      <Image
-          style={styles.CUlogo}
-          source={require("../assets/cuLogoColor.png")}
-        />
+      <View style={[styles.lineStyle, { marginTop: height * 0.05}]} />
     </View>
   );
 };
@@ -184,13 +181,6 @@ const styles = StyleSheet.create({
     marginTop: height * 0.01,
   },
 
-  CUlogo: {
-    width: width * 0.3,
-    height: width * 0.09,
-    opacity: 0.85,
-    marginTop: height * 0.02,
-  },
-
   verseOf: {
     width: 250,
     height: 28,
@@ -232,7 +222,7 @@ const styles = StyleSheet.create({
     borderWidth: 0.75,
     borderColor: "#D3D3D3",
     marginTop: height * 0.01,
-    width: 270,
+    width: width * 0.65,
   },
 
  

@@ -50,7 +50,7 @@ const WelcomeScreen = ({ navigation }) => {
           source={require("../assets/cupray_logo.png")}
         />
         <Text style={styles.cu}>
-          CU<Text style={styles.cupray}>Pray.</Text>
+          GO<Text style={styles.cupray}>Pray.</Text>
         </Text>
         <View style={{ marginBottom: height * 0.09}}>
         <Text
@@ -59,7 +59,7 @@ const WelcomeScreen = ({ navigation }) => {
             navigation.navigate("TempDash");
           }}
         >
-          The prayer journal app for your 1000 days
+          A prayer reminder app to strengthen your quiet time
         </Text>
         </View>
         <View style={{ flex: 1, justifyContent: "flex-end" }}>
@@ -102,16 +102,12 @@ const styles = StyleSheet.create({
 
   cu: {
     color: "#efefef",
-    width: 233,
-    height: 82,
     fontSize: width * 0.16,
     fontWeight: "700",
     textAlign: "center",
   },
 
   cupray: {
-    width: 233,
-    height: 82,
     color: "#d6c396",
     fontSize: width * 0.16,
     fontWeight: "700",
@@ -119,13 +115,13 @@ const styles = StyleSheet.create({
   },
 
   thePrayer: {
-    width: 219,
-    height: 53,
     color: "#d6c396",
     fontSize: 19,
     fontWeight: "700",
     textAlign: "center",
     marginBottom: height * .3,
+    paddingLeft: 30,
+    paddingRight: 30,
   },
 
   bbutton: {
