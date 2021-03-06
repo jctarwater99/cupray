@@ -8,6 +8,7 @@ import {
   TextInput,
   StyleSheet,
   Button,
+  Alert,
   Text,
   View,
 } from "react-native";
@@ -101,7 +102,7 @@ const ThisRequestScreen = ({ route, navigation }) => {
             } else newTagValues.push(0);
             changeValues.push(0);
           }
-          if (route.params.isNewReq && route.params.cat_name != "Category") {
+          if (route.params.isNewReq && route.params.cat_name != "Select") {
             for (const tag in tags) {
               if (tags[tag].name == route.params.cat_name) {
                 newTagValues[tag] = 1;
@@ -123,7 +124,7 @@ const ThisRequestScreen = ({ route, navigation }) => {
           newTagValues.push(0);
           changeValues.push(0);
         }
-        if (route.params.isNewReq && route.params.cat_name != "Category") {
+        if (route.params.isNewReq && route.params.cat_name != "Select") {
           for (const tag in tags) {
             if (tags[tag].name == route.params.cat_name) {
               newTagValues[tag] = 1;
@@ -251,7 +252,15 @@ const ThisRequestScreen = ({ route, navigation }) => {
     req.priority = priority;
 
     // If the user didn't select a category, don't save
-    if (route.params.isNewReq && category == "Category") {
+    if (
+      route.params.isNewReq &&
+      (category == "Select" || category == "Archived")
+    ) {
+      Alert.alert("Notification", "Please select a category", [
+        {
+          text: "Ok",
+        },
+      ]);
       setMode(true);
       return;
     }
@@ -395,7 +404,7 @@ const ThisRequestScreen = ({ route, navigation }) => {
   if (inEditMode) {
     return (
       <SafeAreaView style={styles.container}>
-        <View style={{alignItems: "center",}}>
+        <View style={{ alignItems: "center" }}>
           {/*subject*/}
           <TextInput
             defaultValue={"Enter Subject"}
@@ -474,130 +483,130 @@ const ThisRequestScreen = ({ route, navigation }) => {
               shadowRadius: 3.65,
             }}
           >
-          <ScrollView style={styles.requestContainer}>
-            <View>
+            <ScrollView style={styles.requestContainer}>
               <View>
-                <Text style={styles.boxheaders}>Description</Text>
-                <TextInput
-                  numberOfLines={4}
-                  maxLength={300} // max number of chars
-                  multiline={true}
-                  onFocus={() => {
-                    if (route.params.isNewReq) {
-                      setDescription("");
-                    }
-                  }}
-                  value={description}
-                  onChange={(text) => setDescription(text.nativeEvent.text)}
-                  style={{
-                    backgroundColor: "white",
-                    color: "#7E8C96",
-                    padding: 5,
-                    marginBottom: 20,
-                    textAlignVertical: "top",
-                    fontWeight: "600",
-                  }}
-                />
-              </View>
-
-              <Text style={styles.boxheaders}>Priority</Text>
-              <View
-                style={{
-                  flexDirection: "row",
-                  marginTop: 0,
-                  padding: 0,
-                  alignItems: "flex-end",
-                  //justifyContent: "flex-end",
-                }}
-              >
-                {makeCheckBox("Box1", 0)}
-                {makeCheckBox("Box2", 1)}
-                {makeCheckBox("Box3", 2)}
-              </View>
-              {/* these are not yet dynamic */}
-              <Text style={styles.boxheaders}>Tags</Text>
-              <View
-                style={[
-                  {
-                    flexDirection: "row",
-                    alignSelf: "flex-start",
-                    flexWrap: "wrap",
-                  },
-                ]}
-              >
-                {tagButtons()}
-              </View>
-
-              <Modal
-                isVisible={newTagPopup}
-                backdropOpacity={0.25}
-                animationInTiming={400}
-                animationOutTiming={800}
-                style={styles.modalContent}
-                onBackdropPress={() => {
-                  toggleNewTagPopup(!newTagPopup);
-                }}
-              >
-                <View style={styles.popUpContainer}>
-                  <Text style={styles.popUpHeader}>Create New Tag</Text>
+                <View>
+                  <Text style={styles.boxheaders}>Description</Text>
                   <TextInput
-                    maxLength={15} // max number of chars
+                    numberOfLines={4}
+                    maxLength={300} // max number of chars
                     multiline={true}
-                    value={newTag}
-                    onFocus={() => ""}
-                    onChange={(text) => setNewTag(text.nativeEvent.text)}
+                    onFocus={() => {
+                      if (route.params.isNewReq) {
+                        setDescription("");
+                      }
+                    }}
+                    value={description}
+                    onChange={(text) => setDescription(text.nativeEvent.text)}
                     style={{
                       backgroundColor: "white",
                       color: "#7E8C96",
-                      padding: 8,
+                      padding: 5,
+                      marginBottom: 20,
                       textAlignVertical: "top",
                       fontWeight: "600",
-                      alignSelf: "stretch",
-                      textAlign: "center",
-                      marginLeft: width * 0.1,
-                      marginRight: width * 0.1,
                     }}
                   />
-                  <View style={[{ flexDirection: "row" }]}>
-                    <TouchableOpacity
-                      onPress={() => {
-                        toggleNewTagPopup(!newTagPopup);
-                      }}
-                    >
-                      <Text style={styles.popUpHeader}>Cancel</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      style={{ marginLeft: width * 0.45 }}
-                      onPress={() => {
-                        toggleNewTagPopup(!newTagPopup);
-                        let tag = new Tag();
-                        tag.name = newTag;
-                        inserts.insertTag(tag);
-                        refreshPage();
-                      }}
-                    >
-                      <Text style={styles.popUpHeader}>Save</Text>
-                    </TouchableOpacity>
-                  </View>
                 </View>
-              </Modal>
 
-              <Text style={styles.boxheaders}>Reminder Expiration</Text>
+                <Text style={styles.boxheaders}>Priority</Text>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    marginTop: 0,
+                    padding: 0,
+                    alignItems: "flex-end",
+                    //justifyContent: "flex-end",
+                  }}
+                >
+                  {makeCheckBox("Box1", 0)}
+                  {makeCheckBox("Box2", 1)}
+                  {makeCheckBox("Box3", 2)}
+                </View>
+                {/* these are not yet dynamic */}
+                <Text style={styles.boxheaders}>Tags</Text>
+                <View
+                  style={[
+                    {
+                      flexDirection: "row",
+                      alignSelf: "flex-start",
+                      flexWrap: "wrap",
+                    },
+                  ]}
+                >
+                  {tagButtons()}
+                </View>
 
-              <View>
-                {datePickerButton}
-                {datePicker}
+                <Modal
+                  isVisible={newTagPopup}
+                  backdropOpacity={0.25}
+                  animationInTiming={400}
+                  animationOutTiming={800}
+                  style={styles.modalContent}
+                  onBackdropPress={() => {
+                    toggleNewTagPopup(!newTagPopup);
+                  }}
+                >
+                  <View style={styles.popUpContainer}>
+                    <Text style={styles.popUpHeader}>Create New Tag</Text>
+                    <TextInput
+                      maxLength={15} // max number of chars
+                      multiline={true}
+                      value={newTag}
+                      onFocus={() => ""}
+                      onChange={(text) => setNewTag(text.nativeEvent.text)}
+                      style={{
+                        backgroundColor: "white",
+                        color: "#7E8C96",
+                        padding: 8,
+                        textAlignVertical: "top",
+                        fontWeight: "600",
+                        alignSelf: "stretch",
+                        textAlign: "center",
+                        marginLeft: width * 0.1,
+                        marginRight: width * 0.1,
+                      }}
+                    />
+                    <View style={[{ flexDirection: "row" }]}>
+                      <TouchableOpacity
+                        onPress={() => {
+                          toggleNewTagPopup(!newTagPopup);
+                        }}
+                      >
+                        <Text style={styles.popUpHeader}>Cancel</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        style={{ marginLeft: width * 0.45 }}
+                        onPress={() => {
+                          toggleNewTagPopup(!newTagPopup);
+                          let tag = new Tag();
+                          tag.name = newTag;
+                          inserts.insertTag(tag);
+                          refreshPage();
+                        }}
+                      >
+                        <Text style={styles.popUpHeader}>Save</Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                </Modal>
+
+                <Text style={styles.boxheaders}>Reminder Expiration</Text>
+
+                <View>
+                  {datePickerButton}
+                  {datePicker}
+                </View>
               </View>
-            </View>
-          </ScrollView>
-        </View>
+            </ScrollView>
+          </View>
         </View>
       </SafeAreaView>
     );
   } else {
     return (
       <SafeAreaView style={styles.container}>
-        <View style={{alignItems: "center",}}>
+        <View style={{ alignItems: "center" }}>
           <Text style={styles.title}>{subject}</Text>
           <View
             style={{

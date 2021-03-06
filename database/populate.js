@@ -291,6 +291,7 @@ export function populateDBwithCategories() {
   }
 
   var cats = new Array();
+  cats.push(createCat("Archived", 1, "", 0));
   cats.push(createCat("Friends", 5, "0101010", 1608141600000));
   cats.push(createCat("Church", 6, "0010001", 1608145200000));
   cats.push(createCat("Missions", 7, "1000000", 1608148800000));
@@ -410,6 +411,7 @@ export function populateMinimum() {
   }
 
   var cats = new Array();
+  cats.push(createCat("Archived", 1, "", 0));
   cats.push(createCat("Friends", 2, "0111110", 1608141600000));
   cats.push(createCat("Church", 3, "1000001", 1608145200000));
   cats.push(createCat("Family", 4, "1111111", 1608159600000));

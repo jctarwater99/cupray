@@ -13,7 +13,7 @@ const Dashboard = ({ navigation }) => {
 
   return (
     <View style={styles.dashboardContainer}>
-      <View style={{flexDirection: "row" }}>
+      <View style={{ flexDirection: "row" }}>
         <TouchableOpacity onPress={() => navigation.openDrawer()}>
           <Image
             style={{
@@ -40,7 +40,7 @@ const Dashboard = ({ navigation }) => {
         </Text>
       </View>
       <View style={{ flex: 0.12 }}></View>
-      <View style={[styles.iconRow, { marginTop: height * 0.015}]}>
+      <View style={[styles.iconRow, { marginTop: height * 0.015 }]}>
         <View style={{ marginRight: width * 0.11 }}>
           <TouchableOpacity
             style={styles.icon}
@@ -69,7 +69,7 @@ const Dashboard = ({ navigation }) => {
           <Text style={styles.dashText}>Prayer Time</Text>
         </View>
       </View>
-      <View style={[styles.iconRow, { marginTop: height * 0.04}]}>
+      <View style={[styles.iconRow, { marginTop: height * 0.04 }]}>
         <View style={{ marginRight: width * 0.11 }}>
           <TouchableOpacity
             style={styles.icon}
@@ -88,7 +88,7 @@ const Dashboard = ({ navigation }) => {
             style={styles.icon}
             onPress={() => {
               navigation.navigate("IndividualRequest", {
-                cat_name: "Category",
+                cat_name: "Select",
                 req_id: -1,
                 isNewReq: true,
                 fromDash: true,
@@ -113,14 +113,14 @@ const Dashboard = ({ navigation }) => {
           <Text style={styles.dashText}>Add Request</Text>
         </View>
       </View>
-      <View style={[styles.lineStyle, { marginTop: height * 0.05}]} />
+      <View style={[styles.lineStyle, { marginTop: height * 0.05 }]} />
     </View>
   );
 };
 const styles = StyleSheet.create({
   // Overall container for screen
   dashboardContainer: {
-    flex: .95,
+    flex: 0.95,
     backgroundColor: "#EFEFEF",
     alignItems: "center",
     justifyContent: "center",
@@ -224,8 +224,6 @@ const styles = StyleSheet.create({
     marginTop: height * 0.01,
     width: width * 0.65,
   },
-
- 
 });
 
 export default Dashboard;

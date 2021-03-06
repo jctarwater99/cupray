@@ -63,7 +63,6 @@ const AllReqs = ({ navigation }) => {
         onLongPress={() => {
           //  setRequestID(request.id);
           //  toggleDeletePopupVisibility(!deletePopupVisible);
-          console.log(request);
         }}
       >
         <View style={styles.circle} />
@@ -122,7 +121,6 @@ const AllReqs = ({ navigation }) => {
                 }}
                 textStyle={{ color: "#000" }}
               />
-              
             </View>
           </View>
         }
@@ -146,8 +144,8 @@ const styles = StyleSheet.create({
   },
 
   requestContainer: {
-    width: width * .85,
-    height: width * .17,
+    width: width * 0.85,
+    height: width * 0.17,
     flexDirection: "row",
     shadowColor: "#000",
     shadowOffset: {

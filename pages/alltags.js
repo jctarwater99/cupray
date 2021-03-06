@@ -50,7 +50,6 @@ const AllTags = ({ navigation }) => {
           setIsNewTag(false);
           setSelectedTagName(tag.name);
           setSelectedTag(tag);
-          console.log("one");
           toggleEditPopupVisibility(!editPopupVisible);
         }}
       >
@@ -94,7 +93,6 @@ const AllTags = ({ navigation }) => {
               onPress={() => {
                 setIsNewTag(true);
                 setSelectedTagName("e.g. Jerry");
-                console.log("two");
                 toggleEditPopupVisibility(!editPopupVisible);
               }} // goto create category page or popup or something
               style={styles.createReqButton}
@@ -112,7 +110,6 @@ const AllTags = ({ navigation }) => {
               animationOutTiming={600}
               style={styles.modalContent}
               onBackdropPress={() => {
-                console.log("three");
                 toggleEditPopupVisibility(!editPopupVisible);
               }}
             >
@@ -170,7 +167,6 @@ const AllTags = ({ navigation }) => {
                                 updates.deleteCategory(id);
                               }
                               updates.deleteTag(id);
-                              console.log("four");
                               toggleEditPopupVisibility(!editPopupVisible);
                               refreshPage();
                             },
@@ -179,7 +175,6 @@ const AllTags = ({ navigation }) => {
                             text: "Cancel",
                             style: "cancel",
                             onPress: () => {
-                              console.log("five");
                               toggleEditPopupVisibility(!editPopupVisible);
                             },
                           },
@@ -203,7 +198,6 @@ const AllTags = ({ navigation }) => {
                           updates.editCatName(selectedTagName, id);
                         }
                       }
-                      console.log("six");
                       toggleEditPopupVisibility(!editPopupVisible);
                       refreshPage();
                     }}
@@ -230,8 +224,8 @@ const styles = StyleSheet.create({
   },
 
   requestContainer: {
-    width: width * .85,
-    height: width * .17,
+    width: width * 0.85,
+    height: width * 0.17,
     flexDirection: "row",
     shadowColor: "#000",
     shadowOffset: {

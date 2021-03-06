@@ -24,7 +24,7 @@ const Scanner = ({ navigation }) => {
       console.log(request);
 
       navigation.navigate("IndividualRequest", {
-        cat_name: "Category",
+        cat_name: "Select",
         req_id: -1,
         isNewReq: true,
         subject: request.subject,

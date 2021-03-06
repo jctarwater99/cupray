@@ -34,7 +34,7 @@ export function getAllTables() {
 export function getCategories(callback) {
   db.transaction((tx) => {
     tx.executeSql(
-      "SELECT * from categories ORDER BY name;",
+      "SELECT * from categories WHERE name != 'Archived' ORDER BY name;",
       [],
       (tx, result) => {
         callback(result.rows._array);
