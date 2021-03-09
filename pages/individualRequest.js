@@ -159,6 +159,9 @@ const ThisRequestScreen = ({ route, navigation }) => {
   };
 
   let handleTagPress = (number) => {
+    if (!inEditMode) {
+      return;
+    }
     if (category == tags[number].name || tags[number].name == "Archived") {
       return;
     }
@@ -166,6 +169,7 @@ const ThisRequestScreen = ({ route, navigation }) => {
       for (var i = 0; i < categories.length; i++) {
         if (tags[number].name == categories[i].value) {
           setCategory(tags[number].name);
+          route.params.cat_name = tags[number].name;
           break;
         }
       }
@@ -443,6 +447,7 @@ const ThisRequestScreen = ({ route, navigation }) => {
                 let oldCat = category;
                 let newCat = text;
                 setCategory(text);
+                route.params.cat_name = text;
 
                 let states = [...tagStates]; // can't change manually, must create deep copy
                 let changed = [...changedTags];

@@ -28,6 +28,7 @@ const AllReqs = ({ navigation }) => {
       const unsubscribe = navigation.addListener("focus", () => {
         getRequests();
         queries.getAllRequests((results) => {
+          console.log(results);
           let reqs = [];
           let j = 0;
           for (var i = 0; i < results.length; i++) {
@@ -45,24 +46,6 @@ const AllReqs = ({ navigation }) => {
       return () => unsubscribe;
     }, [navigation])
   );
-  // useEffect(() => {
-  //   queries.getAllRequestsInCategory("%", (result) => {
-  //     setRequests(removeDupes(result));
-  //   });
-  //   queries.getAllRequests((results) => {
-  //     let reqs = [];
-  //     let j = 0;
-  //     for (var i = 0; i < results.length; i++) {
-  //       if (results[i].id == i - j + 1) {
-  //         reqs.push(results[i]);
-  //       } else {
-  //         j++;
-  //       }
-  //     }
-  //     setAllReqs(reqs);
-  //   });
-  //   bookKeeping.checkBooks();
-  // }, []);
 
   let removeDupes = (a) => {
     var seen = {};
