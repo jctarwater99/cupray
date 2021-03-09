@@ -4,22 +4,25 @@
     "slug": "cupray",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/app_logo.png",
+    "icon": "./assets/app_logo(square).png",
     "splash": {
-      "image": "./assets/app_logo.png"
+      "image": "./assets/app_logo(square).png",
+      "backgroundColor": "#003A63"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.TreetopCreative.CUPray",
       "buildNumber": "1.0.0"
     },
     "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/app_logo(square).png",
+        "backgroundImage": "./assets/app_logo(square).png"
+      },
       "useNextNotificationsApi": true,
       "package": "com.testSideLoad.cupray"
     },

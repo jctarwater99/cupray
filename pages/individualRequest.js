@@ -235,12 +235,14 @@ const ThisRequestScreen = ({ route, navigation }) => {
   let saveChanges = () => {
     // Creating request to pass to the update or create field
     let req = new Request();
+    let unexpired = false;
     req.subject = subject;
     req.description = description;
     req.expire_time = selectedDate.getTime();
 
     if (new Date().getTime() < selectedDate.getTime()) {
       updates.unexpire(route.params.req_id);
+      unexpired = true;
     }
 
     let priority = 1;
@@ -252,10 +254,7 @@ const ThisRequestScreen = ({ route, navigation }) => {
     req.priority = priority;
 
     // If the user didn't select a category, don't save
-    if (
-      route.params.isNewReq &&
-      (category == "Select" || category == "Archived")
-    ) {
+    if (unexpired && (category == "Select" || category == "Archived")) {
       Alert.alert("Notification", "Please select a category", [
         {
           text: "Ok",

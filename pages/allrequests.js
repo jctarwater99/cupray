@@ -12,6 +12,7 @@ import { populateDB } from "../database/populate";
 import { createDatabase, dropForTesting } from "../database/create";
 import * as queries from "../database/query";
 import * as bookKeeping from "../database/bookKeeping";
+import { useFocusEffect } from "@react-navigation/native";
 
 var { height, width } = Dimensions.get("window");
 
@@ -20,24 +21,48 @@ const AllReqs = ({ navigation }) => {
   let [searchTag, setSearchTag] = useState("");
   let [allReqs, setAllReqs] = useState([]);
 
-  useEffect(() => {
-    queries.getAllRequestsInCategory("%", (result) => {
-      setRequests(removeDupes(result));
-    });
-    queries.getAllRequests((results) => {
-      let reqs = [];
-      let j = 0;
-      for (var i = 0; i < results.length; i++) {
-        if (results[i].id == i - j + 1) {
-          reqs.push(results[i]);
-        } else {
-          j++;
-        }
-      }
-      setAllReqs(reqs);
-    });
-    bookKeeping.checkBooks();
-  }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      const unsubscribe = navigation.addListener("focus", () => {
+        queries.getAllRequestsInCategory("%", (result) => {
+          setRequests(removeDupes(result));
+        });
+        queries.getAllRequests((results) => {
+          let reqs = [];
+          let j = 0;
+          for (var i = 0; i < results.length; i++) {
+            if (results[i].id == i - j + 1) {
+              reqs.push(results[i]);
+            } else {
+              j++;
+            }
+          }
+          setAllReqs(reqs);
+        });
+        bookKeeping.checkBooks();
+      });
+
+      return () => unsubscribe;
+    }, [navigation])
+  );
+  // useEffect(() => {
+  //   queries.getAllRequestsInCategory("%", (result) => {
+  //     setRequests(removeDupes(result));
+  //   });
+  //   queries.getAllRequests((results) => {
+  //     let reqs = [];
+  //     let j = 0;
+  //     for (var i = 0; i < results.length; i++) {
+  //       if (results[i].id == i - j + 1) {
+  //         reqs.push(results[i]);
+  //       } else {
+  //         j++;
+  //       }
+  //     }
+  //     setAllReqs(reqs);
+  //   });
+  //   bookKeeping.checkBooks();
+  // }, []);
 
   let removeDupes = (a) => {
     var seen = {};
