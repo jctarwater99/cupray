@@ -162,7 +162,7 @@ const ThisRequestScreen = ({ route, navigation }) => {
     if (category == tags[number].name || tags[number].name == "Archived") {
       return;
     }
-    if (category == "Category") {
+    if (category == "Select") {
       for (var i = 0; i < categories.length; i++) {
         if (tags[number].name == categories[i].value) {
           setCategory(tags[number].name);

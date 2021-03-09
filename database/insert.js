@@ -115,7 +115,9 @@ export function insertNewRequest(request, callback) {
         request.weight,
         request.priority,
       ],
-      (tx, result) => callback(result.insertId),
+      (tx, result) => {
+        callback(result.insertId);
+      },
       (tx, result) => {
         console.log("Inserting request failed", result);
       }

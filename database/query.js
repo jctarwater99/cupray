@@ -124,6 +124,30 @@ export function getAllRequestsInCategory(category, callback) {
   });
 }
 
+export function getAllActiveRequestsInCategory(category, callback) {
+  db.transaction((tx) => {
+    tx.executeSql(
+      "SELECT name, requestID, subject FROM requests " +
+        "INNER JOIN request_tags as RT on RT.requestID = requests.id " +
+        "INNER JOIN tags on tags.id = RT.tagID " +
+        "WHERE UPPER(tags.name) LIKE UPPER(?) " +
+        //"AND tags.name != 'Archived' " +
+        "ORDER BY requests.expire_time",
+      [category],
+      (tx, result) => {
+        callback(result.rows._array);
+        console.log(result);
+      },
+      (tx, result) => {
+        console.log(
+          "getAllActiveRequestsInCategory in category query failed",
+          result
+        );
+      }
+    );
+  });
+}
+
 export function getRequest(id, callback) {
   db.transaction((tx) => {
     tx.executeSql(

@@ -21,14 +21,12 @@ const AllReqs = ({ navigation }) => {
   let [requests, setRequests] = useState([]);
   let [searchTag, setSearchTag] = useState("");
   let [allReqs, setAllReqs] = useState([]);
-  let [checked, setBoxes] = useState([true, true, false]);
+  let [checked, setCheckBox] = useState(false);
 
   useFocusEffect(
     React.useCallback(() => {
       const unsubscribe = navigation.addListener("focus", () => {
-        queries.getAllRequestsInCategory("%", (result) => {
-          setRequests(removeDupes(result));
-        });
+        getRequests();
         queries.getAllRequests((results) => {
           let reqs = [];
           let j = 0;
@@ -100,36 +98,27 @@ const AllReqs = ({ navigation }) => {
   };
 
   let getRequests = () => {
-    queries.getAllRequestsInCategory(searchTag + "%", setRequests);
-  };
-
-  let handleKeyDown = (e) => {
-    getRequests();
-  };
-
-  let handleCheckBoxPress = (box) => {
-    let newState = [];
-    if (box == "Box1") {
-      newState = [true, false, false];
-    } else if (box == "Box2") {
-      newState = [true, true, false];
+    if (checked) {
+      queries.getAllRequestsInCategory(searchTag + "%", (result) => {
+        setRequests(removeDupes(result));
+      });
     } else {
-      newState = [true, true, true];
+      queries.getAllActiveRequestsInCategory(searchTag + "%", (result) => {
+        setRequests(removeDupes(result));
+      });
     }
-
-    setBoxes(newState);
   };
 
-  let makeCheckBox = (cBoxTitle, index) => {
+  let makeCheckBox = () => {
     return (
       <TouchableOpacity
-        id={cBoxTitle}
+        id={14432}
         style={[
           styles.checkBox,
-          checked[index] ? styles.active : styles.inactiveCheckBox,
+          checked ? styles.active : styles.inactiveCheckBox,
         ]}
         onPress={() => {
-            handleCheckBoxPress(cBoxTitle);
+          setCheckBox(!checked);
         }}
       ></TouchableOpacity>
     );
@@ -163,7 +152,7 @@ const AllReqs = ({ navigation }) => {
                 autoCorrect={false}
                 onFocus={() => setSearchTag("")} //Doesn't work for some reason
                 onChangeText={(text) => setSearchTag(text)}
-                onKeyPress={(e) => handleKeyDown(e)}
+                onKeyPress={(e) => getRequests()}
                 status="info"
                 placeholder="Search for Tag"
                 clearButtonMode="always"
@@ -178,9 +167,9 @@ const AllReqs = ({ navigation }) => {
                 textStyle={{ color: "#000" }}
               />
             </View>
-            <View style={{ flexDirection: "row"}}>
-            {makeCheckBox("Box1", 0)}
-            <Text style={styles.archivedTitle}> Show Archived Requests</Text>
+            <View style={{ flexDirection: "row" }}>
+              {makeCheckBox("Box1", 0)}
+              <Text style={styles.archivedTitle}> Show Archived Requests</Text>
             </View>
           </View>
         }
