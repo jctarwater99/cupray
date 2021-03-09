@@ -13,6 +13,7 @@ import { createDatabase, dropForTesting } from "../database/create";
 import * as queries from "../database/query";
 import * as bookKeeping from "../database/bookKeeping";
 import { useFocusEffect } from "@react-navigation/native";
+import { CheckBox } from "react-native";
 
 var { height, width } = Dimensions.get("window");
 
@@ -20,6 +21,7 @@ const AllReqs = ({ navigation }) => {
   let [requests, setRequests] = useState([]);
   let [searchTag, setSearchTag] = useState("");
   let [allReqs, setAllReqs] = useState([]);
+  let [checked, setBoxes] = useState([true, true, false]);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -105,6 +107,34 @@ const AllReqs = ({ navigation }) => {
     getRequests();
   };
 
+  let handleCheckBoxPress = (box) => {
+    let newState = [];
+    if (box == "Box1") {
+      newState = [true, false, false];
+    } else if (box == "Box2") {
+      newState = [true, true, false];
+    } else {
+      newState = [true, true, true];
+    }
+
+    setBoxes(newState);
+  };
+
+  let makeCheckBox = (cBoxTitle, index) => {
+    return (
+      <TouchableOpacity
+        id={cBoxTitle}
+        style={[
+          styles.checkBox,
+          checked[index] ? styles.active : styles.inactiveCheckBox,
+        ]}
+        onPress={() => {
+            handleCheckBoxPress(cBoxTitle);
+        }}
+      ></TouchableOpacity>
+    );
+  };
+
   return (
     <View style={styles.container}>
       <FlatList
@@ -143,9 +173,14 @@ const AllReqs = ({ navigation }) => {
                   backgroundColor: "#fff",
                   padding: 10,
                   width: "95%",
+                  marginBottom: height * 0.005,
                 }}
                 textStyle={{ color: "#000" }}
               />
+            </View>
+            <View style={{ flexDirection: "row"}}>
+            {makeCheckBox("Box1", 0)}
+            <Text style={styles.archivedTitle}> Show Archived Requests</Text>
             </View>
           </View>
         }
@@ -166,6 +201,24 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: height * 0.06,
     marginLeft: width * 0.04,
+  },
+
+  checkBox: {
+    margin: 5,
+    height: width * 0.08,
+    width: width * 0.08,
+    borderRadius: 10,
+    alignItems: "center",
+    justifyContent: "center",
+    marginLeft: width * 0.065,
+  },
+
+  active: {
+    backgroundColor: "#D6C396",
+  },
+  inactiveCheckBox: {
+    borderColor: "#D6C396",
+    borderWidth: 2,
   },
 
   requestContainer: {
@@ -192,6 +245,14 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     marginTop: height * 0.025,
     marginLeft: width * 0.05,
+  },
+
+  archivedTitle: {
+    color: "#7E8C96",
+    fontSize: 15,
+    fontWeight: "700",
+    marginTop: height * 0.013,
+    marginLeft: width * 0.04,
   },
 
   requestArrow: {
