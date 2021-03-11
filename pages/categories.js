@@ -597,7 +597,7 @@ const styles = StyleSheet.create({
     fontSize: width * 0.12,
     fontWeight: "700",
     marginBottom: height * 0.01,
-    marginRight: width * 0.1,
+    marginRight: width * 0.3,
   },
 
   titleAccent: {
