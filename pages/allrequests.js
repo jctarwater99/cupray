@@ -28,16 +28,22 @@ const AllReqs = ({ navigation }) => {
       const unsubscribe = navigation.addListener("focus", () => {
         getRequests();
         queries.getAllRequests((results) => {
-          console.log(results);
-          let reqs = [];
-          let j = 0;
-          for (var i = 0; i < results.length; i++) {
-            if (results[i].id == i - j + 1) {
-              reqs.push(results[i]);
-            } else {
-              j++;
+          // let reqs = [];
+          // let j = 0;
+          // for (var i = 0; i < results.length; i++) {
+          //   if (results[i].id == i - j + 1) {
+          //     reqs.push(results[i]);
+          //   } else {
+          //     j++;
+          //   }
+          // }
+          let reqs = new Map();
+          for (let i = 0; i < results.length; i++) {
+            if (reqs[results[i].id] == undefined) {
+              reqs[results[i].id] = results[i];
             }
           }
+
           setAllReqs(reqs);
         });
         bookKeeping.checkBooks();
@@ -63,7 +69,7 @@ const AllReqs = ({ navigation }) => {
         style={styles.requestContainer}
         onPress={() => {
           navigation.navigate("IndividualRequest", {
-            cat_name: allReqs[request.requestID - 1].name,
+            cat_name: allReqs[request.requestID].name,
             req_id: request.requestID,
             isNewReq: false,
           });
@@ -101,6 +107,18 @@ const AllReqs = ({ navigation }) => {
           checked ? styles.active : styles.inactiveCheckBox,
         ]}
         onPress={() => {
+          if (!checked) {
+            queries.getAllRequestsInCategory(searchTag + "%", (result) => {
+              setRequests(removeDupes(result));
+            });
+          } else {
+            queries.getAllActiveRequestsInCategory(
+              searchTag + "%",
+              (result) => {
+                setRequests(removeDupes(result));
+              }
+            );
+          }
           setCheckBox(!checked);
         }}
       ></TouchableOpacity>

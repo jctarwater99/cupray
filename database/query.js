@@ -127,16 +127,19 @@ export function getAllRequestsInCategory(category, callback) {
 export function getAllActiveRequestsInCategory(category, callback) {
   db.transaction((tx) => {
     tx.executeSql(
-      "SELECT name, requestID, subject FROM requests " +
+      "SELECT name, requestID, subject, tags.id FROM requests " +
         "INNER JOIN request_tags as RT on RT.requestID = requests.id " +
         "INNER JOIN tags on tags.id = RT.tagID " +
         "WHERE UPPER(tags.name) LIKE UPPER(?) " +
-        //"AND tags.name != 'Archived' " +
+        "AND requestID NOT IN ( " +
+        "SELECT requests.id AS id FROM requests " +
+        "INNER JOIN request_tags as RT ON RT.requestID = requests.id " +
+        "INNER JOIN tags ON RT.tagID = tags.id " +
+        "WHERE tags.name = 'Archived' ) " +
         "ORDER BY requests.expire_time",
       [category],
       (tx, result) => {
         callback(result.rows._array);
-        console.log(result);
       },
       (tx, result) => {
         console.log(
