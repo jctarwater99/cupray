@@ -45,7 +45,6 @@ const AllReqs = ({ navigation }) => {
           }
 
           setAllReqs(reqs);
-          console.log("allReqs", reqs);
         });
         bookKeeping.checkBooks();
       });
@@ -90,12 +89,10 @@ const AllReqs = ({ navigation }) => {
   let getRequests = () => {
     if (checked) {
       queries.getAllRequestsInCategory(searchTag + "%", (result) => {
-        console.log("Reqs", result);
         setRequests(removeDupes(result));
       });
     } else {
       queries.getAllActiveRequestsInCategory(searchTag + "%", (result) => {
-        console.log("Reqs", result);
         setRequests(removeDupes(result));
       });
     }
