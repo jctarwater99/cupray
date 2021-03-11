@@ -28,6 +28,11 @@
     },
     "web": {
       "favicon": "./assets/apple-touch-icon.png"
+    },
+
+    "notification": {
+      "icon": "./assets/favicon2.png",
+      "color": "#ee8172"
     }
   }
 }
