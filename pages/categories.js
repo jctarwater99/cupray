@@ -12,6 +12,7 @@ import {
   Alert,
   Text,
   View,
+  Keyboard,
 } from "react-native";
 import * as queries from "../database/query";
 import * as inserts from "../database/insert";
@@ -43,6 +44,10 @@ const CategoriesScreen = ({ navigation }) => {
     true,
     false,
   ]);
+  const shouldSetResponse = () => true;
+  const onRelease = () => (
+  Keyboard.dismiss()
+  );
 
   useEffect(() => {
     queries.getCategories((results) => {
@@ -285,13 +290,17 @@ const CategoriesScreen = ({ navigation }) => {
             toggleCreatePopupVisibility(!createPopupVisible);
           }}
         >
-          <View style={styles.popUpContainer}>
+          <View style={styles.popUpContainer}
+          onResponderRelease={ onRelease }
+          onStartShouldSetResponder={ shouldSetResponse }
+          >
             <Text style={styles.popUpHeader}>Create New Category</Text>
             <TextInput
               maxLength={15} // max number of chars
               multiline={true}
               value={newCategory}
               onFocus={() => setNewCategory("")}
+              
               onChange={(text) => setNewCategory(text.nativeEvent.text)}
               style={{
                 backgroundColor: "white",
@@ -313,7 +322,7 @@ const CategoriesScreen = ({ navigation }) => {
               {dayOfTheWeek("W", 3)}
               {dayOfTheWeek("R", 4)}
               {dayOfTheWeek("F", 5)}
-              {dayOfTheWeek("A", 6)}
+              {dayOfTheWeek("S", 6)}
             </View>
 
             <Text style={styles.popUpHeader}> Set Time for Reminder</Text>
@@ -358,7 +367,10 @@ const CategoriesScreen = ({ navigation }) => {
             toggleEditPopupVisibility(!editPopupVisible);
           }}
         >
-          <View style={styles.popUpContainer}>
+          <View style={styles.popUpContainer}
+          onResponderRelease={ onRelease }
+          onStartShouldSetResponder={ shouldSetResponse }
+          >
             <Text style={styles.popUpHeader}>Edit Category</Text>
             <TextInput
               maxLength={15} // max number of chars
@@ -386,7 +398,7 @@ const CategoriesScreen = ({ navigation }) => {
               {dayOfTheWeek("W", 3)}
               {dayOfTheWeek("R", 4)}
               {dayOfTheWeek("F", 5)}
-              {dayOfTheWeek("A", 6)}
+              {dayOfTheWeek("S", 6)}
             </View>
 
             <Text style={styles.popUpHeader}> Edit Time for Reminder</Text>
