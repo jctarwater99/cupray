@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "cupray",
-    "slug": "cupray",
+    "name": "GOPray",
+    "slug": "GOPray",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/app_logo(square).png",
@@ -15,8 +15,8 @@
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.TreetopCreative.CUPray",
-      "buildNumber": "1.0.0"
+      "bundleIdentifier": "com.ykd.GOPray",
+      "buildNumber": "1.1.0"
     },
     "android": {
       "adaptiveIcon": {
