@@ -45,9 +45,7 @@ const CategoriesScreen = ({ navigation }) => {
     false,
   ]);
   const shouldSetResponse = () => true;
-  const onRelease = () => (
-  Keyboard.dismiss()
-  );
+  const onRelease = () => Keyboard.dismiss();
 
   useEffect(() => {
     queries.getCategories((results) => {
@@ -219,7 +217,7 @@ const CategoriesScreen = ({ navigation }) => {
               toggleEditPopupVisibility(!editPopupVisible);
             }}
           >
-            {"⋮"}
+            {" ⋮ "}
           </Text>
         </TouchableOpacity>
       </View>
@@ -230,12 +228,10 @@ const CategoriesScreen = ({ navigation }) => {
   };
 
   let refreshPage = () => {
-    setTimeout(() => {
-      queries.getCategories((results) => {
-        setCategories(results);
-      });
-      scheduler.rescheduleNotifs();
-    }, 200);
+    queries.getCategories((results) => {
+      setCategories(results);
+    });
+    scheduler.rescheduleNotifs();
   };
 
   return (
@@ -290,9 +286,10 @@ const CategoriesScreen = ({ navigation }) => {
             toggleCreatePopupVisibility(!createPopupVisible);
           }}
         >
-          <View style={styles.popUpContainer}
-          onResponderRelease={ onRelease }
-          onStartShouldSetResponder={ shouldSetResponse }
+          <View
+            style={styles.popUpContainer}
+            onResponderRelease={onRelease}
+            onStartShouldSetResponder={shouldSetResponse}
           >
             <Text style={styles.popUpHeader}>Create New Category</Text>
             <TextInput
@@ -300,7 +297,6 @@ const CategoriesScreen = ({ navigation }) => {
               multiline={true}
               value={newCategory}
               onFocus={() => setNewCategory("")}
-              
               onChange={(text) => setNewCategory(text.nativeEvent.text)}
               style={{
                 backgroundColor: "white",
@@ -347,9 +343,7 @@ const CategoriesScreen = ({ navigation }) => {
 
                 cat.remind_time = selectedTime.toString();
 
-                inserts.insertNewTag(newCategory, cat); // New category is the tag name, also inserts new category
-
-                refreshPage();
+                inserts.insertNewTag(newCategory, cat, refreshPage); // New category is the tag name, also inserts new category
               }}
             >
               <Text style={styles.plusSign}>Save</Text>
@@ -367,9 +361,10 @@ const CategoriesScreen = ({ navigation }) => {
             toggleEditPopupVisibility(!editPopupVisible);
           }}
         >
-          <View style={styles.popUpContainer}
-          onResponderRelease={ onRelease }
-          onStartShouldSetResponder={ shouldSetResponse }
+          <View
+            style={styles.popUpContainer}
+            onResponderRelease={onRelease}
+            onStartShouldSetResponder={shouldSetResponse}
           >
             <Text style={styles.popUpHeader}>Edit Category</Text>
             <TextInput
@@ -428,13 +423,15 @@ const CategoriesScreen = ({ navigation }) => {
                           updates.archiveRequestsInCategory(
                             selectedCategory.tagID
                           );
-                          updates.deleteCategory(selectedCategory.tagID);
+                          updates.deleteCategory(
+                            selectedCategory.tagID,
+                            refreshPage
+                          );
                           updates.deleteTag(selectedCategory.tagID);
                           updates.deleteRequestTagsOfTag(
                             selectedCategory.tagID
                           );
                           toggleEditPopupVisibility(!editPopupVisible);
-                          refreshPage();
                         },
                       },
                       {
@@ -467,10 +464,9 @@ const CategoriesScreen = ({ navigation }) => {
                   cat.remind_days = daysString;
 
                   cat.remind_time = selectedTime.toString();
-                  updates.editCategory(cat);
+                  updates.editCategory(cat, refreshPage);
                   updates.editTag(selectedCatName, selectedCategory.tagID);
                   toggleEditPopupVisibility(!editPopupVisible);
-                  refreshPage();
                 }}
               >
                 <Text style={styles.plusSign}>Save</Text>

@@ -30,6 +30,8 @@ async function requestPermissionsAsync() {
 }
 
 const WelcomeScreen = ({ navigation }) => {
+  let [tapCount, setTapCount] = useState(0);
+
   useEffect(() => {
     createDatabase();
     queries.checkIfPopMinRan();
@@ -52,15 +54,19 @@ const WelcomeScreen = ({ navigation }) => {
         <Text style={styles.cu}>
           GO<Text style={styles.cupray}>Pray.</Text>
         </Text>
-        <View style={{ marginBottom: height * 0.09}}>
-        <Text
-          style={styles.thePrayer}
-          onPress={() => {
-            navigation.navigate("TempDash");
-          }}
-        >
-          A prayer reminder app to strengthen your quiet time
-        </Text>
+        <View style={{ marginBottom: height * 0.09 }}>
+          <Text
+            style={styles.thePrayer}
+            onPress={() => {
+              if (tapCount >= 10) {
+                navigation.navigate("TempDash");
+              } else {
+                setTapCount(tapCount + 1);
+              }
+            }}
+          >
+            A prayer reminder app to strengthen your quiet time
+          </Text>
         </View>
         <View style={{ flex: 1, justifyContent: "flex-end" }}>
           <TouchableOpacity
@@ -119,7 +125,7 @@ const styles = StyleSheet.create({
     fontSize: 19,
     fontWeight: "700",
     textAlign: "center",
-    marginBottom: height * .3,
+    marginBottom: height * 0.3,
     paddingLeft: 30,
     paddingRight: 30,
   },

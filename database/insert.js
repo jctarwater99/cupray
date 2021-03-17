@@ -53,12 +53,16 @@ export function insertRequest(request) {
     );
   });
 }
-export function insertTag(tag) {
+export function insertTag(tag, callback) {
   db.transaction((tx) => {
     tx.executeSql(
       "INSERT INTO tags(name) VALUES(?);",
       [tag.name],
-      () => void 0,
+      (tx, result) => {
+        if (callback != undefined) {
+          callback();
+        }
+      },
       (tx, result) => {
         console.log("Inserting tag failed", result);
       }
@@ -79,7 +83,7 @@ export function insertRequestTag(requestTag) {
   });
 }
 
-export function insertCategory(category) {
+export function insertCategory(category, callback) {
   db.transaction((tx) => {
     tx.executeSql(
       "INSERT INTO categories(name, tagID, remind_days, remind_time) VALUES(?, ?, ?, ?);",
@@ -89,7 +93,11 @@ export function insertCategory(category) {
         category.remind_days,
         category.remind_time,
       ],
-      () => void 0,
+      (tx, result) => {
+        if (callback != undefined) {
+          callback();
+        }
+      },
       (tx, result) => {
         console.log("Inserting category failed", result);
       }
@@ -125,14 +133,14 @@ export function insertNewRequest(request, callback) {
   });
 }
 
-export function insertNewTag(tagName, cat) {
+export function insertNewTag(tagName, cat, callback) {
   db.transaction((tx) => {
     tx.executeSql(
       "INSERT INTO tags(name) VALUES(?);",
       [tagName],
       (tx, result) => {
         cat.tagID = result.insertId;
-        insertCategory(cat);
+        insertCategory(cat, callback);
       },
       (tx, result) => {
         console.log("Inserting tag failed", result);

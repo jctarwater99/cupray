@@ -31,7 +31,6 @@
     },
 
     "notification": {
-      "icon": "./assets/favicon2.png",
       "color": "#ee8172"
     }
   }

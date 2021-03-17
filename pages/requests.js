@@ -19,7 +19,7 @@ var { height, width } = Dimensions.get("window");
 
 const RequestsScreen = ({ route, navigation }) => {
   let [requests, setRequests] = useState([]);
-  let [deletePopupVisible, toggleDeletePopupVisibility] = useState(false);
+  let [archivePopupVisible, toggleArchivePopupVisibility] = useState(false);
   let [requestID, setRequestID] = useState(-1);
 
   useEffect(() => {
@@ -52,7 +52,7 @@ const RequestsScreen = ({ route, navigation }) => {
         }}
         onLongPress={() => {
           setRequestID(request.id);
-          toggleDeletePopupVisibility(!deletePopupVisible);
+          toggleArchivePopupVisibility(!archivePopupVisible);
         }}
       >
         <View style={styles.circle} />
@@ -122,13 +122,13 @@ const RequestsScreen = ({ route, navigation }) => {
       </View>
 
       <Modal
-        isVisible={deletePopupVisible}
+        isVisible={archivePopupVisible}
         backdropOpacity={0.25}
         animationInTiming={400}
         animationOutTiming={800}
         style={styles.modalContent}
         onBackdropPress={() => {
-          toggleDeletePopupVisibility(!deletePopupVisible);
+          toggleArchivePopupVisibility(!archivePopupVisible);
         }}
       >
         <View style={styles.popUpContainer}>
@@ -157,7 +157,7 @@ const RequestsScreen = ({ route, navigation }) => {
                       onPress: () => {
                         updates.archiveRequest(requestID);
 
-                        toggleDeletePopupVisibility(!deletePopupVisible);
+                        toggleArchivePopupVisibility(!archivePopupVisible);
                         refreshPage();
                       },
                     },
@@ -165,7 +165,7 @@ const RequestsScreen = ({ route, navigation }) => {
                       text: "Cancel",
                       style: "cancel",
                       onPress: () => {
-                        toggleDeletePopupVisibility(!deletePopupVisible);
+                        toggleArchivePopupVisibility(!archivePopupVisible);
                       },
                     },
                   ]
@@ -176,12 +176,10 @@ const RequestsScreen = ({ route, navigation }) => {
             </TouchableOpacity>
 
             <TouchableOpacity
-              // This is the save button for the edit page?
+              // Cancel button before the warning alert pops up
               style={{ width: width * 0.58 }}
               onPress={() => {
-                /* updates.editCategory(selectedCatName, selectedCatID);
-                  updates.editTag(selectedCatName, selectedCatID); */
-                toggleDeletePopupVisibility(!deletePopupVisible);
+                toggleArchivePopupVisibility(!archivePopupVisible);
                 refreshPage();
               }}
             >

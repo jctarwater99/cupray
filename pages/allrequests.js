@@ -6,13 +6,16 @@ import {
   Dimensions,
   FlatList,
   TextInput,
+  Alert,
 } from "react-native";
 import { StyleSheet, Button, Text, View } from "react-native";
 import { populateDB } from "../database/populate";
 import { createDatabase, dropForTesting } from "../database/create";
 import * as queries from "../database/query";
+import * as updates from "../database/update";
 import * as bookKeeping from "../database/bookKeeping";
 import { useFocusEffect } from "@react-navigation/native";
+import Modal from "react-native-modal";
 import { CheckBox } from "react-native";
 
 var { height, width } = Dimensions.get("window");
@@ -22,21 +25,17 @@ const AllReqs = ({ navigation }) => {
   let [searchTag, setSearchTag] = useState("");
   let [allReqs, setAllReqs] = useState([]);
   let [checked, setCheckBox] = useState(false);
+  let [requestID, setRequestID] = useState(-1);
+  let [deletePopupVisible, toggleDeletePopupVisibility] = useState(false);
+
+  const shouldSetResponse = () => true;
+  const onRelease = () => Keyboard.dismiss();
 
   useFocusEffect(
     React.useCallback(() => {
       const unsubscribe = navigation.addListener("focus", () => {
         getRequests();
         queries.getAllRequests((results) => {
-          // let reqs = [];
-          // let j = 0;
-          // for (var i = 0; i < results.length; i++) {
-          //   if (results[i].id == i - j + 1) {
-          //     reqs.push(results[i]);
-          //   } else {
-          //     j++;
-          //   }
-          // }
           let reqs = new Map();
           for (let i = 0; i < results.length; i++) {
             if (reqs[results[i].id] == undefined) {
@@ -75,8 +74,8 @@ const AllReqs = ({ navigation }) => {
           });
         }}
         onLongPress={() => {
-          //  setRequestID(request.id);
-          //  toggleDeletePopupVisibility(!deletePopupVisible);
+          setRequestID(request.requestID);
+          toggleDeletePopupVisibility(!deletePopupVisible);
         }}
       >
         <View style={styles.circle} />
@@ -180,6 +179,71 @@ const AllReqs = ({ navigation }) => {
         renderItem={({ item, index }) => listItemView(item)}
         showsVerticalScrollIndicator={false}
       />
+      <Modal
+        isVisible={deletePopupVisible}
+        backdropOpacity={0.25}
+        animationInTiming={100}
+        animationOutTiming={100}
+        style={styles.modalContent}
+        onBackdropPress={() => {
+          toggleDeletePopupVisibility(!deletePopupVisible);
+        }}
+      >
+        <View
+          style={styles.popUpContainer}
+          onResponderRelease={onRelease}
+          onStartShouldSetResponder={shouldSetResponse}
+        >
+          <Text style={styles.popUpHeader}>Delete Request</Text>
+
+          <View
+            style={{
+              flexDirection: "row",
+              position: "absolute",
+              bottom: height * 0.03,
+            }}
+          >
+            <TouchableOpacity
+              style={{ width: width * 0.6 }}
+              onPress={() => {
+                // Provide warning
+                Alert.alert(
+                  "Warning",
+                  "Deleting this Request is permanent. Are you sure?",
+                  [
+                    {
+                      text: "Delete",
+                      onPress: () => {
+                        console.log("Deleting", requestID);
+                        updates.deleteRequestTagsOfReq(requestID, getRequests);
+                        toggleDeletePopupVisibility(!deletePopupVisible);
+                      },
+                    },
+                    {
+                      text: "Cancel",
+                      style: "cancel",
+                      onPress: () => {
+                        toggleDeletePopupVisibility(!deletePopupVisible);
+                      },
+                    },
+                  ]
+                );
+              }}
+            >
+              <Text style={styles.plusSign}>Delete</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={{ width: width * 0.58 }}
+              onPress={() => {
+                toggleDeletePopupVisibility(!deletePopupVisible);
+              }}
+            >
+              <Text style={styles.plusSign}>Cancel</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -227,6 +291,36 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: "#E8E7E4",
     margin: height * 0.01,
+  },
+  modalContent: {
+    justifyContent: "center",
+    alignItems: "center",
+    margin: 0,
+  },
+
+  popUpContainer: {
+    width: width * 0.85,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    padding: height * 0.02,
+    shadowOpacity: 0.27,
+    shadowRadius: 4.65,
+
+    elevation: 6,
+    borderRadius: 20,
+    backgroundColor: "#E8E7E4",
+    alignItems: "center",
+  },
+
+  popUpHeader: {
+    flex: 0,
+    fontSize: 16,
+    color: "#003A63",
+    fontWeight: "700",
+    padding: height * 0.01,
   },
 
   requestTitles: {
@@ -287,6 +381,12 @@ const styles = StyleSheet.create({
     color: "#7E8C96",
     fontSize: 19,
     fontWeight: "500",
+    textAlign: "center",
+  },
+  plusSign: {
+    color: "#003a63",
+    fontSize: 15,
+    fontWeight: "700",
     textAlign: "center",
   },
 });

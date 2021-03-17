@@ -41,12 +41,16 @@ export function updateRequestTag(reqID, oldCatID, newCatID) {
   });
 }
 
-export function deleteCategory(catID) {
+export function deleteCategory(catID, callback) {
   db.transaction((tx) => {
     tx.executeSql(
       "DELETE FROM categories WHERE tagID = ?",
       [catID],
-      () => void 0,
+      (tx, result) => {
+        if (callback != undefined) {
+          callback();
+        }
+      },
       (tx, result) => {
         console.log("Deleting category failed", result);
       }
@@ -65,12 +69,16 @@ export function deleteTag(tagID) {
     );
   });
 }
-export function editCategory(cat) {
+export function editCategory(cat, callback) {
   db.transaction((tx) => {
     tx.executeSql(
       "UPDATE categories SET name = ?, remind_days = ?, remind_time = ? WHERE tagID = ?",
       [cat.name, cat.remind_days, cat.remind_time, cat.tagID],
-      () => void 0,
+      (tx, result) => {
+        if (callback != undefined) {
+          callback();
+        }
+      },
       (tx, result) => {
         console.log("Updating category failed", result);
       }
@@ -102,12 +110,17 @@ export function editCatName(newCatName, tagID) {
   });
 }
 
-export function deleteRequest(reqID) {
+export function deleteRequest(reqID, callback) {
   db.transaction((tx) => {
     tx.executeSql(
       "DELETE FROM requests WHERE requests.id = ?",
       [reqID],
-      () => void 0,
+      (tx, result) => {
+        console.log(result);
+        if (callback != undefined) {
+          callback();
+        }
+      },
       (tx, result) => {
         console.log("Deleting request failed", result);
       }
@@ -202,16 +215,17 @@ export function deleteRequestsInCategory() {
   });
 }
 
-export function deleteRequestTagsOfReq(reqID) {
+export function deleteRequestTagsOfReq(reqID, callback) {
   db.transaction((tx) => {
     tx.executeSql(
-      "DELETE FROM request_tags WHERE request_tags.id IN ( " +
-        "SELECT request_tags.id FROM request_tags WHERE request_tags.requestID IN ( " +
-        "SELECT requests.id FROM requests " +
-        "WHERE requests.id = ? ))",
+      // "DELETE FROM request_tags WHERE request_tags.id IN ( " +
+      //   "SELECT request_tags.id FROM request_tags WHERE request_tags.requestID IN ( " +
+      //   "SELECT requests.id FROM requests " +
+      //   "WHERE requests.id = ? ))",
+      "DELETE FROM request_tags WHERE request_tags.requestID = ?",
       [reqID],
       (tx, result) => {
-        deleteRequest(reqID);
+        deleteRequest(reqID, callback);
       },
       (tx, result) => {
         console.log("Deleting request tags failed", result);

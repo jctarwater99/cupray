@@ -151,11 +151,9 @@ const ThisRequestScreen = ({ route, navigation }) => {
   }, []);
 
   let refreshPage = () => {
-    setTimeout(() => {
-      queries.getTags((tags) => {
-        setTags(tags);
-      });
-    }, 200);
+    queries.getTags((tags) => {
+      setTags(tags);
+    });
   };
 
   let handleTagPress = (number) => {
@@ -288,14 +286,13 @@ const ThisRequestScreen = ({ route, navigation }) => {
     // Actuall update part
     if (route.params.isNewReq) {
       inserts.insertNewRequest(req, updateTags);
-      scheduler.rescheduleNotifs();
-
       const popAction = StackActions.pop(route.params.fromDash ? 1 : 2);
       navigation.dispatch(popAction);
     } else {
       updates.updateRequest(route.params.req_id, req);
       updateTags(route.params.req_id);
     }
+    scheduler.rescheduleNotifs();
   };
 
   let handleCheckBoxPress = (box) => {
@@ -585,8 +582,7 @@ const ThisRequestScreen = ({ route, navigation }) => {
                           toggleNewTagPopup(!newTagPopup);
                           let tag = new Tag();
                           tag.name = newTag;
-                          inserts.insertTag(tag);
-                          refreshPage();
+                          inserts.insertTag(tag, refreshPage);
                         }}
                       >
                         <Text style={styles.popUpHeader}>Save</Text>
