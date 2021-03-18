@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Text, View, StyleSheet, Button } from "react-native";
+import { Text, View, StyleSheet, Button, Dimensions, TouchableOpacity} from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import * as updates from "../database/update";
+
+var { height, width } = Dimensions.get("window");
 
 const Scanner = ({ navigation }) => {
   const [hasPermission, setHasPermission] = useState(null);
@@ -31,7 +33,7 @@ const Scanner = ({ navigation }) => {
         description: request.description,
       });
     } else {
-      alert(`This barcode does not represent a valid cupray request`);
+      alert(`This barcode does not represent a valid GOPray request`);
     }
   };
 
@@ -48,18 +50,50 @@ const Scanner = ({ navigation }) => {
         onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
         style={StyleSheet.absoluteFillObject}
       />
+      {!scanned && (
+        <TouchableOpacity
+            style={styles.buttonStyle}
+            onPress={() => setScanned(false)}
+          >
+            <Text style={styles.prayButton}>Scan QR or Swipe Left to return to Menu</Text>
+          </TouchableOpacity>
+      )}
       {scanned && (
-        <Button title={"Tap to Scan Again"} onPress={() => setScanned(false)} />
+        <TouchableOpacity
+            style={styles.buttonStyle}
+            onPress={() => setScanned(false)}
+          >
+            <Text style={styles.prayButton}>Tap to Scan Again</Text>
+          </TouchableOpacity>
       )}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+
   container: {
     flex: 1,
     flexDirection: "column",
     justifyContent: "center",
+    alignItems: "center",
+  },
+
+  buttonStyle: {
+    width: width * 0.7,
+    alignItems: "center",
+    borderRadius: 20,
+    backgroundColor: "#e8e7e4",
+    marginBottom: height * 0.16,
+    padding: width * 0.05,
+
+  },
+
+  prayButton: {
+    color: "#003a63",
+    fontSize: 20,
+    fontWeight: "700",
+    textAlign: "center",
   },
 });
 

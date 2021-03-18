@@ -65,7 +65,7 @@ const WelcomeScreen = ({ navigation }) => {
               }
             }}
           >
-            A prayer reminder app to strengthen your quiet time
+            a prayer reminder app to strengthen your quiet time
           </Text>
         </View>
         <View style={{ flex: 1, justifyContent: "flex-end" }}>
