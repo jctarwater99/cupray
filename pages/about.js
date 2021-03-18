@@ -33,8 +33,8 @@ const About = ({ navigation }) => {
       </View>
       <View style={{ marginTop: height * 0.2 }}>
         <Text style={styles.title}>
-          This is app is brought to you by{" "}
-          <Text style={styles.titleAccent}>The GO Pray Team </Text>
+          This is app is brought to you by the{" "}
+          <Text style={styles.titleAccent}>GO Pray Team </Text>
           at Cedarville University
         </Text>
         <Text style={styles.subtitle}>
@@ -48,6 +48,7 @@ const About = ({ navigation }) => {
             Google Form
           </Text>
         </Text>
+        <Text style={styles.subtitle}>Thank You :)</Text>
       </View>
     </View>
   );
@@ -63,7 +64,7 @@ const styles = StyleSheet.create({
 
   title: {
     color: "#003A63",
-    fontSize: 20,
+    fontSize: 25,
     fontWeight: "700",
     marginTop: height * 0.01,
     textAlign: "center",
@@ -73,13 +74,13 @@ const styles = StyleSheet.create({
 
   titleAccent: {
     color: "#7E8C96",
-    fontSize: 20,
+    fontSize: 25,
     fontWeight: "700",
   },
 
   subtitle: {
     color: "#003A63",
-    fontSize: 15,
+    fontSize: 25,
     fontWeight: "700",
     marginTop: height * 0.04,
     textAlign: "center",
@@ -88,7 +89,7 @@ const styles = StyleSheet.create({
   },
   subtitleAccent: {
     color: "#7E8C96",
-    fontSize: 15,
+    fontSize: 25,
     fontWeight: "700",
   },
 });
