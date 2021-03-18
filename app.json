@@ -6,8 +6,7 @@
     "orientation": "portrait",
     "icon": "./assets/app_logo(square).png",
     "splash": {
-      "image": "./assets/app_logo(square).png",
-      "backgroundColor": "#003A63"
+      "image": "./assets/loadingScreen.png"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
