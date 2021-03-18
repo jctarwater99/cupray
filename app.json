@@ -6,7 +6,7 @@
     "orientation": "portrait",
     "icon": "./assets/app_logo(square).png",
     "splash": {
-      "image": "./assets/app_logo(square).png",
+      "image": "./assets/loadingScreen.png",
       "backgroundColor": "#003A63"
     },
     "updates": {
