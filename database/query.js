@@ -66,12 +66,12 @@ export function getTags(callback) {
 export function getRequestsInCategory(categoryId, callback) {
   db.transaction((tx) => {
     tx.executeSql(
-      "SELECT DISTINCT requests.subject as subject, requests.id as id FROM requests " +
+      "SELECT DISTINCT requests.subject AS subject, requests.description AS description, requests.id AS id FROM requests " +
         "INNER JOIN request_tags as RT ON RT.requestID = requests.id " +
         "INNER JOIN tags ON RT.tagID = tags.id " +
         "WHERE tags.id = ? " +
         "EXCEPT " +
-        "SELECT requests.subject, requests.id FROM requests " +
+        "SELECT requests.subject, requests.description, requests.id FROM requests " +
         "INNER JOIN request_tags as RT ON RT.requestID = requests.id " +
         "INNER JOIN tags ON RT.tagID = tags.id " +
         "WHERE tags.name = 'Archived';" +
@@ -108,7 +108,7 @@ export function getAllRequests(callback) {
 export function getAllRequestsInCategory(category, callback) {
   db.transaction((tx) => {
     tx.executeSql(
-      "SELECT name, requestID, subject FROM requests " +
+      "SELECT name, requestID, subject, description FROM requests " +
         "INNER JOIN request_tags as RT on RT.requestID = requests.id " +
         "INNER JOIN tags on tags.id = RT.tagID " +
         "WHERE UPPER(tags.name) LIKE UPPER(?) " +
@@ -127,7 +127,7 @@ export function getAllRequestsInCategory(category, callback) {
 export function getAllActiveRequestsInCategory(category, callback) {
   db.transaction((tx) => {
     tx.executeSql(
-      "SELECT name, requestID, subject, tags.id FROM requests " +
+      "SELECT name, requestID, subject, description, tags.id FROM requests " +
         "INNER JOIN request_tags as RT on RT.requestID = requests.id " +
         "INNER JOIN tags on tags.id = RT.tagID " +
         "WHERE UPPER(tags.name) LIKE UPPER(?) " +

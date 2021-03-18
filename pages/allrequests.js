@@ -79,7 +79,12 @@ const AllReqs = ({ navigation }) => {
         }}
       >
         <View style={styles.circle} />
-        <Text style={styles.requestTitles}>{request.subject}</Text>
+        <View style={{ flexDirection: "column" }}>
+          <Text style={styles.requestTitles}>{request.subject}</Text>
+          <Text numberOfLines={1} style={styles.requestSubTitles}>
+            {request.description}
+          </Text>
+        </View>
         <View style={{ flex: 1 }}></View>
       </TouchableOpacity>
     );
@@ -291,6 +296,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: "#E8E7E4",
     margin: height * 0.01,
+    overflow: "hidden",
   },
   modalContent: {
     justifyContent: "center",
@@ -330,7 +336,13 @@ const styles = StyleSheet.create({
     marginTop: height * 0.025,
     marginLeft: width * 0.05,
   },
-
+  requestSubTitles: {
+    color: "#7E8C96",
+    fontSize: 15,
+    fontWeight: "400",
+    marginTop: height * 0.0,
+    marginLeft: width * 0.05,
+  },
   archivedTitle: {
     color: "#7E8C96",
     fontSize: 15,

@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Text, View, StyleSheet, Button, Dimensions, TouchableOpacity} from "react-native";
+import {
+  Text,
+  View,
+  StyleSheet,
+  Button,
+  Dimensions,
+  TouchableOpacity,
+} from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import * as updates from "../database/update";
 
@@ -52,26 +59,27 @@ const Scanner = ({ navigation }) => {
       />
       {!scanned && (
         <TouchableOpacity
-            style={styles.buttonStyle}
-            onPress={() => setScanned(false)}
-          >
-            <Text style={styles.prayButton}>Scan QR or Swipe Left to return to Menu</Text>
-          </TouchableOpacity>
+          style={styles.buttonStyle}
+          onPress={() => setScanned(false)}
+        >
+          <Text style={styles.prayButton}>
+            Scan QR or Swipe from Left to view Menu
+          </Text>
+        </TouchableOpacity>
       )}
       {scanned && (
         <TouchableOpacity
-            style={styles.buttonStyle}
-            onPress={() => setScanned(false)}
-          >
-            <Text style={styles.prayButton}>Tap to Scan Again</Text>
-          </TouchableOpacity>
+          style={styles.buttonStyle}
+          onPress={() => setScanned(false)}
+        >
+          <Text style={styles.prayButton}>Tap to Scan Again</Text>
+        </TouchableOpacity>
       )}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-
   container: {
     flex: 1,
     flexDirection: "column",
@@ -86,7 +94,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#e8e7e4",
     marginBottom: height * 0.16,
     padding: width * 0.05,
-
   },
 
   prayButton: {
