@@ -7,6 +7,7 @@ import {
   FlatList,
   TextInput,
   Alert,
+  Keyboard,
 } from "react-native";
 import { StyleSheet, Button, Text, View } from "react-native";
 import { populateDB } from "../database/populate";
@@ -64,32 +65,42 @@ const AllReqs = ({ navigation }) => {
   let listItemView = (request) => {
     return (
       <View
-      style={[styles.requestContainer, {overflow: 'visible',  backgroundColor: "#E8E7E4",
-      margin: height * 0.01}]} >
-      <TouchableOpacity
-      key={request.id}
-      style={[{flexDirection: "row"}]}
-        onPress={() => {
-          navigation.navigate("IndividualRequest", {
-            cat_name: allReqs[request.requestID].name,
-            req_id: request.requestID,
-            isNewReq: false,
-          });
-        }}
-        onLongPress={() => {
-          setRequestID(request.requestID);
-          toggleDeletePopupVisibility(!deletePopupVisible);
-        }}
+        style={[
+          styles.requestContainer,
+          {
+            overflow: "visible",
+            backgroundColor: "#E8E7E4",
+            margin: height * 0.01,
+          },
+        ]}
       >
-        <View style={styles.circle} />
-        <View style={{ flexDirection: "column" }}>
-          <Text style={styles.requestTitles}>{request.subject}</Text>
-          <Text numberOfLines={1} style={[styles.requestSubTitles, {maxWidth: width * 0.6}]}>
-            {request.description}
-          </Text>
-        </View>
-        <View style={{ flex: 1 }}></View>
-      </TouchableOpacity>
+        <TouchableOpacity
+          key={request.id}
+          style={[{ flexDirection: "row" }]}
+          onPress={() => {
+            navigation.navigate("IndividualRequest", {
+              cat_name: allReqs[request.requestID].name,
+              req_id: request.requestID,
+              isNewReq: false,
+            });
+          }}
+          onLongPress={() => {
+            setRequestID(request.requestID);
+            toggleDeletePopupVisibility(!deletePopupVisible);
+          }}
+        >
+          <View style={styles.circle} />
+          <View style={{ flexDirection: "column" }}>
+            <Text style={styles.requestTitles}>{request.subject}</Text>
+            <Text
+              numberOfLines={1}
+              style={[styles.requestSubTitles, { maxWidth: width * 0.6 }]}
+            >
+              {request.description}
+            </Text>
+          </View>
+          <View style={{ flex: 1 }}></View>
+        </TouchableOpacity>
       </View>
     );
   };
@@ -203,7 +214,9 @@ const AllReqs = ({ navigation }) => {
           onResponderRelease={onRelease}
           onStartShouldSetResponder={shouldSetResponse}
         >
-          <Text style={[styles.popUpHeader, { marginBottom: height * 0.04 }]}>Delete Request?</Text>
+          <Text style={[styles.popUpHeader, { marginBottom: height * 0.04 }]}>
+            Delete Request?
+          </Text>
 
           <View
             style={{
