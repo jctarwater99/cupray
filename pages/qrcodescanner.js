@@ -3,12 +3,10 @@ import {
   Text,
   View,
   StyleSheet,
-  Button,
   Dimensions,
   TouchableOpacity,
 } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
-import * as updates from "../database/update";
 
 var { height, width } = Dimensions.get("window");
 

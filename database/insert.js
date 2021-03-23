@@ -1,17 +1,4 @@
 import * as SQLite from "expo-sqlite";
-// Do I need this import?
-import {
-  Request,
-  Request_Tag,
-  Tag,
-  Reminder,
-  Category,
-  Frequency,
-} from "./objects";
-
-// These functions are starting to feel repetitive.
-// We could probably create a "do sql" function that takes an sql string, [] of args, and an error/success message
-// This file would look nicer. Other files would not. Probably better to do this huh.
 
 const db = SQLite.openDatabase("db.cupray");
 

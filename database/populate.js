@@ -1,14 +1,5 @@
-import * as SQLite from "expo-sqlite";
 import * as db_insert from "./insert";
-import {
-  Request,
-  RequestTag,
-  Tag,
-  Reminder,
-  Frequency,
-  Category,
-  DailyRequest,
-} from "./objects";
+import { Request, RequestTag, Tag, Category, DailyRequest } from "./objects";
 
 export function populateDB() {
   populateDBwithFlags();

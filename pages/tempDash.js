@@ -1,13 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { Image, TouchableOpacity, Dimensions, FlatList } from "react-native";
-import { StyleSheet, Button, Text, View } from "react-native";
+import React from "react";
+import { TouchableOpacity, Dimensions } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import * as Notifications from "expo-notifications";
 import * as queries from "../database/query";
-import * as updates from "../database/update";
 import { populateDB, populateMinimum } from "../database/populate";
 import { createDatabase, dropForTesting } from "../database/create";
-
-var { height, width } = Dimensions.get("window");
 
 const TempDash = ({ navigation }) => {
   return (
@@ -83,8 +80,8 @@ const TempDash = ({ navigation }) => {
           backgroundColor: "#0F0F0F",
           padding: 5,
         }}
-        onPress={() => { 
-            queries.getAllRequests((results)=>console.log(results));
+        onPress={() => {
+          queries.getAllRequests((results) => console.log(results));
         }}
       >
         <Text style={{ color: "#FFFFFF" }}>Get Categories</Text>

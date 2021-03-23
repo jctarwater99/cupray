@@ -1,16 +1,6 @@
-import React, { useState } from "react";
-import { StatusBar } from "expo-status-bar";
-import {
-  Image,
-  TouchableOpacity,
-  Dimensions,
-  FlatList,
-  Linking,
-} from "react-native";
-import { StyleSheet, Button, Text, View } from "react-native";
-import { populateDB } from "../database/populate";
-import { createDatabase, dropForTesting } from "../database/create";
-import * as queries from "../database/query";
+import React from "react";
+import { Image, TouchableOpacity, Dimensions, Linking } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
 var { height, width } = Dimensions.get("window");
 

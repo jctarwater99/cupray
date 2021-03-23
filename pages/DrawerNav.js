@@ -1,4 +1,3 @@
-import { createStackNavigator } from "@react-navigation/stack";
 import {
   createDrawerNavigator,
   DrawerContentScrollView,
@@ -13,10 +12,7 @@ import {
   Text,
 } from "react-native";
 import * as React from "react";
-import Dashboard from "./dashboard";
 import StackNavigator from "./StackNav";
-import CategoriesScreen from "./categories";
-import ScheduledPrayers from "./prayerTime";
 import AllReqs from "./allrequests";
 import AllTags from "./alltags";
 import About from "./about";
@@ -27,13 +23,15 @@ var { height, width } = Dimensions.get("window");
 function CustomDrawerContent(props) {
   return (
     <DrawerContentScrollView {...props}>
-      <SafeAreaView style={{ flex:1, marginTop: height * 0.05 }}>
-        <View style={{ flex: .8 }}>
+      <SafeAreaView style={{ flex: 1, marginTop: height * 0.05 }}>
+        <View style={{ flex: 0.8 }}>
           <DrawerItemList {...props} />
         </View>
-        <View style={{ height: height * 0.05}}></View>
+        <View style={{ height: height * 0.05 }}></View>
       </SafeAreaView>
-      <View style={{ flex: .2, alignItems: 'center', justifyContent: 'flex-end', }}>
+      <View
+        style={{ flex: 0.2, alignItems: "center", justifyContent: "flex-end" }}
+      >
         <Image
           source={require("../assets/logo_menu.png")}
           style={{
@@ -67,8 +65,6 @@ export default function DrawerNavigator() {
       }}
     >
       <Drawer.Screen name="Dashboard" component={StackNavigator} />
-      {/*      <Drawer.Screen name="Prayer Time" component={ScheduledPrayers} />
-      <Drawer.Screen name="Prayer Journal" component={CategoriesScreen} />    */}
       <Drawer.Screen name="All Requests" component={AllReqs} />
       <Drawer.Screen name="All Tags" component={AllTags} />
       <Drawer.Screen name="Scan QR Code" component={Scanner} />

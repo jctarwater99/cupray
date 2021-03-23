@@ -4,15 +4,11 @@ import {
   TouchableOpacity,
   Dimensions,
   FlatList,
-  Alert,
   SafeAreaView,
 } from "react-native";
-import { StyleSheet, Button, Text, View } from "react-native";
-import { populateDB } from "../database/populate";
-import { createDatabase } from "../database/create";
+import { StyleSheet, Text, View } from "react-native";
 import * as queries from "../database/query";
 import * as updates from "../database/update";
-import { Category } from "../database/objects";
 import { CheckBox } from "react-native-elements";
 import { checkBooks } from "../database/bookKeeping";
 
@@ -145,51 +141,54 @@ const ScheduledPrayers = ({ route, navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-    
-        <FlatList
+      <FlatList
         ListHeaderComponent={
           <View>
-           <View
-        style={{ flex: 0.85, flexDirection: "row", marginLeft: width * 0.05 }}
+            <View
+              style={{
+                flex: 0.85,
+                flexDirection: "row",
+                marginLeft: width * 0.05,
+              }}
             >
-        <TouchableOpacity onPress={() => navigation.navigate("Dash")}>
-          <Image
-            style={{
-              marginRight: width * 0.03,
-              marginTop: height * 0.015,
-              width: 30,
-              height: 30,
-              resizeMode: "contain",
-            }}
-            source={require("../assets/Home_blue.png")}
-          ></Image>
-        </TouchableOpacity>
-        <Text style={styles.title}>
-          Pray<Text style={styles.titleAccent}>.</Text>
-        </Text>
-      </View>
-      <Text style={styles.header1}> Today's Schedule </Text>
+              <TouchableOpacity onPress={() => navigation.navigate("Dash")}>
+                <Image
+                  style={{
+                    marginRight: width * 0.03,
+                    marginTop: height * 0.015,
+                    width: 30,
+                    height: 30,
+                    resizeMode: "contain",
+                  }}
+                  source={require("../assets/Home_blue.png")}
+                ></Image>
+              </TouchableOpacity>
+              <Text style={styles.title}>
+                Pray<Text style={styles.titleAccent}>.</Text>
+              </Text>
+            </View>
+            <Text style={styles.header1}> Today's Schedule </Text>
 
-      <View style={styles.dateContainer}>
-        <View style={styles.weekContainer}>
-          {dayOfTheWeek("S", 0)}
-          {dayOfTheWeek("M", 1)}
-          {dayOfTheWeek("T", 2)}
-          {dayOfTheWeek("W", 3)}
-          {dayOfTheWeek("R", 4)}
-          {dayOfTheWeek("F", 5)}
-          {dayOfTheWeek("S", 6)}
-        </View>
-      </View>
-      <View>
-        <Text style={styles.header2}> Daily: </Text>
-        </View>
-        </View>
+            <View style={styles.dateContainer}>
+              <View style={styles.weekContainer}>
+                {dayOfTheWeek("S", 0)}
+                {dayOfTheWeek("M", 1)}
+                {dayOfTheWeek("T", 2)}
+                {dayOfTheWeek("W", 3)}
+                {dayOfTheWeek("R", 4)}
+                {dayOfTheWeek("F", 5)}
+                {dayOfTheWeek("S", 6)}
+              </View>
+            </View>
+            <View>
+              <Text style={styles.header2}> Daily: </Text>
+            </View>
+          </View>
         }
-          data={requests}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={({ item, index }) => listItemView(item, index)}
-        />
+        data={requests}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({ item, index }) => listItemView(item, index)}
+      />
     </SafeAreaView>
   );
 };
@@ -233,7 +232,7 @@ const styles = StyleSheet.create({
   },
 
   dateContainer: {
-    width: width * .85,
+    width: width * 0.85,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -287,7 +286,7 @@ const styles = StyleSheet.create({
   },
 
   requestBar: {
-    width: width * .85,
+    width: width * 0.85,
     flexDirection: "row",
     shadowColor: "#000",
     shadowOffset: {

@@ -7,10 +7,9 @@ import {
   Alert,
   SafeAreaView,
 } from "react-native";
-import { StyleSheet, Button, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import * as queries from "../database/query";
 import * as updates from "../database/update";
-import { Category } from "../database/objects";
 import Modal from "react-native-modal";
 import { checkBooks } from "../database/bookKeeping";
 import * as scheduler from "../schedule/scheduler";
@@ -41,31 +40,41 @@ const RequestsScreen = ({ route, navigation }) => {
   let listItemView = (request) => {
     return (
       <View
-        style={[styles.requestContainer, {overflow: 'visible',  backgroundColor: "#E8E7E4",
-        margin: height * 0.01}]} >
+        style={[
+          styles.requestContainer,
+          {
+            overflow: "visible",
+            backgroundColor: "#E8E7E4",
+            margin: height * 0.01,
+          },
+        ]}
+      >
         <TouchableOpacity
-        key={request.id}
-        style={[{flexDirection: "row"}]}
-        onPress={() => {
-          navigation.navigate("IndividualRequest", {
-            cat_name: route.params.cat_name,
-            req_id: request.id,
-            isNewReq: false,
-          });
-        }}
-        onLongPress={() => {
-          setRequestID(request.id);
-          toggleArchivePopupVisibility(!archivePopupVisible);
-        }}
+          key={request.id}
+          style={[{ flexDirection: "row" }]}
+          onPress={() => {
+            navigation.navigate("IndividualRequest", {
+              cat_name: route.params.cat_name,
+              req_id: request.id,
+              isNewReq: false,
+            });
+          }}
+          onLongPress={() => {
+            setRequestID(request.id);
+            toggleArchivePopupVisibility(!archivePopupVisible);
+          }}
         >
-        <View style={styles.circle} />
-        <View style={{ flexDirection: "column" }}>
-          <Text style={styles.requestTitles}>{request.subject}</Text>
-          <Text numberOfLines={1} style={[styles.requestSubTitles, {maxWidth: width * 0.6}]}>
-            {request.description}
-          </Text>
-        </View>
-        <View style={{ flex: 1 }}></View>
+          <View style={styles.circle} />
+          <View style={{ flexDirection: "column" }}>
+            <Text style={styles.requestTitles}>{request.subject}</Text>
+            <Text
+              numberOfLines={1}
+              style={[styles.requestSubTitles, { maxWidth: width * 0.6 }]}
+            >
+              {request.description}
+            </Text>
+          </View>
+          <View style={{ flex: 1 }}></View>
         </TouchableOpacity>
       </View>
     );

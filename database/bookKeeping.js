@@ -1,5 +1,3 @@
-import * as SQLite from "expo-sqlite";
-import DateTimePicker from "@react-native-community/datetimepicker";
 import * as queries from "./query";
 import * as updates from "./update";
 import * as scheduler from "../schedule/scheduler";

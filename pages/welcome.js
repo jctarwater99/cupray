@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { StatusBar } from "expo-status-bar";
-import { Image, TouchableOpacity, Dimensions, FlatList } from "react-native";
-import { StyleSheet, Button, Text, View } from "react-native";
-import { populateDB, populateMinimum } from "../database/populate";
-import { createDatabase, dropForTesting } from "../database/create";
+import { Image, TouchableOpacity, Dimensions } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
+import { createDatabase } from "../database/create";
 import * as queries from "../database/query";
-import * as updates from "../database/update";
 import * as Notifications from "expo-notifications";
-import { updateRequest } from "../database/update";
 import * as bookKeeping from "../database/bookKeeping";
 
 // Ignoring potential problems

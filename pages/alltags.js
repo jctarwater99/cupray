@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { StatusBar } from "expo-status-bar";
 import {
   Image,
   TouchableOpacity,
@@ -7,15 +6,12 @@ import {
   TextInput,
   FlatList,
   Alert,
-  SafeAreaView,
-  ScrollView,
 } from "react-native";
-import { StyleSheet, Button, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import * as queries from "../database/query";
 import * as updates from "../database/update";
 import * as inserts from "../database/insert";
 import Modal from "react-native-modal";
-import { insertRequest } from "../database/insert";
 import { checkBooks } from "../database/bookKeeping";
 
 var { height, width } = Dimensions.get("window");

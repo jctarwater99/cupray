@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import { StatusBar } from "expo-status-bar";
+import React, { useState } from "react";
 import {
   Image,
   TouchableOpacity,
@@ -9,15 +8,12 @@ import {
   Alert,
   Keyboard,
 } from "react-native";
-import { StyleSheet, Button, Text, View } from "react-native";
-import { populateDB } from "../database/populate";
-import { createDatabase, dropForTesting } from "../database/create";
+import { StyleSheet, Text, View } from "react-native";
 import * as queries from "../database/query";
 import * as updates from "../database/update";
 import * as bookKeeping from "../database/bookKeeping";
 import { useFocusEffect } from "@react-navigation/native";
 import Modal from "react-native-modal";
-import { CheckBox } from "react-native";
 
 var { height, width } = Dimensions.get("window");
 

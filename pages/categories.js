@@ -2,12 +2,10 @@ import React, { useEffect, useState } from "react";
 import {
   Image,
   TouchableOpacity,
-  TouchableHighlight,
   Dimensions,
   StyleSheet,
   TextInput,
   FlatList,
-  Button,
   Platform,
   Alert,
   Text,

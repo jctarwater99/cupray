@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react";
 import {
-  Image,
   TouchableOpacity,
   Dimensions,
   SafeAreaView,
   ScrollView,
   TextInput,
   StyleSheet,
-  Button,
   Alert,
   Text,
   View,
@@ -16,13 +14,12 @@ import * as queries from "../database/query";
 import * as updates from "../database/update";
 import * as inserts from "../database/insert";
 import * as scheduler from "../schedule/scheduler";
-import { Category, Tag } from "../database/objects";
+import { Tag } from "../database/objects";
 import Modal from "react-native-modal";
 import { Dropdown } from "react-native-material-dropdown-v2";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import QRCode from "react-native-qrcode-svg";
 import { StackActions } from "@react-navigation/native";
-
 import { checkBooks } from "../database/bookKeeping";
 
 // Ignore log notification by message
@@ -148,6 +145,7 @@ const ThisRequestScreen = ({ route, navigation }) => {
       });
       setCategories(dropDownData);
     });
+    checkBooks();
   }, []);
 
   let refreshPage = () => {
