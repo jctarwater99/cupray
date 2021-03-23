@@ -6,7 +6,7 @@
     "orientation": "portrait",
     "icon": "./assets/app_logo(square).png",
     "splash": {
-      "image": "./assets/loadingScreen.png",
+      "image": "./assets/gopraylogo-01.png",
       "backgroundColor": "#003A63"
     },
     "updates": {

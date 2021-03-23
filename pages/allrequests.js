@@ -63,9 +63,12 @@ const AllReqs = ({ navigation }) => {
 
   let listItemView = (request) => {
     return (
+      <View
+      style={[styles.requestContainer, {overflow: 'visible',  backgroundColor: "#E8E7E4",
+      margin: height * 0.01}]} >
       <TouchableOpacity
-        key={request.id}
-        style={styles.requestContainer}
+      key={request.id}
+      style={[{flexDirection: "row"}]}
         onPress={() => {
           navigation.navigate("IndividualRequest", {
             cat_name: allReqs[request.requestID].name,
@@ -81,12 +84,13 @@ const AllReqs = ({ navigation }) => {
         <View style={styles.circle} />
         <View style={{ flexDirection: "column" }}>
           <Text style={styles.requestTitles}>{request.subject}</Text>
-          <Text numberOfLines={1} style={styles.requestSubTitles}>
+          <Text numberOfLines={1} style={[styles.requestSubTitles, {maxWidth: width * 0.6}]}>
             {request.description}
           </Text>
         </View>
         <View style={{ flex: 1 }}></View>
       </TouchableOpacity>
+      </View>
     );
   };
 
@@ -199,7 +203,7 @@ const AllReqs = ({ navigation }) => {
           onResponderRelease={onRelease}
           onStartShouldSetResponder={shouldSetResponse}
         >
-          <Text style={styles.popUpHeader}>Delete Request</Text>
+          <Text style={[styles.popUpHeader, { marginBottom: height * 0.04 }]}>Delete Request?</Text>
 
           <View
             style={{
@@ -292,12 +296,10 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.27,
     shadowRadius: 3.65,
 
-    elevation: 6,
     borderRadius: 10,
-    backgroundColor: "#E8E7E4",
-    margin: height * 0.01,
     overflow: "hidden",
   },
+
   modalContent: {
     justifyContent: "center",
     alignItems: "center",
@@ -333,7 +335,7 @@ const styles = StyleSheet.create({
     color: "#7E8C96",
     fontSize: 15,
     fontWeight: "700",
-    marginTop: height * 0.025,
+    marginTop: height * 0.015,
     marginLeft: width * 0.05,
   },
   requestSubTitles: {
