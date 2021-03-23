@@ -232,7 +232,6 @@ const AllReqs = ({ navigation }) => {
                     {
                       text: "Delete",
                       onPress: () => {
-                        console.log("Deleting", requestID);
                         updates.deleteRequestTagsOfReq(requestID, getRequests);
                         toggleDeletePopupVisibility(!deletePopupVisible);
                       },

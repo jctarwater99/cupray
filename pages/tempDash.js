@@ -80,9 +80,6 @@ const TempDash = ({ navigation }) => {
           backgroundColor: "#0F0F0F",
           padding: 5,
         }}
-        onPress={() => {
-          queries.getAllRequests((results) => console.log(results));
-        }}
       >
         <Text style={{ color: "#FFFFFF" }}>Get Categories</Text>
       </TouchableOpacity>

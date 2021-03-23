@@ -115,7 +115,6 @@ export function deleteRequest(reqID, callback) {
       "DELETE FROM requests WHERE requests.id = ?",
       [reqID],
       (tx, result) => {
-        console.log(result);
         if (callback != undefined) {
           callback();
         }
@@ -318,9 +317,7 @@ export function updateIsPrayedFor(isPrayedFor, id) {
     tx.executeSql(
       "UPDATE daily_requests SET isPrayedFor = ? WHERE requestID = ?",
       [isPrayedFor, id],
-      (tx, result) => {
-        console.log(isPrayedFor, " and ", result);
-      }, //() => void 0,
+      () => void 0,
       (tx, result) => {
         console.log("Updating flag failed", result);
       }

@@ -3,33 +3,6 @@ import * as populate from "../database/populate";
 
 const db = SQLite.openDatabase("db.cupray");
 
-export function testQuery() {
-  db.transaction((tx) => {
-    tx.executeSql(
-      "SELECT subject, weight, previous_weight FROM requests",
-      [],
-      (tx, result) => {
-        console.log(result);
-      }
-    );
-  });
-}
-
-export function getAllTables() {
-  db.transaction((tx) => {
-    tx.executeSql(
-      "SELECT name FROM sqlite_master " +
-        "WHERE type IN ('table','view') " +
-        "AND name NOT LIKE 'sqlite_%' " +
-        "ORDER BY 1;",
-      [],
-      (tx, result) => {
-        console.log(result);
-      }
-    );
-  });
-}
-
 export function getCategories(callback) {
   db.transaction((tx) => {
     tx.executeSql(
@@ -231,7 +204,6 @@ export function getCategoriesWithActiveCount(callback) {
         "GROUP BY name ",
       [],
       (tx, result) => {
-        //console.log(result.rows._array);
         callback(result.rows._array);
       },
       (tx, result) => {

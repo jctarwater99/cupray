@@ -28,7 +28,6 @@ const Scanner = ({ navigation }) => {
       data = data.substring(6);
 
       let request = JSON.parse(data);
-      console.log(request);
 
       navigation.navigate("IndividualRequest", {
         cat_name: "Select",
