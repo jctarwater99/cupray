@@ -4,7 +4,6 @@ export class Request {
     this.description = ""; // Max 300?
     this.create_time = "";
     this.expire_time = "";
-    this.remind_freq = 0;
     this.remind_days = "";
     this.remind_time = "";
     this.daily_weight = 0;
@@ -33,7 +32,6 @@ export class Reminder {
 export class Category {
   name = ""; // Max 10?
   tagID = 0;
-  remind_freq = 0;
   remind_days = "";
   remind_time = "";
 }

@@ -19,17 +19,15 @@ export function insertRequest(request) {
   db.transaction((tx) => {
     tx.executeSql(
       "INSERT INTO requests(subject, description, create_time," +
-        "expire_time, remind_freq, remind_days, remind_time, previous_weight, " +
-        "weight, priority) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);",
+        "expire_time, remind_days, remind_time, " +
+        "weight, priority) VALUES(?, ?, ?, ?, ?, ?, ?, ?);",
       [
         request.subject,
         request.description,
         request.create_time,
         request.expire_time,
-        request.remind_freq,
         request.remind_days,
         request.remind_time,
-        request.previous_weight,
         request.weight,
         request.priority,
       ],
@@ -96,17 +94,15 @@ export function insertNewRequest(request, callback) {
   db.transaction((tx) => {
     tx.executeSql(
       "INSERT INTO requests(subject, description, create_time," +
-        "expire_time, remind_freq, remind_days, remind_time, previous_weight, " +
-        "weight, priority) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);",
+        "expire_time, remind_days, remind_time, " +
+        "weight, priority) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?);",
       [
         request.subject,
         request.description,
         request.create_time,
         request.expire_time,
-        request.remind_freq,
         request.remind_days,
         request.remind_time,
-        request.previous_weight,
         request.weight,
         request.priority,
       ],

@@ -30,10 +30,8 @@ export function populateDBwithRequests() {
     request.description = desc;
     request.create_time = baseC + offset;
     request.expire_time = baseE + offset;
-    request.remind_freq = 1;
     request.remind_days = "";
     request.remind_time = "15:15";
-    request.previous_weight = 1;
     request.weight = priority;
     request.priority = priority;
     requests.push(request);
@@ -49,10 +47,8 @@ export function populateDBwithRequests() {
     "be able to finish this semester strongly";
   request.create_time = "";
   request.expire_time = baseE + offset;
-  request.remind_freq = 0;
   request.remind_days = "";
   request.remind_time = "";
-  request.previous_weight = 5;
   request.weight = 3;
   request.priority = 1;
   requests.push(request);

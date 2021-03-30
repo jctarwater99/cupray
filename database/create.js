@@ -39,10 +39,8 @@ export function createDatabase() {
         "description	TEXT," +
         "create_time	INT," +
         "expire_time	INT," +
-        "remind_freq	INT," +
         "remind_days  TEXT," +
         "remind_time	TEXT," +
-        "previous_weight INT," +
         "weight       INT," +
         "priority     INT);",
       null,

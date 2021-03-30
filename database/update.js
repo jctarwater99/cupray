@@ -6,13 +6,12 @@ export function updateRequest(reqID, request) {
   db.transaction((tx) => {
     tx.executeSql(
       "UPDATE requests SET subject = ?, description = ?, " +
-        "expire_time = ?, remind_freq = ?, remind_days = ?, " +
-        "remind_time = ?, priority = ? WHERE requests.id = ?;",
+        "expire_time = ?, remind_days = ?, remind_time = ?, " +
+        "priority = ? WHERE requests.id = ?;",
       [
         request.subject,
         request.description,
         request.expire_time,
-        request.remind_freq,
         request.remind_days,
         request.remind_time,
         request.priority,
@@ -121,19 +120,6 @@ export function deleteRequest(reqID, callback) {
       },
       (tx, result) => {
         console.log("Deleting request failed", result);
-      }
-    );
-  });
-}
-
-export function rollbackNotificationWeight() {
-  db.transaction((tx) => {
-    tx.executeSql(
-      "UPDATE requests SET weight = previous_weight ",
-      [],
-      () => void 0,
-      (tx, result) => {
-        console.log("Failed ", result);
       }
     );
   });
