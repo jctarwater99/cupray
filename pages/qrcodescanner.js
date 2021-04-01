@@ -26,18 +26,22 @@ const Scanner = ({ navigation }) => {
 
     if (data.substring(0, 6) == "cupray") {
       data = data.substring(6);
-
       let request = JSON.parse(data);
-
-      navigation.navigate("IndividualRequest", {
-        cat_name: "Select",
-        req_id: -1,
-        isNewReq: true,
-        subject: request.subject,
-        description: request.description,
-      });
+      if (request.multi != undefined) {
+        navigation.navigate("MultiScanner", {
+          reqs: data,
+        });
+      } else {
+        navigation.navigate("IndividualRequest", {
+          cat_name: "Select",
+          req_id: -1,
+          isNewReq: true,
+          subject: request.subject,
+          description: request.description,
+        });
+      }
     } else {
-      alert(`This barcode does not represent a valid GOPray request`);
+      alert(`This qr code does not represent a valid GOPray request`);
     }
   };
 
