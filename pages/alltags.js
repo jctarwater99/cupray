@@ -125,6 +125,7 @@ const AllTags = ({ navigation }) => {
                     backgroundColor: "white",
                     color: "#7E8C96",
                     padding: 5,
+                    borderRadius: 5,
                     textAlignVertical: "top",
                     fontWeight: "600",
                     alignSelf: "stretch",

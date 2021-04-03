@@ -416,7 +416,7 @@ const ThisRequestScreen = ({ route, navigation }) => {
             }}
             value={subject}
             onChange={(text) => setSubject(text.nativeEvent.text)}
-            style={[styles.title, { backgroundColor: "white", padding: 5 }]}
+            style={[styles.title, { backgroundColor: "white", padding: 8,  borderRadius: 5,}]}
           />
 
           <View
@@ -501,6 +501,7 @@ const ThisRequestScreen = ({ route, navigation }) => {
                       backgroundColor: "white",
                       color: "#7E8C96",
                       padding: 5,
+                      borderRadius: 5,
                       marginBottom: 20,
                       textAlignVertical: "top",
                       fontWeight: "600",
@@ -558,6 +559,7 @@ const ThisRequestScreen = ({ route, navigation }) => {
                         backgroundColor: "white",
                         color: "#7E8C96",
                         padding: 8,
+                        borderRadius: 5,
                         textAlignVertical: "top",
                         fontWeight: "600",
                         alignSelf: "stretch",

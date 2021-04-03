@@ -7,7 +7,7 @@ import {
   Alert,
   SafeAreaView,
 } from "react-native";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, TextInput } from "react-native";
 import * as queries from "../database/query";
 import * as updates from "../database/update";
 import Modal from "react-native-modal";
@@ -35,6 +35,8 @@ const RequestsScreen = ({ route, navigation }) => {
 
   let listItemView = (request) => {
     return (
+      <SafeAreaView style={styles.container}>
+        <View style={{ alignItems: "center" }}>
       <View
         style={[
           styles.requestContainer,
@@ -43,36 +45,46 @@ const RequestsScreen = ({ route, navigation }) => {
             backgroundColor: "#E8E7E4",
             margin: height * 0.01,
             padding: 3,
+            
           },
         ]}
       >
         <TouchableOpacity
           key={request.id}
           style={[{ flexDirection: "row" }]}
-          onPress={() => {
-            navigation.navigate("IndividualRequest", {
-              cat_name: route.params.cat_name,
-              req_id: request.id,
-              isNewReq: false,
-            });
-          }}
-          onLongPress={() => {
-            setRequestID(request.id);
-            toggleArchivePopupVisibility(!archivePopupVisible);
-          }}
+         
         >
           <View style={{ flexDirection: "column" }}>
-            <Text style={styles.requestTitles}>{request.subject}</Text>
-            <Text
-              numberOfLines={1}
-              style={[styles.requestSubTitles, { maxWidth: width * 0.6 }]}
+            <TextInput style={[styles.requestTitles, 
+              { backgroundColor: "white", 
+                maxWidth: width * 0.4,
+                padding: 3,
+                paddingLeft: 7,
+                borderRadius: 5,
+                width: '50%',
+              }]}>
+                {request.subject}</TextInput>
+            <TextInput
+              numberOfLines={4}
+              multiline ={true}
+              style={[styles.requestSubTitles, { 
+                marginTop: height * 0.01,
+                maxWidth: width * 0.7,
+                minWidth: width * 0.7,
+                maxHeight: height * 0.1,
+                minHeight: height * 0.1,
+                backgroundColor: "white", 
+                padding: 9,
+                borderRadius: 5, }]}
             >
               {request.description}
-            </Text>
+            </TextInput>
           </View>
           <View style={{ flex: 1 }}></View>
         </TouchableOpacity>
       </View>
+      </View>
+      </SafeAreaView>
     );
   };
 
@@ -97,7 +109,7 @@ const RequestsScreen = ({ route, navigation }) => {
                     ></Image>
                   </TouchableOpacity>
                   <Text style={styles.title}>
-                    Requests
+                    Requests Found
                     <Text style={styles.titleAccent}>.</Text>
                   </Text>
                 </View>
@@ -106,12 +118,13 @@ const RequestsScreen = ({ route, navigation }) => {
                     flexDirection: "row",
                     alignSelf: "stretch",
                     justifyContent: "center",
+                    marginBottom: height * 0.01,
                   }}
                 >
                   <Dropdown
                     defaultValue={category}
                     style={{
-                      width: 120,
+                      width: 100,
                       height: 40,
                       fontWeight: "600",
                     }}
@@ -127,6 +140,12 @@ const RequestsScreen = ({ route, navigation }) => {
                       route.params.cat_name = text;
                     }}
                   />
+                  <TouchableOpacity
+              onPress={() => setMode(true)}
+              style={styles.editButton}
+            >
+              <Text style={styles.editButtonText}>SAVE</Text>
+            </TouchableOpacity>
                 </View>
               </View>
             }
@@ -148,12 +167,11 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#EFEFEF",
     alignItems: "center",
-    marginTop: height * 0.06,
   },
 
   requestContainer: {
     width: width * 0.85,
-    height: width * 0.17,
+    height: width * 0.4,
     flexDirection: "row",
     shadowColor: "#000",
     shadowOffset: {
@@ -165,11 +183,12 @@ const styles = StyleSheet.create({
 
     borderRadius: 10,
     overflow: "hidden",
+    
   },
 
   requestTitles: {
     color: "#7E8C96",
-    fontSize: 15,
+    fontSize: 20,
     fontWeight: "700",
     marginTop: height * 0.015,
     marginLeft: width * 0.05,
@@ -192,80 +211,46 @@ const styles = StyleSheet.create({
     marginRight: width * 0.04,
   },
 
-  circle: {
-    width: width * 0.08,
-    height: width * 0.08,
-    borderRadius: 100 / 2,
-    borderWidth: 2,
-    borderColor: "#D6C396",
-    marginTop: height * 0.02,
-    marginLeft: width * 0.05,
-  },
-
   title: {
     color: "#003A63",
-    fontSize: width * 0.12,
+    fontSize: width * 0.1,
     fontWeight: "700",
-    marginRight: width * 0.15,
+    marginBottom: height * 0.01,
+    marginTop: height * 0.005,
+    
   },
 
   titleAccent: {
     color: "#D6C396",
-    fontSize: width * 0.12,
+    fontSize: width * 0.1,
     fontWeight: "700",
   },
 
-  addReq: {
-    alignItems: "center",
-    margin: 20,
-    flex: 12,
-  },
-
-  createReqButton: {
-    width: 37,
-    height: 36,
-    borderRadius: 6,
-    backgroundColor: "#D3D3D3",
-    padding: 6,
-  },
-
-  plusSign: {
-    color: "#7E8C96",
-    fontSize: 15,
-    fontWeight: "700",
-    textAlign: "center",
-  },
-
-  modalContent: {
-    justifyContent: "center",
-    alignItems: "center",
-    margin: 0,
-  },
-
-  popUpContainer: {
-    width: width * 0.85,
+  editButton: {
+    width: 100,
+    height: 35,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 1,
+      height: 2,
     },
-    padding: height * 0.02,
     shadowOpacity: 0.27,
-    shadowRadius: 4.65,
+    shadowRadius: 2.65,
 
-    elevation: 6,
-    borderRadius: 20,
+    borderRadius: 10,
     backgroundColor: "#D6C396",
-    alignItems: "center",
+    marginLeft: width * 0.3,
   },
 
-  popUpHeader: {
-    flex: 0,
-    fontSize: 16,
-    color: "#fff",
+  editButtonText: {
+    color: "#ffffff",
+    fontSize: 18,
     fontWeight: "700",
-    padding: height * 0.01,
+    textAlign: "center",
+    marginTop: height * 0.009,
   },
+
+
 });
 
 export default RequestsScreen;
