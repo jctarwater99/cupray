@@ -11,6 +11,8 @@ import {
   StyleSheet,
   Text,
 } from "react-native";
+import { NavigationContainer } from '@react-navigation/native';
+
 import * as React from "react";
 import StackNavigator from "./StackNav";
 import AllReqs from "./allrequests";
@@ -19,6 +21,14 @@ import About from "./about";
 import Scanner from "./qrcodescanner";
 
 var { height, width } = Dimensions.get("window");
+
+export default function Navigation() {
+  return (
+    <NavigationContainer>
+      <DrawerNav />
+    </NavigationContainer>
+  );
+}
 
 function CustomDrawerContent(props) {
   return (
@@ -49,7 +59,7 @@ function CustomDrawerContent(props) {
 }
 
 const Drawer = createDrawerNavigator();
-export default function DrawerNavigator() {
+function DrawerNav() {
   return (
     <Drawer.Navigator
       initialRouteName="Dashboard"
@@ -79,7 +89,6 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     textAlign: "center",
     marginRight: width * 0.02,
-    resizeMode: "contain",
   },
 
   cupray: {
@@ -87,6 +96,5 @@ const styles = StyleSheet.create({
     fontSize: width * 0.15,
     fontWeight: "700",
     textAlign: "center",
-    resizeMode: "contain",
   },
 });

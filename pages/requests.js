@@ -69,12 +69,23 @@ const RequestsScreen = ({ route, navigation }) => {
             <Text style={styles.requestTitles}>{request.subject}</Text>
             <Text
               numberOfLines={1}
-              style={[styles.requestSubTitles, { maxWidth: width * 0.6 }]}
+              style={[styles.requestSubTitles, { maxWidth: width * 0.55 }]}
             >
               {request.description}
             </Text>
           </View>
           <View style={{ flex: 1 }}></View>
+        <TouchableOpacity style={{ marginLeft: width * 0.03 }}>
+          <Text
+            style={styles.catMenu}
+            onPress={() => {
+              setRequestID(request.id);
+            toggleArchivePopupVisibility(!archivePopupVisible);
+            }}
+          >
+            {" ⋮ "}
+          </Text>
+        </TouchableOpacity>
         </TouchableOpacity>
       </View>
     );
@@ -149,7 +160,7 @@ const RequestsScreen = ({ route, navigation }) => {
         <View style={styles.popUpContainer}>
           <View>
             <Text style={[styles.popUpHeader, { marginBottom: height * 0.04 }]}>
-              Archive Request?
+              Remove Request?
             </Text>
           </View>
           <View
@@ -160,7 +171,7 @@ const RequestsScreen = ({ route, navigation }) => {
             }}
           >
             <TouchableOpacity
-              style={{ width: width * 0.6 }}
+              style={{ width: width * 0.48 }}
               onPress={() => {
                 // Provide warning
                 Alert.alert(
@@ -189,10 +200,37 @@ const RequestsScreen = ({ route, navigation }) => {
             >
               <Text style={styles.plusSign}>Archive</Text>
             </TouchableOpacity>
-
             <TouchableOpacity
               // Cancel button before the warning alert pops up
-              style={{ width: width * 0.58 }}
+              onPress= {() => {
+                // Provide warning
+                Alert.alert(
+                  "Warning",
+                  "Deleting this Request is permanent. Are you sure?",
+                  [
+                    {
+                      text: "Delete",
+                      onPress: () => {
+                        updates.deleteRequestTagsOfReq(requestID, getRequests);
+                        toggleArchivePopupVisibility(!archivePopupVisible);
+                      },
+                    },
+                    {
+                      text: "Cancel",
+                      style: "cancel",
+                      onPress: () => {
+                        toggleArchivePopupVisibility(!archivePopupVisible);
+                      },
+                    },
+                  ]
+                );
+              }}
+            >
+              <Text style={styles.plusSign}>Delete</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              // Cancel button before the warning alert pops up
+              style={{ width: width * 0.48 }}
               onPress={() => {
                 toggleArchivePopupVisibility(!archivePopupVisible);
                 refreshPage();
@@ -249,14 +287,6 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
 
-  requestArrow: {
-    color: "#D6C396",
-    fontSize: 20,
-    fontWeight: "700",
-    marginTop: height * 0.02,
-    marginRight: width * 0.04,
-  },
-
   circle: {
     width: width * 0.08,
     height: width * 0.08,
@@ -273,7 +303,12 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     marginRight: width * 0.15,
   },
-
+  catMenu: {
+    color: "#D6C396",
+    fontSize: 30,
+    fontWeight: "700",
+    marginTop: height * 0.015,
+  },
   titleAccent: {
     color: "#D6C396",
     fontSize: width * 0.12,

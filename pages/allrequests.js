@@ -90,12 +90,23 @@ const AllReqs = ({ navigation }) => {
             <Text style={styles.requestTitles}>{request.subject}</Text>
             <Text
               numberOfLines={1}
-              style={[styles.requestSubTitles, { maxWidth: width * 0.6 }]}
+              style={[styles.requestSubTitles, { maxWidth: width * 0.55 }]}
             >
               {request.description}
             </Text>
           </View>
           <View style={{ flex: 1 }}></View>
+        <TouchableOpacity style={{ marginLeft: width * 0.03 }}>
+          <Text
+            style={styles.catMenu}
+            onPress={() => {
+              setRequestID(request.requestID);
+              toggleDeletePopupVisibility(!deletePopupVisible);
+            }}
+          >
+            {" ⋮ "}
+          </Text>
+        </TouchableOpacity>
         </TouchableOpacity>
       </View>
     );
@@ -221,8 +232,38 @@ const AllReqs = ({ navigation }) => {
               bottom: height * 0.03,
             }}
           >
+             <TouchableOpacity
+              style={{ width: width * 0.48 }}
+              onPress={() => {
+                // Provide warning
+                Alert.alert(
+                  "Warning",
+                  "Are you sure you want to prematurely archive this prayer request? It will auto archive when it expires. ",
+                  [
+                    {
+                      text: "Archive",
+                      onPress: () => {
+                        updates.archiveRequest(requestID);
+
+                        toggleDeletePopupVisibility(!deletePopupVisible);
+                        refreshPage();
+                      },
+                    },
+                    {
+                      text: "Cancel",
+                      style: "cancel",
+                      onPress: () => {
+                        toggleDeletePopupVisibility(!deletePopupVisible);
+                      },
+                    },
+                  ]
+                );
+              }}
+            >
+              <Text style={styles.plusSign}>Archive</Text>
+            </TouchableOpacity>
             <TouchableOpacity
-              style={{ width: width * 0.6 }}
+              
               onPress={() => {
                 // Provide warning
                 Alert.alert(
@@ -251,7 +292,7 @@ const AllReqs = ({ navigation }) => {
             </TouchableOpacity>
 
             <TouchableOpacity
-              style={{ width: width * 0.58 }}
+              style={{ width: width * 0.48 }}
               onPress={() => {
                 toggleDeletePopupVisibility(!deletePopupVisible);
               }}
@@ -368,7 +409,12 @@ const styles = StyleSheet.create({
     marginTop: height * 0.02,
     marginRight: width * 0.04,
   },
-
+  catMenu: {
+    color: "#D6C396",
+    fontSize: 30,
+    fontWeight: "700",
+    marginTop: height * 0.015,
+  },
   circle: {
     width: width * 0.08,
     height: width * 0.08,
