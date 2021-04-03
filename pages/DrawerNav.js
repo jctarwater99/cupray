@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     textAlign: "center",
     marginRight: width * 0.02,
-    resizeMode: "contain",
+    //resizeMode: "contain",
   },
 
   cupray: {
@@ -87,6 +87,6 @@ const styles = StyleSheet.create({
     fontSize: width * 0.15,
     fontWeight: "700",
     textAlign: "center",
-    resizeMode: "contain",
+    //resizeMode: "contain",
   },
 });

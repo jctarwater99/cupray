@@ -9,11 +9,9 @@ import {
 } from "react-native";
 import { StyleSheet, Text, View, TextInput } from "react-native";
 import * as queries from "../database/query";
-import * as updates from "../database/update";
+import * as inserts from "../database/insert";
 import { Request } from "../database/objects";
-import Modal from "react-native-modal";
 import { checkBooks } from "../database/bookKeeping";
-import * as scheduler from "../schedule/scheduler";
 import { Dropdown } from "react-native-material-dropdown-v2";
 
 var { height, width } = Dimensions.get("window");
@@ -22,19 +20,9 @@ const RequestsScreen = ({ route, navigation }) => {
   let [requests, setRequests] = useState([]);
   let [categories, setCategories] = useState([]);
   let [category, setCategory] = useState("Select");
-  let [subjects, setSubjects] = useState([]);
-  let [descriptions, setDescriptions] = useState([]);
 
   useEffect(() => {
     setRequests(JSON.parse(route.params.reqs).multi);
-    let subs = [];
-    let descs = [];
-    requests.forEach((request) => {
-      subs.add(request.subject);
-      descs.add(request.description);
-    });
-    setSubjects(subs);
-    setDescriptions(descs);
 
     queries.getCategories((results) => {
       let dropDownData = [];
@@ -57,21 +45,23 @@ const RequestsScreen = ({ route, navigation }) => {
       return;
     }
 
-    function createRequestTag(reqId) {
-      let catId = 0;
-      for (var i = 0; i < categories.length; i++) {
-        if (category == categories[i].value) {
-          catId = categories[i].id;
-          break;
-        }
+    let catId = 0;
+    for (var i = 0; i < categories.length; i++) {
+      if (category == categories[i].value) {
+        catId = categories[i].id;
+        break;
       }
+    }
+
+    function createRequestTag(reqId) {
       inserts.insertRequestTag({
         requestID: reqId,
         tagID: catId,
       });
+      console.log("Reached at least once");
     }
 
-    requests.array.forEach((request) => {
+    requests.forEach((request) => {
       let req = new Request();
       req.description = request.description;
       req.subject = request.subject;
@@ -207,7 +197,10 @@ const RequestsScreen = ({ route, navigation }) => {
                     }}
                   />
                   <TouchableOpacity
-                    onPress={() => saveReqs()}
+                    onPress={() => {
+                      saveReqs();
+                      navigation.navigate("Dash");
+                    }}
                     style={styles.editButton}
                   >
                     <Text style={styles.editButtonText}>SAVE</Text>
