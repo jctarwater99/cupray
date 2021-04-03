@@ -107,6 +107,8 @@ export function insertNewRequest(request, callback) {
         request.priority,
       ],
       (tx, result) => {
+        console.log("reached here too");
+
         callback(result.insertId);
       },
       (tx, result) => {
