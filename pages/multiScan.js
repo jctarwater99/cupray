@@ -10,6 +10,7 @@ import {
 import { StyleSheet, Text, View, TextInput } from "react-native";
 import * as queries from "../database/query";
 import * as updates from "../database/update";
+import { Request } from "../database/objects";
 import Modal from "react-native-modal";
 import { checkBooks } from "../database/bookKeeping";
 import * as scheduler from "../schedule/scheduler";
@@ -21,8 +22,20 @@ const RequestsScreen = ({ route, navigation }) => {
   let [requests, setRequests] = useState([]);
   let [categories, setCategories] = useState([]);
   let [category, setCategory] = useState("Select");
+  let [subjects, setSubjects] = useState([]);
+  let [descriptions, setDescriptions] = useState([]);
+
   useEffect(() => {
     setRequests(JSON.parse(route.params.reqs).multi);
+    let subs = [];
+    let descs = [];
+    requests.forEach((request) => {
+      subs.add(request.subject);
+      descs.add(request.description);
+    });
+    setSubjects(subs);
+    setDescriptions(descs);
+
     queries.getCategories((results) => {
       let dropDownData = [];
       results.forEach((element) => {
@@ -33,57 +46,110 @@ const RequestsScreen = ({ route, navigation }) => {
     checkBooks();
   }, []);
 
-  let listItemView = (request) => {
+  let saveReqs = () => {
+    // Do stuff
+    if (category == "Select") {
+      Alert.alert("Notification", "Please select a category", [
+        {
+          text: "Ok",
+        },
+      ]);
+      return;
+    }
+
+    function createRequestTag(reqId) {
+      let catId = 0;
+      for (var i = 0; i < categories.length; i++) {
+        if (category == categories[i].value) {
+          catId = categories[i].id;
+          break;
+        }
+      }
+      inserts.insertRequestTag({
+        requestID: reqId,
+        tagID: catId,
+      });
+    }
+
+    requests.array.forEach((request) => {
+      let req = new Request();
+      req.description = request.description;
+      req.subject = request.subject;
+      req.expire_time = new Date(new Date().getTime() + 2592000000);
+      req.priority = 2;
+      inserts.insertNewRequest(req, createRequestTag);
+    });
+  };
+
+  let listItemView = (request, index) => {
     return (
       <SafeAreaView style={styles.container}>
         <View style={{ alignItems: "center" }}>
-      <View
-        style={[
-          styles.requestContainer,
-          {
-            overflow: "visible",
-            backgroundColor: "#E8E7E4",
-            margin: height * 0.01,
-            padding: 3,
-            
-          },
-        ]}
-      >
-        <TouchableOpacity
-          key={request.id}
-          style={[{ flexDirection: "row" }]}
-         
-        >
-          <View style={{ flexDirection: "column" }}>
-            <TextInput style={[styles.requestTitles, 
-              { backgroundColor: "white", 
-                maxWidth: width * 0.4,
+          <View
+            style={[
+              styles.requestContainer,
+              {
+                overflow: "visible",
+                backgroundColor: "#E8E7E4",
+                margin: height * 0.01,
                 padding: 3,
-                paddingLeft: 7,
-                borderRadius: 5,
-                width: '50%',
-              }]}>
-                {request.subject}</TextInput>
-            <TextInput
-              numberOfLines={4}
-              multiline ={true}
-              style={[styles.requestSubTitles, { 
-                marginTop: height * 0.01,
-                maxWidth: width * 0.7,
-                minWidth: width * 0.7,
-                maxHeight: height * 0.1,
-                minHeight: height * 0.1,
-                backgroundColor: "white", 
-                padding: 9,
-                borderRadius: 5, }]}
+              },
+            ]}
+          >
+            <TouchableOpacity
+              key={request.id}
+              style={[{ flexDirection: "row" }]}
             >
-              {request.description}
-            </TextInput>
+              <View style={{ flexDirection: "column" }}>
+                <TextInput
+                  style={[
+                    styles.requestTitles,
+                    {
+                      backgroundColor: "white",
+                      maxWidth: width * 0.4,
+                      padding: 3,
+                      paddingLeft: 7,
+                      borderRadius: 5,
+                      width: "50%",
+                    },
+                  ]}
+                  onChangeText={(text) => {
+                    let temp = requests;
+                    temp[index].subject = text;
+                    setRequests(temp);
+                  }}
+                >
+                  {request.subject}
+                </TextInput>
+                <TextInput
+                  numberOfLines={4}
+                  multiline={true}
+                  style={[
+                    styles.requestSubTitles,
+                    {
+                      marginTop: height * 0.01,
+                      maxWidth: width * 0.7,
+                      minWidth: width * 0.7,
+                      maxHeight: height * 0.1,
+                      minHeight: height * 0.1,
+                      backgroundColor: "white",
+                      padding: 9,
+                      borderRadius: 5,
+                    },
+                  ]}
+                  onChangeText={(text) => {
+                    let temp = requests;
+                    temp[index].description = text;
+                    setRequests(temp);
+                  }}
+                >
+                  {request.description}
+                </TextInput>
+              </View>
+              <View style={{ flex: 1 }}></View>
+            </TouchableOpacity>
           </View>
-          <View style={{ flex: 1 }}></View>
-        </TouchableOpacity>
-      </View>
-      </View>
+        </View>
       </SafeAreaView>
     );
   };
@@ -141,11 +207,11 @@ const RequestsScreen = ({ route, navigation }) => {
                     }}
                   />
                   <TouchableOpacity
-              onPress={() => setMode(true)}
-              style={styles.editButton}
-            >
-              <Text style={styles.editButtonText}>SAVE</Text>
-            </TouchableOpacity>
+                    onPress={() => saveReqs()}
+                    style={styles.editButton}
+                  >
+                    <Text style={styles.editButtonText}>SAVE</Text>
+                  </TouchableOpacity>
                 </View>
               </View>
             }
@@ -153,7 +219,7 @@ const RequestsScreen = ({ route, navigation }) => {
             showsVerticalScrollIndicator={false}
             removeClippedSubviews={false}
             keyExtractor={(item, index) => index.toString()}
-            renderItem={({ item }) => listItemView(item)}
+            renderItem={({ item, index }) => listItemView(item, index)}
           />
         </View>
       </View>
@@ -183,7 +249,6 @@ const styles = StyleSheet.create({
 
     borderRadius: 10,
     overflow: "hidden",
-    
   },
 
   requestTitles: {
@@ -217,7 +282,6 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     marginBottom: height * 0.01,
     marginTop: height * 0.005,
-    
   },
 
   titleAccent: {
@@ -249,8 +313,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginTop: height * 0.009,
   },
-
-
 });
 
 export default RequestsScreen;
