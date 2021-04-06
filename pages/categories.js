@@ -488,25 +488,6 @@ const styles = StyleSheet.create({
     marginTop: height * 0.06,
   },
 
-  cont: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  btnNormal: {
-    borderColor: "blue",
-    borderWidth: 1,
-    borderRadius: 10,
-    height: 30,
-    width: 100,
-  },
-  btnPress: {
-    borderColor: "blue",
-    borderWidth: 1,
-    height: 30,
-    width: 100,
-  },
-
   folderContainer: {
     width: width * 0.85,
     maxHeight: height * 0.6,
@@ -539,7 +520,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontWeight: "700",
     marginTop: height * 0.02,
-    marginRight: width * 0.08,
+    marginRight: width * 0.04,
   },
 
   modalContent: {

@@ -6,6 +6,7 @@ import { createDatabase } from "../database/create";
 import * as queries from "../database/query";
 import * as Notifications from "expo-notifications";
 import * as bookKeeping from "../database/bookKeeping";
+import styles from '../styles';
 
 // Ignoring potential problems
 import { LogBox } from "react-native";
@@ -83,75 +84,5 @@ const WelcomeScreen = ({ navigation }) => {
   );
 };
 
-const styles = StyleSheet.create({
-  welcomeContainer: {
-    flex: 1,
-    backgroundColor: "#003a63",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-
-  contentContainer: {
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: height * 0.24,
-  },
-
-  pray: {
-    width: width * 0.5,
-    height: width * 0.5,
-    resizeMode: "contain",
-  },
-
-  cu: {
-    color: "#efefef",
-    fontSize: width * 0.16,
-    fontWeight: "700",
-    textAlign: "center",
-  },
-
-  cupray: {
-    color: "#d6c396",
-    fontSize: width * 0.16,
-    fontWeight: "700",
-    textAlign: "center",
-  },
-
-  thePrayer: {
-    color: "#d6c396",
-    fontSize: 19,
-    fontWeight: "700",
-    textAlign: "center",
-    marginBottom: height * 0.3,
-    paddingLeft: 30,
-    paddingRight: 30,
-  },
-
-  bbutton: {
-    width: width * 0.7,
-    height: 61,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 3,
-    },
-    shadowOpacity: 0.27,
-    shadowRadius: 4.65,
-
-    elevation: 6,
-    borderRadius: 20,
-    backgroundColor: "#e8e7e4",
-    marginBottom: height * 0.16,
-  },
-
-  prayButton: {
-    color: "#003a63",
-    fontSize: 20,
-    fontWeight: "700",
-    textAlign: "center",
-    marginTop: 18,
-  },
-});
 
 export default WelcomeScreen;

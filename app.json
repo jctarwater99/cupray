@@ -16,7 +16,10 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.ykd.GOPray",
-      "buildNumber": "1.2.0"
+      "buildNumber": "1.4.0",
+      "infoPlist": {
+        "NSCameraUsageDescription": "This app uses the camera to scan QR codes to share prayer requests."
+      }
     },
     "android": {
       "adaptiveIcon": {

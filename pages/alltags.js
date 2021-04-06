@@ -246,14 +246,6 @@ const styles = StyleSheet.create({
     marginLeft: width * 0.05,
   },
 
-  requestArrow: {
-    color: "#D6C396",
-    fontSize: 20,
-    fontWeight: "700",
-    marginTop: height * 0.02,
-    marginRight: width * 0.04,
-  },
-
   circle: {
     width: width * 0.08,
     height: width * 0.08,

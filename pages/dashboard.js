@@ -180,11 +180,9 @@ const styles = StyleSheet.create({
     marginTop: height * 0.01,
   },
 
-  verseOf: {
-    width: 250,
-    height: 28,
+  verseOf: {    
     color: "#d6c396",
-    fontSize: 20,
+    fontSize: width * 0.05,
     fontWeight: "700",
     marginTop: height * 0.03,
     textAlign: "center",

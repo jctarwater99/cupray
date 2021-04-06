@@ -1,6 +1,7 @@
 import React from "react";
 import { Image, TouchableOpacity, Dimensions, Linking } from "react-native";
 import { StyleSheet, Text, View } from "react-native";
+import styles from '../styles';
 
 var { height, width } = Dimensions.get("window");
 
@@ -44,44 +45,5 @@ const About = ({ navigation }) => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#EFEFEF",
-    alignItems: "flex-start",
-    marginTop: height * 0.06,
-  },
-
-  title: {
-    color: "#003A63",
-    fontSize: 25,
-    fontWeight: "700",
-    marginTop: height * 0.01,
-    textAlign: "center",
-    marginRight: width * 0.2,
-    marginLeft: width * 0.2,
-  },
-
-  titleAccent: {
-    color: "#7E8C96",
-    fontSize: 25,
-    fontWeight: "700",
-  },
-
-  subtitle: {
-    color: "#003A63",
-    fontSize: 25,
-    fontWeight: "700",
-    marginTop: height * 0.04,
-    textAlign: "center",
-    marginRight: width * 0.2,
-    marginLeft: width * 0.2,
-  },
-  subtitleAccent: {
-    color: "#7E8C96",
-    fontSize: 25,
-    fontWeight: "700",
-  },
-});
 
 export default About;

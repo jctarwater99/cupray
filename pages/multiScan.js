@@ -261,14 +261,6 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
 
-  requestArrow: {
-    color: "#D6C396",
-    fontSize: 20,
-    fontWeight: "700",
-    marginTop: height * 0.02,
-    marginRight: width * 0.04,
-  },
-
   title: {
     color: "#003A63",
     fontSize: width * 0.1,

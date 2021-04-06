@@ -402,13 +402,6 @@ const styles = StyleSheet.create({
     marginLeft: width * 0.04,
   },
 
-  requestArrow: {
-    color: "#D6C396",
-    fontSize: 20,
-    fontWeight: "700",
-    marginTop: height * 0.02,
-    marginRight: width * 0.04,
-  },
   catMenu: {
     color: "#D6C396",
     fontSize: 30,
@@ -436,26 +429,6 @@ const styles = StyleSheet.create({
     color: "#003A63",
     fontSize: width * 0.12,
     fontWeight: "700",
-  },
-
-  searchButton: {
-    width: 50,
-    borderRadius: 10,
-    backgroundColor: "#D3D3D3",
-    padding: 6,
-  },
-
-  searchButtonTxt: {
-    color: "#7E8C96",
-    fontSize: 19,
-    fontWeight: "500",
-    textAlign: "center",
-  },
-  plusSign: {
-    color: "#003a63",
-    fontSize: 15,
-    fontWeight: "700",
-    textAlign: "center",
   },
 });
 
