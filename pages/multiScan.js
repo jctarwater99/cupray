@@ -58,17 +58,17 @@ const RequestsScreen = ({ route, navigation }) => {
         requestID: reqId,
         tagID: catId,
       });
-      console.log("Reached at least once");
     }
 
-    requests.forEach((request) => {
+    for (const request in requests) {
       let req = new Request();
-      req.description = request.description;
-      req.subject = request.subject;
-      req.expire_time = new Date(new Date().getTime() + 2592000000);
+      req.description = requests[request].description;
+      req.subject = requests[request].subject;
+      req.create_time = new Date().getTime();
+      req.expire_time = new Date(new Date().getTime() + 2592000000).getTime();
       req.priority = 2;
       inserts.insertNewRequest(req, createRequestTag);
-    });
+    }
   };
 
   let listItemView = (request, index) => {

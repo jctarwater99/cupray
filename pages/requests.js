@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Image,
   TouchableOpacity,
@@ -13,6 +13,7 @@ import * as updates from "../database/update";
 import Modal from "react-native-modal";
 import { checkBooks } from "../database/bookKeeping";
 import * as scheduler from "../schedule/scheduler";
+import { useFocusEffect } from "@react-navigation/native";
 
 var { height, width } = Dimensions.get("window");
 
@@ -21,12 +22,18 @@ const RequestsScreen = ({ route, navigation }) => {
   let [archivePopupVisible, toggleArchivePopupVisibility] = useState(false);
   let [requestID, setRequestID] = useState(-1);
 
-  useEffect(() => {
-    queries.getRequestsInCategory(route.params.cat_id, (results) => {
-      setRequests(results);
-    });
-    checkBooks();
-  }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      const unsubscribe = navigation.addListener("focus", () => {
+        queries.getRequestsInCategory(route.params.cat_id, (results) => {
+          setRequests(results);
+        });
+        checkBooks();
+      });
+
+      return () => unsubscribe;
+    }, [navigation])
+  );
 
   let refreshPage = () => {
     setTimeout(() => {
@@ -75,17 +82,17 @@ const RequestsScreen = ({ route, navigation }) => {
             </Text>
           </View>
           <View style={{ flex: 1 }}></View>
-        <TouchableOpacity style={{ marginLeft: width * 0.03 }}>
-          <Text
-            style={styles.catMenu}
-            onPress={() => {
-              setRequestID(request.id);
-            toggleArchivePopupVisibility(!archivePopupVisible);
-            }}
-          >
-            {" ⋮ "}
-          </Text>
-        </TouchableOpacity>
+          <TouchableOpacity style={{ marginLeft: width * 0.03 }}>
+            <Text
+              style={styles.catMenu}
+              onPress={() => {
+                setRequestID(request.id);
+                toggleArchivePopupVisibility(!archivePopupVisible);
+              }}
+            >
+              {" ⋮ "}
+            </Text>
+          </TouchableOpacity>
         </TouchableOpacity>
       </View>
     );
@@ -202,7 +209,7 @@ const RequestsScreen = ({ route, navigation }) => {
             </TouchableOpacity>
             <TouchableOpacity
               // Cancel button before the warning alert pops up
-              onPress= {() => {
+              onPress={() => {
                 // Provide warning
                 Alert.alert(
                   "Warning",

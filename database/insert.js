@@ -95,7 +95,7 @@ export function insertNewRequest(request, callback) {
     tx.executeSql(
       "INSERT INTO requests(subject, description, create_time," +
         "expire_time, remind_days, remind_time, " +
-        "weight, priority) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?);",
+        "weight, priority) VALUES(?, ?, ?, ?, ?, ?, ?, ?);",
       [
         request.subject,
         request.description,
@@ -107,8 +107,6 @@ export function insertNewRequest(request, callback) {
         request.priority,
       ],
       (tx, result) => {
-        console.log("reached here too");
-
         callback(result.insertId);
       },
       (tx, result) => {
