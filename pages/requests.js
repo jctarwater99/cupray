@@ -48,12 +48,7 @@ const RequestsScreen = ({ route, navigation }) => {
     return (
       <View
         style={[
-          styles.requestContainer,
-          {
-            overflow: "visible",
-            backgroundColor: "#E8E7E4",
-            margin: height * 0.01,
-          },
+          styles.requestContainer
         ]}
       >
         <TouchableOpacity
@@ -76,13 +71,12 @@ const RequestsScreen = ({ route, navigation }) => {
             <Text style={styles.requestTitles}>{request.subject}</Text>
             <Text
               numberOfLines={1}
-              style={[styles.requestSubTitles, { maxWidth: width * 0.55 }]}
+              style={[styles.requestSubTitles, { minWidth: width * 0.55, maxWidth: width * 0.55 }]}
             >
               {request.description}
             </Text>
           </View>
-          <View style={{ flex: 1 }}></View>
-          <TouchableOpacity style={{ marginLeft: width * 0.03 }}>
+          <TouchableOpacity>
             <Text
               style={styles.catMenu}
               onPress={() => {
@@ -93,6 +87,7 @@ const RequestsScreen = ({ route, navigation }) => {
               {" ⋮ "}
             </Text>
           </TouchableOpacity>
+          
         </TouchableOpacity>
       </View>
     );
@@ -273,8 +268,11 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.27,
     shadowRadius: 3.65,
 
+    elevation: 6,
     borderRadius: 10,
-    overflow: "hidden",
+    backgroundColor: "#E8E7E4",
+    margin: height * 0.01,
+    
   },
 
   requestTitles: {
@@ -315,6 +313,8 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontWeight: "700",
     marginTop: height * 0.015,
+    
+    
   },
   titleAccent: {
     color: "#D6C396",
