@@ -507,7 +507,8 @@ const styles = StyleSheet.create({
     color: "#003a63",
     fontSize: 30,
     fontWeight: "700",
-    marginTop: height * 0.02,
+    marginTop: height * 0.015,
+    marginBottom: height * 0.01,
     marginRight: width * 0.04,
   },
 

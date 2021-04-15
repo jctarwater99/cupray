@@ -62,12 +62,7 @@ const AllReqs = ({ navigation }) => {
     return (
       <View
         style={[
-          styles.requestContainer,
-          {
-            overflow: "visible",
-            backgroundColor: "#E8E7E4",
-            margin: height * 0.01,
-          },
+          styles.requestContainer
         ]}
       >
         <TouchableOpacity
@@ -90,7 +85,7 @@ const AllReqs = ({ navigation }) => {
             <Text style={styles.requestTitles}>{request.subject}</Text>
             <Text
               numberOfLines={1}
-              style={[styles.requestSubTitles, { maxWidth: width * 0.55 }]}
+              style={[styles.requestSubTitles, {minWidth: width * 0.55, maxWidth: width * 0.55 }]}
             >
               {request.description}
             </Text>
@@ -345,8 +340,10 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.27,
     shadowRadius: 3.65,
 
+    elevation: 6,
     borderRadius: 10,
-    overflow: "hidden",
+    backgroundColor: "#E8E7E4",
+    margin: height * 0.01,
   },
 
   modalContent: {
@@ -400,6 +397,12 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     marginTop: height * 0.013,
     marginLeft: width * 0.04,
+  },
+  plusSign: {
+    color: "#7E8C96",
+    fontSize: 15,
+    fontWeight: "700",
+    textAlign: "center",
   },
 
   catMenu: {
