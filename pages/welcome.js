@@ -6,7 +6,7 @@ import { createDatabase } from "../database/create";
 import * as queries from "../database/query";
 import * as Notifications from "expo-notifications";
 import * as bookKeeping from "../database/bookKeeping";
-import styles from '../styles';
+import styles from "../styles";
 
 // Ignoring potential problems
 import { LogBox } from "react-native";
@@ -83,6 +83,5 @@ const WelcomeScreen = ({ navigation }) => {
     </View>
   );
 };
-
 
 export default WelcomeScreen;

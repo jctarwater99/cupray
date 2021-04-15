@@ -13,8 +13,6 @@ export function dropForTesting() {
   });
 }
 
-// This function should probably get called every time the app loads?
-// If we can only call it once, (like the welcome screen?) that would be ideal.
 export function createDatabase() {
   const db = SQLite.openDatabase("db.cupray");
   db.transaction((tx) => {

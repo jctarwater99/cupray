@@ -220,6 +220,7 @@ const RequestsScreen = ({ route, navigation }) => {
                       onPress: () => {
                         updates.deleteRequestTagsOfReq(requestID, getRequests);
                         toggleArchivePopupVisibility(!archivePopupVisible);
+                        refreshPage();
                       },
                     },
                     {
@@ -240,7 +241,6 @@ const RequestsScreen = ({ route, navigation }) => {
               style={{ width: width * 0.48 }}
               onPress={() => {
                 toggleArchivePopupVisibility(!archivePopupVisible);
-                refreshPage();
               }}
             >
               <Text style={styles.plusSign}>Cancel</Text>

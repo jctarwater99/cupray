@@ -3,6 +3,8 @@ import * as updates from "./update";
 import * as scheduler from "../schedule/scheduler";
 
 // Call this function at the end of every useEffect()
+// It just checks when requests were last scheduled to appear on people's phones
+// so that they get the daily reminders for everything.
 export function checkBooks() {
   let currDate = new Date();
   currDate.setHours(0);

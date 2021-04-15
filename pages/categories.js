@@ -163,6 +163,22 @@ const CategoriesScreen = ({ navigation }) => {
     callback(parsedTime);
   };
 
+  let setPopupData = (category) => {
+    let date = new Date(category.remind_time);
+    setSelectedCategory(category);
+    setSelectedCatName(category.name);
+    setSelectedTime(date);
+    let newDays = [0, 0, 0, 0, 0, 0, 0];
+    let i = 0;
+    for (const day of category.remind_days) {
+      newDays[i] = day == 1;
+      i++;
+    }
+    setDays(newDays);
+    parseTime(date, setDisplayTime);
+    toggleEditPopupVisibility(!editPopupVisible);
+  };
+
   let listItemView = (category) => {
     return (
       <View key={category.tagID} style={{ flexDirection: "row" }}>
@@ -174,21 +190,7 @@ const CategoriesScreen = ({ navigation }) => {
             })
           }
           onLongPress={() => {
-            let date = new Date(category.remind_time);
-            setSelectedCategory(category);
-            setSelectedCatName(category.name);
-            setSelectedTime(date);
-            let newDays = [0, 0, 0, 0, 0, 0, 0];
-            let i = 0;
-            for (const day of category.remind_days) {
-              newDays[i] = day == 1;
-              i++;
-            }
-            setDays(newDays);
-
-            parseTime(date, setDisplayTime);
-
-            toggleEditPopupVisibility(!editPopupVisible);
+            setPopupData(category);
           }}
         >
           <Text style={styles.folderTitles}> {category.name} </Text>
@@ -198,21 +200,7 @@ const CategoriesScreen = ({ navigation }) => {
           <Text
             style={styles.catMenu}
             onPress={() => {
-              let date = new Date(category.remind_time);
-              setSelectedCategory(category);
-              setSelectedCatName(category.name);
-              setSelectedTime(date);
-              let newDays = [0, 0, 0, 0, 0, 0, 0];
-              let i = 0;
-              for (const day of category.remind_days) {
-                newDays[i] = day == 1;
-                i++;
-              }
-              setDays(newDays);
-
-              parseTime(date, setDisplayTime);
-
-              toggleEditPopupVisibility(!editPopupVisible);
+              setPopupData(category);
             }}
           >
             {" ⋮ "}

@@ -158,7 +158,11 @@ const ThisRequestScreen = ({ route, navigation }) => {
     if (!inEditMode) {
       return;
     }
-    if (category == tags[number].name || tags[number].name == "Archived") {
+    // Don't let the user unselect the current category tag
+    if (
+      (category == tags[number].name && states[number]) ||
+      tags[number].name == "Archived"
+    ) {
       return;
     }
     if (category == "Select") {
@@ -284,8 +288,8 @@ const ThisRequestScreen = ({ route, navigation }) => {
     // Actuall update part
     if (route.params.isNewReq) {
       inserts.insertNewRequest(req, updateTags);
-      const popAction = StackActions.pop(route.params.fromDash ? 1 : 2);
-      navigation.dispatch(popAction);
+      //const popAction = StackActions.pop(route.params.fromDash ? 1 : 2);
+      //navigation.dispatch(popAction);
     } else {
       updates.updateRequest(route.params.req_id, req);
       updateTags(route.params.req_id);
@@ -416,7 +420,10 @@ const ThisRequestScreen = ({ route, navigation }) => {
             }}
             value={subject}
             onChange={(text) => setSubject(text.nativeEvent.text)}
-            style={[styles.title, { backgroundColor: "white", padding: 8,  borderRadius: 5,}]}
+            style={[
+              styles.title,
+              { backgroundColor: "white", padding: 8, borderRadius: 5 },
+            ]}
           />
 
           <View
