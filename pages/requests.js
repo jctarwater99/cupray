@@ -25,15 +25,18 @@ const RequestsScreen = ({ route, navigation }) => {
   useFocusEffect(
     React.useCallback(() => {
       const unsubscribe = navigation.addListener("focus", () => {
-        queries.getRequestsInCategory(route.params.cat_id, (results) => {
-          setRequests(results);
-        });
+        getRequests();
         checkBooks();
       });
 
       return () => unsubscribe;
     }, [navigation])
   );
+  let getRequests = () => {
+    queries.getRequestsInCategory(route.params.cat_id, (results) => {
+      setRequests(results);
+    });
+  };
 
   let refreshPage = () => {
     setTimeout(() => {
@@ -46,11 +49,7 @@ const RequestsScreen = ({ route, navigation }) => {
 
   let listItemView = (request) => {
     return (
-      <View
-        style={[
-          styles.requestContainer
-        ]}
-      >
+      <View style={[styles.requestContainer]}>
         <TouchableOpacity
           key={request.id}
           style={[{ flexDirection: "row" }]}
@@ -71,7 +70,10 @@ const RequestsScreen = ({ route, navigation }) => {
             <Text style={styles.requestTitles}>{request.subject}</Text>
             <Text
               numberOfLines={1}
-              style={[styles.requestSubTitles, { minWidth: width * 0.55, maxWidth: width * 0.55 }]}
+              style={[
+                styles.requestSubTitles,
+                { minWidth: width * 0.55, maxWidth: width * 0.55 },
+              ]}
             >
               {request.description}
             </Text>
@@ -87,7 +89,6 @@ const RequestsScreen = ({ route, navigation }) => {
               {" ⋮ "}
             </Text>
           </TouchableOpacity>
-          
         </TouchableOpacity>
       </View>
     );
@@ -272,7 +273,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: "#E8E7E4",
     margin: height * 0.01,
-    
   },
 
   requestTitles: {
@@ -313,8 +313,6 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontWeight: "700",
     marginTop: height * 0.015,
-    
-    
   },
   titleAccent: {
     color: "#D6C396",
