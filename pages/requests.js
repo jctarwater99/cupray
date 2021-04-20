@@ -32,6 +32,7 @@ const RequestsScreen = ({ route, navigation }) => {
       return () => unsubscribe;
     }, [navigation])
   );
+
   let getRequests = () => {
     queries.getRequestsInCategory(route.params.cat_id, (results) => {
       setRequests(results);

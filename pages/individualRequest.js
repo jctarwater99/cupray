@@ -160,7 +160,7 @@ const ThisRequestScreen = ({ route, navigation }) => {
     }
     // Don't let the user unselect the current category tag
     if (
-      (category == tags[number].name && states[number]) ||
+      (category == tags[number].name && tagStates[number] == true) ||
       tags[number].name == "Archived"
     ) {
       return;
