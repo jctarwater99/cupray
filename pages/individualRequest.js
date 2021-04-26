@@ -294,6 +294,7 @@ const ThisRequestScreen = ({ route, navigation }) => {
       updates.updateRequest(route.params.req_id, req);
       updateTags(route.params.req_id);
     }
+    route.params.isNewReq = false; // Keeps users from hitting save-edit-save and creating dupes.
     scheduler.rescheduleNotifs();
   };
 
